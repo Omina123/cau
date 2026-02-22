@@ -1,0 +1,479 @@
+{% load static %}
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+
+    <!--- basic page needs
+    ================================================== -->
+    <meta charset="utf-8">
+    <title>St peters ngoisa parish</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- mobile specific metas
+    ================================================== -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS
+    ================================================== -->
+    <link rel="stylesheet" href="static/css/base.css">
+    <link rel="stylesheet" href="static/css/main.css">
+
+    <!-- script
+    ================================================== -->
+   <script src="static/js/modernizr.js"></script>
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="tempalates/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="templates/favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+<style>
+
+/* ============================= */
+/* VATICAN THEME COLORS */
+/* ============================= */
+
+:root {
+    --vatican-gold: #C9A227;
+    --vatican-white: #FFFFFF;
+    --vatican-red: #8B0000;
+}
+
+/* HEADER */
+.s-header {
+    background-color: var(--vatican-white);
+    border-bottom: 3px solid var(--vatican-gold);
+}
+
+.header-logo h {
+    color: var(--vatican-gold);
+    font-weight: bold;
+    font-size: 20px;
+}
+
+/* NAV LINKS */
+.header-nav a {
+    color: var(--vatican-red);
+    font-weight: 600;
+}
+
+.header-nav a:hover {
+    color: var(--vatican-gold);
+}
+
+/* HERO SECTION */
+.s-hero::before {
+    background: linear-gradient(
+        rgba(139,0,0,0.6),
+        rgba(201,162,39,0.6)
+    );
+}
+
+/* BUTTONS */
+.btn,
+.btn--primary,
+.btn--stroke {
+    background-color: var(--vatican-gold);
+    border-color: var(--vatican-gold);
+    color: #fff;
+}
+
+.btn:hover {
+    background-color: var(--vatican-red);
+    border-color: var(--vatican-red);
+}
+
+/* SOCIAL ICONS */
+.hero-social a {
+    color: var(--vatican-gold);
+}
+
+.hero-social a:hover {
+    color: var(--vatican-red);
+}
+
+/* ABOUT SECTION */
+.s-about {
+    background-color: var(--vatican-white);
+}
+
+/* CONNECT SECTION */
+.s-connect {
+    background-color: #fdf8e6;
+}
+
+/* FOOTER */
+.s-footer {
+    background-color: var(--vatican-red);
+    color: #fff;
+}
+
+.footer-list a {
+    color: var(--vatican-gold);
+}
+
+.footer-list a:hover {
+    color: #fff;
+}
+
+/* GO TOP BUTTON */
+.ss-go-top {
+    background-color: var(--vatican-gold);
+}
+<style>
+
+/* ABOUT SECTION TEXT FIX */
+#about .subhead,
+#about .lead,
+#about p,
+#about h3 {
+    color: #000 !important;
+}
+
+#about .btn--about {
+    background-color: #C9A227; /* Vatican Gold */
+    color: #000;
+    border: none;
+}
+
+#about .btn--about:hover {
+    background-color: #8B0000; /* Vatican Red */
+    color: #fff;
+}
+/* HEADER RIGHT PHOTO */
+.header-photo {
+    position: absolute;
+    right: 80px;   /* adjust if needed */
+    top: 15px;
+}
+
+.header-photo img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;   /* makes it circle */
+    object-fit: cover;
+    border: 3px solid var(--vatican-gold);
+}
+
+</style>
+
+</style>
+</head>
+
+<body id="top">
+
+    <!-- preloader
+    ================================================== -->
+    <div id="preloader">
+        <div id="loader" class="dots-jump">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+
+    <!-- header
+    ================================================== -->
+    <header class="s-header">
+
+        <div class="header-logo">
+            <a class="site-logo" href="">
+                <h>ST PETERS NGOISA PARISH</H>
+            </a>
+        </div>
+
+        <nav class="header-nav-wrap">
+            <ul class="header-nav">
+                <li class="current"><a href="" title="Home">Home</a></li>
+                <li><a href="{% url 'about' %}" title="">About</a></li>
+               
+                <li><a href="{% url "Contact" %}" title="Contact us">Contact</a></li>	
+                <li><a href="https://shcathedral-eld.org/" title="Contact us">Cathedral</a></li>
+                 <li><a href="https://holyfamilybasilica.info/about-us/" title="Contact us">Holy family basilica</a></li>
+                 <li><a href="https://www.basilicasanpietro.va/en/san-pietro/the-square" title="Contact us">ST Peters square vertcan</a></li>
+            </ul>
+        </nav>
+
+      
+</div>
+  <a class="header-menu-toggle" href="#0"><span>Menu</span></a><br><br><br>
+        
+    </header> <!-- end s-header -->
+    
+
+
+    <!-- hero
+    ================================================== -->
+
+   
+    <section class="s-hero" data-parallax="scroll" data-image-src="static/images/cathlic.jpg" data-natural-width=3000 data-natural-height=2000 data-position-y=center>
+
+        <div class="hero-left-bar"></div>
+
+        <div class="row hero-content">
+
+            <div class="column large-full hero-content__text">
+                <h1>WELCOME TO ST PETERS NGOISA PARISH
+                </h3>
+                We Exist To <br>
+                    Honor God And <br>
+                    Make Disciples
+                </h3>
+
+                <div class="hero-content__buttons">
+                    <a href="{%url 'register_member'%}" class="btn btn--stroke">BE part of us</a>
+                    <a href="{% url 'about' %}" class="btn btn--stroke">About Us</a>
+                </div>
+            </div> <!-- end hero-content__text -->
+
+        </div> <!-- end hero-content -->
+
+        <ul class="hero-social">
+            <li class="hero-social__title">Follow Us</li>
+            <li>
+                <a href="#0" title="">Facebook</a>
+            </li>
+            <li>
+                <a href="#0" title="">YouTube</a>
+            </li>
+            <li>
+                <a href="#0" title="">Instagram</a>
+            </li>
+        </ul> <!-- end hero-social -->
+
+        <div class="hero-scroll">
+            <a href="" class="scroll-link smoothscroll">
+                Scroll For More
+            </a>
+        </div> <!-- end hero-scroll -->
+
+    </section> <!-- end s-hero -->
+
+
+    <!-- about
+    ================================================== -->
+    
+
+            <div class="column large-half medium-full">
+                <ul class="about-sched">
+                    <li>
+                        <h4>Main Church Mass
+                        
+                        Sunday Mass -7.00- 9:00 AM |9.00- 11:00 AM|<br>
+                        Eldoret</h4>
+                        
+                    </li>
+                    <li>
+                        <h4>PMC MASS
+                        
+                        Sunday - 9:00 AM |  <br>
+                        </h4>
+                    </li>
+                    <li>
+                        <h4>Daily mass Meeting
+                        
+                       Monday- Saturday - 7:00 am <br>
+                        Eldoret
+                        </h4>
+                    </li>
+                </ul> <!-- end about-sched-->
+            </div>
+
+        </div> <!-- end about-content -->
+
+    </section> <!-- end s-about -->
+
+
+    <!-- connect
+    ================================================== -->
+    <section class="s-connect">
+
+        <div class="row connect-content">
+           <h3 class="display-1">  St Peters Ngoiso parish</h3>
+                <p class="lead">
+              Welcome to our Parish community! Together with our outstations and church groups, we grow in faith, support one another, and serve in Christ’s love. May you encounter Christ, find peace, and grow spiritually.
+                </p>
+                <a href="{% url 'about' %}" class="btn btn--primary btn--about">More About St Ngoiso</a>
+            </div>
+
+                <a href="volunteer.html" class="btn btn--primary h-full-width">I'm Interested</a>
+            </div>
+            <div class="column large-half tab-full">
+              <h3 class="display-1">Join a Parish Group</h3>
+<p>
+Grow in faith and fellowship by joining one of our parish groups such as CWA, CMA, Youth, or PMS. Be part of our mission and serve the Church together.
+</p>
+                
+
+                <a href="{% url 'register_member' %}" class="btn btn--primary h-full-width">JOIN OUR PARISH</a>
+            </div>
+        </div> <!-- end connect-content  -->
+
+    </section> <!-- end s-connect -->
+
+
+    <!-- events
+    ================================================== -->
+   
+
+
+    <!-- series
+    ================================================== -->
+    <section class="s-series">
+
+        <div class="series-img" style="background-image: url('images/series-2000.jpg');"></div>
+
+        <div class="row row-y-center series-content">
+
+    <div class="column large-half medium-full">
+        <h3 class="subhead">Latest Homily</h3>
+        <h2>Be Transformed by the Word of God</h2>
+        <p>
+        Reflect on the Sunday Gospel and grow spiritually through our latest homily.
+        Join us as we deepen our faith, strengthen our hope, and live out Christ’s
+        teachings in our daily lives.
+        </p>
+    </div> <!-- end column -->
+
+    <div class="column large-half medium-full">
+        <div class="series-content__buttons">
+            <a href="#" class="btn btn--large h-full-width">Watch the Homily</a>
+            <a href="#" class="btn btn--large h-full-width">Listen to the Message</a>
+        </div>
+
+        <div class="series-content__subscribe">
+            <p>
+            Stay connected. Follow our parish on YouTube and other platforms.
+            </p>
+            
+            <ul class="series-content__subscribe-links">
+                <li class="ss-youtube"><a href="#">YouTube</a></li>
+                <li class="ss-facebook"><a href="#">Facebook</a></li>
+                <li class="ss-soundcloud"><a href="#">SoundCloud</a></li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+            </div> <!-- end column -->
+            
+        </div> <!-- series-content -->
+
+    </section> <!-- end s-series -->
+
+
+    <!-- Social
+    ================================================== -->
+    <section class="s-social">
+            
+        <div class="row social-content">
+            <div class="column">
+                <ul class="social-list">
+                    <li class="social-list__item">
+                        <a href="#0" title="">
+                            <span class="social-list__icon social-list__icon--facebook"></span>
+                            <span class="social-list__text">Facebook</span>
+                        </a>
+                    </li>
+                    <li class="social-list__item">
+                        <a href="#0" title="">
+                            <span class="social-list__icon social-list__icon--twitter"></span>
+                            <span class="social-list__text">Twitter</span>
+                        </a>
+                    </li>
+                    <li class="social-list__item">
+                        <a href="#0" title="">
+                            <span class="social-list__icon social-list__icon--instagram"></span>
+                            <span class="social-list__text">Instagram</span>
+                        </a>
+                    </li>
+                    <li class="social-list__item">
+                        <a href="#0" title="">
+                            <span class="social-list__icon social-list__icon--email"></span>
+                            <span class="social-list__text">Email</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div> <!-- end social-content -->
+
+    </section> <!-- end s-social -->
+
+
+    <!-- footer
+    ================================================== -->
+    <footer class="s-footer">
+
+    <div class="row footer-top">
+        <div class="column large-4 medium-5 tab-full">
+            <div class="footer-logo">
+                <a class="site-footer-logo" href="index.html">
+                    <img src="static/images/logo.svg" alt="Parish Logo">
+                </a>
+            </div>
+            <p>
+            We are a Catholic community committed to worship, evangelization, 
+            and service. Together with our outstations and parish groups, 
+            we strive to grow in faith and build a strong Christian family.
+            </p>
+        </div>
+
+        <div class="column large-half tab-full">
+            <div class="row">
+                <div class="column large-7 medium-full">
+                    <h4 class="h6">Our Location</h4>
+                    <p>
+                    Ngoiso Catholic Church <br>
+                    Ngoiso, Eldoret <br>
+                    Eldoret, Kenya
+                    </p>
+
+                    <p>
+                    <a href="#" target="_blank" class="btn btn--footer">Get Directions</a>
+                    </p>
+                </div>
+
+                <div class="column large-5 medium-full">
+                    <h4 class="h6">Quick Links</h4>
+                    <ul class="footer-list">
+                        <li><a href="">Home</a></li>
+                        <li><a href="{% url 'about' %}">About Parish</a></li>
+                       
+                        <li><a href="{% url 'Dashbd' %}">Admin</a></li>
+                        <li><a href="{% url 'about' %}">About</a></li>
+                        <li><a href="{% url 'Contact' %}">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row footer-bottom">
+        <div class="column ss-copyright">
+            <span>© 2026 Ngoiso Catholic Church. All Rights Reserved.</span>
+        </div>
+    </div>
+
+</footer>
+                <span>Design by <a href="https://www.styleshout.com/">StyleShout</a></span>
+            </div>
+        </div> <!-- footer-bottom -->
+
+        <div class="ss-go-top">
+            <a class="smoothscroll" title="Back to Top" href="#top">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 0l8 9h-6v15h-4v-15h-6z"/></svg>
+            </a>
+        </div> <!-- ss-go-top -->
+
+    </footer> <!-- end s-footer -->
+
+
+    <!-- Java Script
+    ================================================== -->
+    <script src="static/js/jquery-3.2.1.min.js"></script>
+    <script src="static/js/plugins.js"></script>
+    <script src="static/js/main.js"></script>
+
+</body>

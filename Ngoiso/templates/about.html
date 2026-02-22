@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>St Peters Ngoisa Parish - About</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="static/css/base.css">
+    <link rel="stylesheet" href="static/css/main.css">
+
+    <!-- Script -->
+    <script src="static/js/modernizr.js"></script>
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+
+    <style>
+        /* Vatican-inspired colors */
+        body {
+            background-color: #fffbea; /* pale yellow */
+            color: #333;
+        }
+        h1, h2, h4, h6 {
+            color: #FFD700; /* Vatican gold */
+        }
+        a {
+            color: #C9A227;
+        }
+        a:hover {
+            color: #b38f1b;
+        }
+        .header-nav a {
+            color: #C9A227;
+        }
+        .header-nav a.current {
+            font-weight: bold;
+        }
+        .block-list__item p {
+            line-height: 1.5;
+        }
+        blockquote {
+            border-left: 4px solid #FFD700;
+            padding-left: 15px;
+            font-style: italic;
+            color: #555;
+        }
+        footer {
+            background-color: #fffbea;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body id="top">
+
+    <!-- preloader -->
+    <div id="preloader">
+        <div id="loader" class="dots-jump">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+    <!-- header -->
+    <header class="s-header">
+        <div class="header-logo">
+            <a class="site-logo" href="">
+                <img src="" alt="Homepage">
+            </a>
+        </div>
+
+        <nav class="header-nav-wrap">
+            <ul class="header-nav">
+                <li><a href="" title="Home">Home</a></li>
+                <li class="current"><a href="{% url 'about' %}" title="About">About</a></li>
+                <li><a href="{% url 'Contact' %}" title="Contact">Contact</a></li>  
+            </ul>
+        </nav>
+
+        <a class="header-menu-toggle" href="#0"><span>Menu</span></a>
+    </header>
+
+    <!-- page header -->
+    <section class="page-header page-header--about">
+        <div class="gradient-overlay"></div>
+        <div class="row page-header__content">
+            <div class="column">
+                <h1>We Are st peters ngoisa parish</h1>
+            </div>
+        </div>
+    </section>
+
+    <!-- page content -->
+    <section class="page-content">
+        <div class="row">
+            <div class="column">
+                <p class="lead drop-cap">
+                    We are a Catholic community. We worship, serve, and grow in faith together. 
+                    We care for our parish, outstations, and each member.
+                </p>
+
+                <div class="row">
+                    <div class="column large-half medium-full">
+                        <h2>Our Purpose</h2>
+                        <p>
+                            We guide members to live in faith, love, and service. We teach the Word of God 
+                            and strengthen our community.
+                        </p>
+                    </div>
+                    <div class="column large-half medium-full">
+                        <h2>Our Mission</h2>
+                        <p>
+                            We share Christ’s love, support each member, and grow disciples. 
+                            We aim to build strong, caring families in the church.
+                        </p>
+                    </div>
+                </div>
+
+                <blockquote cite="#">
+                    <p>
+                        “For God so loved the world, that he gave his only Son, that whoever believes in 
+                        him should not perish but have eternal life.” 
+                    </p>
+                    <cite><a href="#0">John 3:16</a></cite>
+                </blockquote>
+
+                <h2>Our Values</h2>
+                <div class="row block-large-1-2 block-1000-full block-list">
+                    <div class="column block-list__item">
+                        <h6>Identity in Christ</h6>
+                        <p>We live our identity as children of God and reflect His love.</p>
+                    </div>
+                    <div class="column block-list__item">
+                        <h6>Church Is Family</h6>
+                        <p>We treat each member as family, caring and supporting one another.</p>
+                    </div>
+                    <div class="column block-list__item">
+                        <h6>Kingdom Culture</h6>
+                        <p>We follow God’s ways, serving with humility and faithfulness.</p>
+                    </div>
+                    <div class="column block-list__item">
+                        <h6>Spirit Led Life</h6>
+                        <p>We live guided by the Holy Spirit in all our actions and decisions.</p>
+                    </div>
+                </div>
+
+                <h2>What We Believe</h2>
+                <div class="row block-large-1-2 block-1000-full block-list">
+                    <div class="column block-list__item">
+                        <h6>Faith in Christ</h6>
+                        <p>Jesus Christ is Lord. Through Him we have life and salvation.</p>
+                    </div>
+                    <div class="column block-list__item">
+                        <h6>Living Word</h6>
+                        <p>The Bible guides our life and choices. We obey its teachings.</p>
+                    </div>
+                    <div class="column block-list__item">
+                        <h6>Service</h6>
+                        <p>We serve God and others with love, humility, and generosity.</p>
+                    </div>
+                    <div class="column block-list__item">
+                        <h6>Community</h6>
+                        <p>We build strong families, care for the needy, and share God’s love.</p>
+                    </div>
+                </div>
+
+                <h2>Meet Our Team</h2>
+                <div class="row block-large-1-2 block-tab-full church-staff">
+                    {% for member in team %}
+                    <div class="column church-staff__item">
+                        <div class="church-staff__header">
+                            <div class="church-staff__picture">
+                                <img src="{{ member.image_url }}" alt="{{ member.name }}">
+                            </div>
+                            <h4 class="church-staff__name">
+                                {{ member.name }}
+                                <span class="church-staff__position">{{ member.role }}</span>
+                            </h4>
+                        </div>
+                        <p>{{ member.description }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Social -->
+    <section class="s-social">
+        <div class="row social-content">
+            <div class="column">
+                <ul class="social-list">
+                    <li><a href="#0"><span class="social-list__icon social-list__icon--facebook"></span>Facebook</a></li>
+                    <li><a href="#0"><span class="social-list__icon social-list__icon--twitter"></span>Twitter</a></li>
+                    <li><a href="#0"><span class="social-list__icon social-list__icon--instagram"></span>Instagram</a></li>
+                    <li><a href="#0"><span class="social-list__icon social-list__icon--email"></span>Email</a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="s-footer">
+        <div class="row footer-top">
+            <div class="column large-4 medium-5 tab-full">
+                <div class="footer-logo">
+                    <a class="site-footer-logo" href="index.html">
+                        <img src="static/images/logo.svg" alt="Parish Logo">
+                    </a>
+                </div>
+                <p>We are a Catholic community worshipping God and serving others with love and faith.</p>
+            </div>
+            <div class="column large-half tab-full">
+                <div class="row">
+                    <div class="column large-7 medium-full">
+                        <h4 class="h6">Our Location</h4>
+                        <p>Ngoiso Catholic Church<br>Ngoiso, Eldoret<br>Kenya</p>
+                    </div>
+                    <div class="column large-5 medium-full">
+                        <h4 class="h6">Quick Links</h4>
+                        <ul class="footer-list">
+                            <li><a href="/">Home</a></li>
+                            <li><a href="/about/">About Parish</a></li>
+                            <li><a href="/outstations/">Outstations</a></li>
+                            <li><a href="/groups/">Parish Groups</a></li>
+                            <li><a href="/events/">Events</a></li>
+                            <li><a href="/contact/">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row footer-bottom">
+            <div class="column ss-copyright">
+                <span>© 2026 Ngoiso Catholic Church. All Rights Reserved.</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS -->
+    <script src="static/js/jquery-3.2.1.min.js"></script>
+    <script src="static/js/plugins.js"></script>
+    <script src="static/js/main.js"></script>
+
+</body>
+</html>

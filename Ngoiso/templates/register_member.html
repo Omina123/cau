@@ -1,0 +1,152 @@
+{% load crispy_forms_tags %}
+{% load django_bootstrap5 %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register Member</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #FFD700, #FFFFFF);
+            color: #000; /* Vatican black text */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: #C9A227; /* Vatican gold */
+        }
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+            font-weight: 600;
+        }
+        .nav-link:hover {
+            color: #000 !important;
+        }
+
+        /* Form card */
+        .form-wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 15px;
+        }
+        .form-card {
+            background: #fff;
+            border-radius: 15px;
+            padding: 30px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .form-card h2 {
+            text-align: center;
+            color: #C9A227;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+        .btn-primary {
+            background-color: #C9A227;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .btn-primary:hover {
+            background-color: #b08f1a;
+        }
+
+        footer {
+            background-color: #C9A227;
+            color: #fff;
+            text-align: center;
+            padding: 15px 0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">Parish System</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'register_member' %}">Members</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- FORM -->
+<div class="form-wrapper">
+    <div class="form-card">
+        <h2>Register Member</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {% bootstrap_field form.parish %}
+            {% bootstrap_field form.outstation %}
+            {% bootstrap_field form.jumuiya %}
+            {% bootstrap_field form.full_name %}
+            {% bootstrap_field form.phone_number %}
+            {% bootstrap_field form.group %}
+            <button type="submit" class="btn btn-primary w-100 mt-3">Save</button>
+        </form>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    &copy; 2026 Parish Management System | Vatican Colors Theme
+</footer>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // When Parish changes
+    $('#parish').change(function(){
+        var parishId = $(this).val();
+        $.ajax({
+            url: "{% url 'ajax_load_outstations' %}",
+            data: {'parish': parishId},
+            success: function(data){
+                $("#outstation").html('<option value="">Select Outstation</option>');
+                data.forEach(function(outstation){
+                    $("#outstation").append('<option value="'+ outstation.id +'">'+ outstation.name +'</option>');
+                });
+                $("#jumuiya").html('<option value="">Select Jumuiya</option>'); // reset jumuiya
+            }
+        });
+    });
+
+    // When Outstation changes
+    $('#outstation').change(function(){
+        var outstationId = $(this).val();
+        $.ajax({
+            url: "{% url 'ajax_load_jumuiya' %}",
+            data: {'outstation': outstationId},
+            success: function(data){
+                $("#jumuiya").html('<option value="">Select Jumuiya</option>');
+                data.forEach(function(j){
+                    $("#jumuiya").append('<option value="'+ j.id +'">'+ j.name +'</option>');
+                });
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
