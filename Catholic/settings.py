@@ -78,10 +78,23 @@ WSGI_APPLICATION = 'Catholic.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+import os
+import dj_database_url  # Optional but recommended
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME', 'catholic'),
+        'USER': os.environ.get('DB_USER', 'catholic_uqp1_user'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', '5ze2GuyyUHnlRuzFvbCaDCXYOWCvZxOR'),
+        'HOST': os.environ.get('DB_HOST', 'dpg-d6e0m8h4tr6s73d4ls3g-a'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
 
