@@ -29,8 +29,12 @@ SECRET_KEY = 'django-insecure-wxuyzr(t=q%&krapya$&86h02-yj9fq%3ru%*i$z&a@n@nql%c
 DEBUG = False
 ALLOWED_HOSTS = [
     "st-peters-ngoisa.onrender.com",
-    'localhost','127.0.0.0.1'
+    "localhost",
+    "127.0.0.1:8000",
 ]
+
+# "st-peters-ngoisa.onrender.com",
+#     'localhost','127.0.0.1:8000'
 
 #
 
@@ -54,6 +58,7 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # ADD THIS
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -145,8 +150,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 

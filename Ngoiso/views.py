@@ -104,7 +104,7 @@ def mavuno(request):
         if form.is_valid():   
             form.save()
             messages.success(request, "Mavuno recorded successfully!")
-            return redirect('Dashbd')
+            return redirect('mavuno')
             
     else:
         form = MavunoForm()   
