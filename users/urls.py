@@ -7,6 +7,8 @@ urlpatterns = [
     path('error_page', views.error_page, name= 'error_page'),
     path('Login', views.Login, name= 'Login'),
     path('register_user', views.register_user, name= 'register_user'),
+    path('Logout/', views.Logout, name='Logout'),
+
     
     
     

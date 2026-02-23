@@ -7,6 +7,7 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
     <style>
         body {
@@ -56,6 +57,7 @@
 </nav>
 
 <!-- OFFCANVAS SIDEBAR -->
+<!-- OFFCANVAS SIDEBAR -->
 <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar">
     <div class="offcanvas-header bg-warning text-white">
         <h5 class="offcanvas-title">Parish Menu</h5>
@@ -63,15 +65,52 @@
     </div>
     <div class="offcanvas-body p-0">
         <ul class="list-unstyled m-0">
-            <li><a href="{% url 'Dashbd' %}" class="d-block p-3 text-dark text-decoration-none {% if request.path == '/Dashbd/' %}bg-warning text-white{% endif %}">Dashboard</a></li>
-            <li><a href="{% url 'register_member' %}" class="d-block p-3 text-dark text-decoration-none {% if request.path == '/register_member/' %}bg-warning text-white{% endif %}">Register Members</a></li>
-            <li><a href="{% url 'zaka' %}" class="d-block p-3 text-dark text-decoration-none {% if request.path == '/zaka/' %}bg-warning text-white{% endif %}">Zaka</a></li>
-            <li><a href="{% url 'mavuno' %}" class="d-block p-3 text-dark text-decoration-none {% if request.path == '/mavuno/' %}bg-warning text-white{% endif %}">Monthly Mavuno</a></li>
-            <li><a href="{% url 'Special' %}" class="d-block p-3 text-dark text-decoration-none {% if request.path == '/Special/' %}bg-warning text-white{% endif %}">Special Contributions</a></li>
-            <li><a href="{% url 'sadaka' %}" class="d-block p-3 text-dark text-decoration-none {% if request.path == '/sadaka/' %}bg-warning text-white{% endif %}">Sadaka</a></li>
-            <li><a href="#" class="d-block p-3 text-dark text-decoration-none">Staff</a></li>
-            <li><a href="{% url 'jumuiya' %}" class="d-block p-3 text-dark text-decoration-none {% if request.path == '/jumuiya/' %}bg-warning text-white{% endif %}">Jumuiya</a></li>
-            <li><a href="{% url 'out_station' %}" class="d-block p-3 text-dark text-decoration-none">Register Outstation</a></li>
+            <li>
+                <a href="{% url 'Dashbd' %}" class="d-block p-3 text-dark text-decoration-none {% if request.path == '/Dashbd/' %}bg-warning text-white{% endif %}">
+                    <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'register_member' %}" class="d-block p-3 text-dark text-decoration-none {% if request.path == '/register_member/' %}bg-warning text-white{% endif %}">
+                    <i class="bi bi-person-plus me-2"></i> Register Members
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'zaka' %}" class="d-block p-3 text-dark text-decoration-none {% if request.path == '/zaka/' %}bg-warning text-white{% endif %}">
+                    <i class="bi bi-cash-stack me-2"></i> Zaka
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'mavuno' %}" class="d-block p-3 text-dark text-decoration-none {% if request.path == '/mavuno/' %}bg-warning text-white{% endif %}">
+                    <i class="bi bi-bar-chart-line me-2"></i> Monthly Mavuno
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'Special' %}" class="d-block p-3 text-dark text-decoration-none {% if request.path == '/Special/' %}bg-warning text-white{% endif %}">
+                    <i class="bi bi-gift me-2"></i> Special Contributions
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'sadaka' %}" class="d-block p-3 text-dark text-decoration-none {% if request.path == '/sadaka/' %}bg-warning text-white{% endif %}">
+                    <i class="bi bi-hand-thumbs-up me-2"></i> Sadaka
+                </a>
+            </li>
+            
+            <li>
+                <a href="{% url 'jumuiya' %}" class="d-block p-3 text-dark text-decoration-none {% if request.path == '/jumuiya/' %}bg-warning text-white{% endif %}">
+                    <i class="bi bi-people me-2"></i> Jumuiya
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'out_station' %}" class="d-block p-3 text-dark text-decoration-none">
+                    <i class="bi bi-building me-2"></i> Register Outstation
+            <li>
+                <a href="{% url 'Logout' %}" class="d-block p-3 text-dark text-decoration-none">
+                    <i class="bi bi-box-arrow-right me-2"></i> Logout
+                </a>
+            </li>
+                </a>
+            </li>
         </ul>
     </div>
 </div>

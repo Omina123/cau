@@ -9,6 +9,10 @@ from django.core.mail import send_mail
 from django.conf import settings
 from Ngoiso import views
 from django.contrib.auth import logout
+def Logout(request):
+    logout(request)
+    return redirect('Login')
+
 def error_page(request):
     title ="Access Denied"
     message= "You must login/Register to continue"

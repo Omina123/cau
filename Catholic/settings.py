@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+import dj_database_url  # Optional but recommended
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -83,22 +86,25 @@ WSGI_APPLICATION = 'Catholic.wsgi.application'
 #         'ENGINE': 'django.db.backends.sqlite3',
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
+#  }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.environ.get('DB_NAME', 'catholic'),
+#         'USER': os.environ.get('DB_USER', 'catholic_uqp1_user'),
+#         'PASSWORD': os.environ.get('DB_PASSWORD', '5ze2GuyyUHnlRuzFvbCaDCXYOWCvZxOR'),
+#         'HOST': os.environ.get('DB_HOST', 'dpg-d6e0m8h4tr6s73d4ls3g-a.abcdef.postgres.render.com'),
+#         'PORT': os.environ.get('DB_PORT', '5432'),
+#     }
 # }
-import os
-import dj_database_url  # Optional but recommended
+import dj_database_url
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'catholic'),
-        'USER': os.environ.get('DB_USER', 'catholic_uqp1_user'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', '5ze2GuyyUHnlRuzFvbCaDCXYOWCvZxOR'),
-        'HOST': os.environ.get('DB_HOST', 'dpg-d6e0m8h4tr6s73d4ls3g-a'),
-        'PORT': os.environ.get('DB_PORT', '5432'),
-    }
+    'default': dj_database_url.config(
+        default='postgresql://catholic_uqp1_user:5ze2GuyyUHnlRuzFvbCaDCXYOWCvZxOR@dpg-d6e0m8h4tr6s73d4ls3g-a.oregon-postgres.render.com/catholic_uqp1'
+    )
 }
-
-
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
