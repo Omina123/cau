@@ -20,7 +20,8 @@ def register_member(request):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            return redirect('Dashbd')  # You can also redirect to a success page or the member list page after saving
+            messages.success(request, "Member recorded successfully!")
+            return redirect('register_member')  # You can also redirect to a success page or the member list page after saving
             # redirect to members page or success message
     context = {'form': form}
     return render(request, 'register_member.html', context)
@@ -30,7 +31,8 @@ def jumuiya(request):
         form = JumuiyaForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('register_member')
+            messages.success(request, "Jumuiya recorded successfully!")
+            return redirect('jumuiya')
     else:
         form = JumuiyaForm()   
 
@@ -86,7 +88,8 @@ def zaka(request):
         form = ZakaForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('Dashbd')
+            messages.success(request, "zaka recorded successfully!")
+            return redirect('zaka')
     else:
         form = ZakaForm()
 
@@ -102,12 +105,15 @@ def mavuno(request):
         form = MavunoForm(request.POST)
         if form.is_valid():   
             form.save()
+            messages.success(request, "Mavuno recorded successfully!")
             return redirect('Dashbd')
+            
     else:
         form = MavunoForm()   
 
     context = {
         'form': form
+        
     }
     return render(request, 'mavuno.html', context)
 @login_required(login_url='Login')
@@ -116,7 +122,8 @@ def Special(request):
         form = SpecialForm(request.POST)
         if form.is_valid():   
             form.save()
-            return redirect('Dashbd')
+            messages.success(request, "Recorded successfully!")
+            return redirect('Special')
     else:
         form = SpecialForm()   
 
@@ -180,6 +187,7 @@ def outstation(request, pk):
             'special': {s.contribution_type: s.amount for s in special},
             'mavuno': {m.produce_type: m.quantity for m in mavuno},
         })
+        messages.success(request, "Outstation  recorded successfully!")
 
     return render(request, 'detail.html', {
         'outstation': outstation_obj,

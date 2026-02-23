@@ -94,6 +94,13 @@
 <div class="form-wrapper">
     <div class="form-card">
         <h2>Register Member</h2>
+         {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
         <form method="POST">
             {% csrf_token %}
             {% bootstrap_field form.parish %}

@@ -1,4 +1,6 @@
 from django.db import models
+
+from datetime import date
 class Outstation(models.Model):
     name = models.CharField(max_length=100)
     parish = models.CharField(max_length=50, choices=[('NGOISA', 'NGOISa Parish')])
@@ -67,8 +69,7 @@ class Mavuno(models.Model):
 
     def __str__(self):
         return f"{self.member.full_name} - {self.produce_type}"                                   
-from django.db import models
-from datetime import date
+
 
 class Sadaka(models.Model):
     outstation = models.ForeignKey('Outstation', on_delete=models.CASCADE)
