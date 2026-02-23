@@ -29,8 +29,7 @@ SECRET_KEY = 'django-insecure-wxuyzr(t=q%&krapya$&86h02-yj9fq%3ru%*i$z&a@n@nql%c
 DEBUG = False
 ALLOWED_HOSTS = [
     "st-peters-ngoisa.onrender.com",
-    "localhost",
-    "127.0.0.1:8000",
+    "localhost","127.0.0.1",
 ]
 
 # "st-peters-ngoisa.onrender.com",
