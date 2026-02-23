@@ -42,7 +42,9 @@
 
 <!-- NAVBAR -->
 <nav class="navbar navbar-light bg-white shadow-sm px-3 mb-4">
-    <span class="navbar-brand mb-0 h5">Parish Dashboard</span>
+    <li class="nav-item">
+                    <a class="nav-link" href="{% url 'Dashbd' %}">DASHBOARD</a>
+                </li>
     <span>Welcome, {{ request.user.username }}</span>
 </nav>
 

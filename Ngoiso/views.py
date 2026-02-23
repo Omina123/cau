@@ -20,7 +20,6 @@ def register_member(request):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            messages.success(request, "Member recorded successfully!")
             return redirect('register_member')  # You can also redirect to a success page or the member list page after saving
             # redirect to members page or success message
     context = {'form': form}
@@ -31,8 +30,7 @@ def jumuiya(request):
         form = JumuiyaForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, "Jumuiya recorded successfully!")
-            return redirect('jumuiya')
+            return redirect('register_member')
     else:
         form = JumuiyaForm()   
 
@@ -73,15 +71,15 @@ def zaka(request):
 
     members = Member.objects.all()
 
-    # SEARCH FILTER
-    outstation = request.GET.get('outstation')
-    jumuiya = request.GET.get('jumuiya')
+    # # SEARCH FILTER
+    # outstation = request.GET.get('outstation')
+    # jumuiya = request.GET.get('jumuiya')
 
-    if outstation:
-        members = members.filter(outstation__icontains=outstation)
+    # if outstation:
+    #     members = members.filter(outstation__icontains=outstation)
 
-    if jumuiya:
-        members = members.filter(jumuiya__icontains=jumuiya)
+    # if jumuiya:
+    #     members = members.filter(jumuiya__icontains=jumuiya)
 
     # FORM SAVE
     if request.method == 'POST':
@@ -122,8 +120,8 @@ def Special(request):
         form = SpecialForm(request.POST)
         if form.is_valid():   
             form.save()
-            messages.success(request, "Recorded successfully!")
-            return redirect('Special')
+            messages.success(request, "Reecorded successfully!")
+            return redirect('Dashbd')
     else:
         form = SpecialForm()   
 
@@ -200,7 +198,7 @@ def sadaka(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Sadaka recorded successfully!")
-            return redirect('Dashbd')
+            return redirect('sadaka')
     else:
         form = SadakaForm()
     return render(request, 'sdk.html', {'form': form})

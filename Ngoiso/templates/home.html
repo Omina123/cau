@@ -207,28 +207,34 @@
     <!-- hero
     ================================================== -->
 
-   
-    <section class="s-hero" data-parallax="scroll" data-image-src="static/images/cathlic.jpg" data-natural-width=3000 data-natural-height=2000 data-position-y=center>
+   <section class="s-hero" 
+         data-parallax="scroll" 
+         data-image-src="{% static 'images/cathlic.jpg' %}" 
+         data-natural-width="3000" 
+         data-natural-height="2000" 
+         data-position-y="center">
 
-        <div class="hero-left-bar"></div>
+    <div class="hero-left-bar"></div>
 
-        <div class="row hero-content">
+    <div class="row hero-content">
 
-            <div class="column large-full hero-content__text">
-                <h1>WELCOME TO ST PETERS NGOISA PARISH
-                </h3>
+        <div class="column large-full hero-content__text">
+            <h1>WELCOME TO ST PETERS NGOISA PARISH</h1>
+            <p>
                 We Exist To <br>
-                    Honor God And <br>
-                    Make Disciples
-                </h3>
+                Honor God And <br>
+                Make Disciples
+            </p>
 
-                <div class="hero-content__buttons">
-                    <a href="{%url 'register_member'%}" class="btn btn--stroke">BE part of us</a>
-                    <a href="{% url 'about' %}" class="btn btn--stroke">About Us</a>
-                </div>
-            </div> <!-- end hero-content__text -->
+            <div class="hero-content__buttons">
+                <a href="{% url 'register_member' %}" class="btn btn--stroke">BE part of us</a>
+                <a href="{% url 'about' %}" class="btn btn--stroke">About Us</a>
+            </div>
+        </div> <!-- end hero-content__text -->
 
-        </div> <!-- end hero-content -->
+    </div> <!-- end hero-content -->
+
+</section> <!-- end s-hero -->
 
         <ul class="hero-social">
             <li class="hero-social__title">Follow Us</li>
