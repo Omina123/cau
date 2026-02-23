@@ -20,6 +20,7 @@ def register_member(request):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
+            messages.success("Registered Member succefully")
             return redirect('register_member')  # You can also redirect to a success page or the member list page after saving
             # redirect to members page or success message
     context = {'form': form}
@@ -43,7 +44,8 @@ def out_station(request):
         form = OutstationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('register_member')
+            messages.success('Recorded station succeffully')
+            return redirect('Dashbd')
     else:
         form = OutstationForm()   
 

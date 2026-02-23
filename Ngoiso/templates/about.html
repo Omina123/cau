@@ -20,41 +20,9 @@
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="manifest" href="site.webmanifest">
 
-    <style>
-        /* Vatican-inspired colors */
-        body {
-            background-color: #fffbea; /* pale yellow */
-            color: #333;
-        }
-        h1, h2, h4, h6 {
-            color: #FFD700; /* Vatican gold */
-        }
-        a {
-            color: #C9A227;
-        }
-        a:hover {
-            color: #b38f1b;
-        }
-        .header-nav a {
-            color: #C9A227;
-        }
-        .header-nav a.current {
-            font-weight: bold;
-        }
-        .block-list__item p {
-            line-height: 1.5;
-        }
-        blockquote {
-            border-left: 4px solid #FFD700;
-            padding-left: 15px;
-            font-style: italic;
-            color: #555;
-        }
-        footer {
-            background-color: #fffbea;
-            color: #333;
-        }
-    </style>
+    
+
+
 </head>
 
 <body id="top">
@@ -77,10 +45,14 @@
         </div>
 
         <nav class="header-nav-wrap">
-            <ul class="header-nav">
-                <li><a href="" title="Home">Home</a></li>
-                <li class="current"><a href="{% url 'about' %}" title="About">About</a></li>
-                <li><a href="{% url 'Contact' %}" title="Contact">Contact</a></li>  
+           <ul class="header-nav">
+                <li class="current"><a href="{%url 'home'%}" title="Home">Home</a></li>
+                <li><a href="{% url 'about' %}" title="">About</a></li>
+               
+                <li><a href="{% url "Contact" %}" title="Contact us">Contact</a></li>	
+                <li><a href="https://shcathedral-eld.org/" title="Contact us">Cathedral</a></li>
+                 <li><a href="https://holyfamilybasilica.info/about-us/" title="Contact us">Holy family basilica</a></li>
+                 <li><a href="https://www.basilicasanpietro.va/en/san-pietro/the-square" title="Contact us">ST Peters square vertcan</a></li>
             </ul>
         </nav>
 
@@ -227,13 +199,12 @@
                     <div class="column large-5 medium-full">
                         <h4 class="h6">Quick Links</h4>
                         <ul class="footer-list">
-                            <li><a href="/">Home</a></li>
-                            <li><a href="/about/">About Parish</a></li>
-                            <li><a href="/outstations/">Outstations</a></li>
-                            <li><a href="/groups/">Parish Groups</a></li>
-                            <li><a href="/events/">Events</a></li>
-                            <li><a href="/contact/">Contact</a></li>
-                        </ul>
+                        <li><a href="{%url 'home'%}">Home</a></li>
+                       
+                        <li><a href="{% url 'Dashbd' %}">Admin</a></li>
+                        <li><a href="{% url 'about' %}">About</a></li>
+                        <li><a href="{% url 'Contact' %}">Contact</a></li>
+                    </ul>
                     </div>
                 </div>
             </div>
