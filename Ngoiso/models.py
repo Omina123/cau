@@ -35,7 +35,7 @@ class Zaka(models.Model):
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
     year = models.CharField(max_length=1, choices=YEAR_CHOICES)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    date_paid = models.DateField(auto_now_add=True)
+    date_recorded = models.DateField(default=date.today)
 
     def __str__(self):
         return f"{self.member.full_name} - Zaka {self.year}"
@@ -50,7 +50,7 @@ class SpecialContribution(models.Model):
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
     contribution_type = models.CharField(max_length=20, choices=CONTRIBUTION_TYPE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    date_paid = models.DateField(auto_now_add=True)
+    date_recorded = models.DateField(default=date.today)
 
     def __str__(self):
         return f"{self.member.full_name} - {self.contribution_type}"  
@@ -65,7 +65,7 @@ class Mavuno(models.Model):
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
     produce_type = models.CharField(max_length=20, choices=PRODUCE_CHOICES)
     quantity = models.DecimalField(max_digits=10, decimal_places=2)
-    date_received = models.DateField(auto_now_add=True)
+    date_recorded = models.DateField(default=date.today)
 
     def __str__(self):
         return f"{self.member.full_name} - {self.produce_type}"                                   

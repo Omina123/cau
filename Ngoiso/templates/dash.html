@@ -150,6 +150,7 @@
                     </tbody>
                 </table>
             </div>
+            
 
             <!-- Mavuno -->
             <div class="card mb-3 p-2">
@@ -166,6 +167,28 @@
                         <tr>
                             <td>{{ produce }}</td>
                             <td>{{ total }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="card mb-3 p-2">
+                <h6 class="text-center">Zaka Contributions (Year {{ now.year }})</h6>
+                <table class="table table-sm table-bordered mb-0">
+                    <thead>
+                        <tr>
+                            
+                            <th>Type</th>
+                            <th>year</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for contrib, total in data.zaka_totals.items %}
+                        <tr>
+                            
+                            <td>{{ contrib }}</td>
+                            <td>KES {{ total }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>

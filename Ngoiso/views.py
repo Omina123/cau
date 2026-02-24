@@ -132,28 +132,49 @@ def Special(request):
     }
     return render(request, 'special.html', context)
 @login_required(login_url='Login')
-
-@login_required(login_url='Login')
 def Dashbd(request):
     outstations = Outstation.objects.all()
     outstation_data = []
 
+    current_year = date.today().year
+
     for outstation in outstations:
         # Sadaka totals
         sadaka_weekly = Sadaka.objects.filter(outstation=outstation).order_by('-date_recorded')[:5]  # last 5 weeks
-        sadaka_yearly = Sadaka.objects.filter(outstation=outstation, date_recorded__year=date.today().year).aggregate(total=Sum('amount'))['total'] or 0
+        sadaka_yearly = Sadaka.objects.filter(
+            outstation=outstation, 
+            date_recorded__year=current_year
+        ).aggregate(total=Sum('amount'))['total'] or 0
 
         # Mavuno totals per produce type
         mavuno_totals = {}
         for produce in ['MAIZE', 'BEANS', 'WHEAT']:
-            total = Mavuno.objects.filter(member__outstation=outstation, produce_type=produce, date_received__year=date.today().year).aggregate(total=Sum('quantity'))['total'] or 0
+            total = Mavuno.objects.filter(
+                member__outstation=outstation,
+                produce_type=produce,
+                date_recorded__year=current_year
+            ).aggregate(total=Sum('quantity'))['total'] or 0
             mavuno_totals[produce] = total
 
-        # Special contributions
+        # Special contributions totals
         special_totals = {}
         for contrib in ['NOEL', 'CHRISTMAS', 'PASAKA']:
-            total = SpecialContribution.objects.filter(member__outstation=outstation, contribution_type=contrib, date_paid__year=date.today().year).aggregate(total=Sum('amount'))['total'] or 0
+            total = SpecialContribution.objects.filter(
+                member__outstation=outstation,
+                contribution_type=contrib,
+                date_recorded__year=current_year
+            ).aggregate(total=Sum('amount'))['total'] or 0
             special_totals[contrib] = total
+
+        # Zaka totals per year
+        zaka_totals = {}
+        zaka_records = Zaka.objects.filter(
+            member__outstation=outstation, 
+            date_recorded__year=current_year
+        )
+        for z in zaka_records:
+            year = z.date_recorded.year
+            zaka_totals[year] = zaka_totals.get(year, 0) + z.amount
 
         outstation_data.append({
             'outstation': outstation,
@@ -161,38 +182,70 @@ def Dashbd(request):
             'sadaka_yearly': sadaka_yearly,
             'mavuno_totals': mavuno_totals,
             'special_totals': special_totals,
+            'zaka_totals': zaka_totals,
         })
 
     context = {
-        'outstation_data': outstation_data
+        'outstation_data': outstation_data,
+        'now': date.today(),  # for templates to show current year
     }
 
     return render(request, 'dash.html', context)
 
 
+
 @login_required(login_url='Login')
 def outstation(request, pk):
-    outstation_obj = get_object_or_404(Outstation, pk=pk)
-    members = Member.objects.filter(outstation=outstation_obj)
+    outstation = get_object_or_404(Outstation, id=pk)
+    members = Member.objects.filter(outstation=outstation)
 
     member_data = []
-    for member in members:
-        zaka = Zaka.objects.filter(member=member)
-        special = SpecialContribution.objects.filter(member=member)
-        mavuno = Mavuno.objects.filter(member=member)
+
+    for m in members:
+        # Zaka: group by year
+        zaka_qs = Zaka.objects.filter(member=m).order_by('date_recorded')
+        zaka = {'A': [], 'B': [], 'C': []}
+        for z in zaka_qs:
+            zaka[z.year].append({
+                'amount': z.amount,
+                'year': z.year,
+                'date': z.date_recorded,
+            })
+
+        # Special Contributions: group by type
+        special_qs = SpecialContribution.objects.filter(member=m).order_by('date_recorded')
+        special = {'NOEL': [], 'CHRISTMAS': [], 'PASAKA': []}
+        for s in special_qs:
+            special[s.contribution_type].append({
+                'amount': s.amount,
+                'date': s.date_recorded,
+                'year': s.date_recorded.year,
+            })
+
+        # Mavuno: group by produce type
+        mavuno_qs = Mavuno.objects.filter(member=m).order_by('date_recorded')
+        mavuno = {'MAIZE': [], 'BEANS': [], 'WHEAT': []}
+        for p in mavuno_qs:
+            mavuno[p.produce_type].append({
+                'quantity': p.quantity,
+                'date': p.date_recorded,
+                'year': p.date_recorded.year,
+            })
 
         member_data.append({
-            'member': member,
-            'zaka': {z.year: z.amount for z in zaka},
-            'special': {s.contribution_type: s.amount for s in special},
-            'mavuno': {m.produce_type: m.quantity for m in mavuno},
+            'member': m,
+            'zaka': zaka,
+            'special': special,
+            'mavuno': mavuno,
         })
-        messages.success(request, "Outstation  recorded successfully!")
 
-    return render(request, 'detail.html', {
-        'outstation': outstation_obj,
-        'member_data': member_data
-    })
+    context = {
+        'outstation_name': outstation.name,
+        'member_data': member_data,
+        'now': None,
+    }
+
+    return render(request, 'detail.html', context)
 @login_required(login_url='Login')
 def sadaka(request):
     if request.method == 'POST':
