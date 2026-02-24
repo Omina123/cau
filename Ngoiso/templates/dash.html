@@ -57,7 +57,6 @@
 </nav>
 
 <!-- OFFCANVAS SIDEBAR -->
-<!-- OFFCANVAS SIDEBAR -->
 <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar">
     <div class="offcanvas-header bg-warning text-white">
         <h5 class="offcanvas-title">Parish Menu</h5>
@@ -95,7 +94,6 @@
                     <i class="bi bi-hand-thumbs-up me-2"></i> Sadaka
                 </a>
             </li>
-            
             <li>
                 <a href="{% url 'jumuiya' %}" class="d-block p-3 text-dark text-decoration-none {% if request.path == '/jumuiya/' %}bg-warning text-white{% endif %}">
                     <i class="bi bi-people me-2"></i> Jumuiya
@@ -104,11 +102,11 @@
             <li>
                 <a href="{% url 'out_station' %}" class="d-block p-3 text-dark text-decoration-none">
                     <i class="bi bi-building me-2"></i> Register Outstation
+                </a>
+            </li>
             <li>
                 <a href="{% url 'Logout' %}" class="d-block p-3 text-dark text-decoration-none">
                     <i class="bi bi-box-arrow-right me-2"></i> Logout
-                </a>
-            </li>
                 </a>
             </li>
         </ul>
@@ -117,11 +115,54 @@
 
 <!-- MAIN CONTENT -->
 <div class="container mt-4">
-    <h2 class="mb-4 text-center">Outstations</h2>
 
-    <div class="row g-4">
+    <h2 class="mb-4 text-center">Parish Perfomance </h2>
+
+    <!-- Parish totals -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card p-3 text-center bg-warning text-white">
+                <h6>Total Sadaka (Year {{ now.year }})</h6>
+                <p>KES {{ parish_totals.sadaka }}</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 text-center bg-success text-white">
+                <h6>Total Mavuno (Year {{ now.year }})</h6>
+                <p>
+                    Maize: {{ parish_totals.mavuno.MAIZE }}<br>
+                    Beans: {{ parish_totals.mavuno.BEANS }}<br>
+                    Wheat: {{ parish_totals.mavuno.WHEAT }}
+                </p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 text-center bg-info text-white">
+                <h6>Total Zaka (Year {{ now.year }})</h6>
+                <p>KES {{ parish_totals.zaka }}</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 text-center bg-primary text-white">
+                <h6>Total Special Contributions (Year {{ now.year }})</h6>
+                <p>
+                    Noel: {{ parish_totals.special.NOEL }}<br>
+                    Christmas KES: {{ parish_totals.special.CHRISTMAS }}<br>
+                    Pasaka: {{ parish_totals.special.PASAKA }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search box -->
+    <div class="mb-3">
+        <input type="text" id="outstationSearch" class="form-control" placeholder="Search outstation by name..." onkeyup="searchOutstation()">
+    </div>
+
+    <!-- Outstations list -->
+    <div class="row g-4" id="outstationContainer">
         {% for data in outstation_data %}
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 outstation-card">
             <div class="card card-outstation mb-3">
                 <h5 class="card-title">{{ data.outstation.name }}</h5>
                 <a href="{% url 'outstation' data.outstation.id %}" class="btn btn-outline-warning btn-sm">Open</a>
@@ -131,30 +172,11 @@
             <div class="card mb-3 p-2">
                 <h6 class="text-center">Sadaka</h6>
                 <p>Year Total: KES {{ data.sadaka_yearly }}</p>
-                <table class="table table-sm table-bordered mb-0">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for s in data.sadaka_weekly %}
-                        <tr>
-                            <td>{{ s.date_recorded }}</td>
-                            <td>KES {{ s.amount }}</td>
-                        </tr>
-                        {% empty %}
-                        <tr><td colspan="2">No records</td></tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
             </div>
-            
 
             <!-- Mavuno -->
             <div class="card mb-3 p-2">
-                <h6 class="text-center">Mavuno (Year {{ now.year }})</h6>
+                <h6 class="text-center">Mavuno</h6>
                 <table class="table table-sm table-bordered mb-0">
                     <thead>
                         <tr>
@@ -172,32 +194,16 @@
                     </tbody>
                 </table>
             </div>
+
+            <!-- Zaka -->
             <div class="card mb-3 p-2">
-                <h6 class="text-center">Zaka Contributions (Year {{ now.year }})</h6>
-                <table class="table table-sm table-bordered mb-0">
-                    <thead>
-                        <tr>
-                            
-                            <th>Type</th>
-                            <th>year</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for contrib, total in data.zaka_totals.items %}
-                        <tr>
-                            
-                            <td>{{ contrib }}</td>
-                            <td>KES {{ total }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                <h6 class="text-center">Zaka Contributions</h6>
+                <p>Total: KES {{ data.zaka_totals.current_year }}</p>
             </div>
 
             <!-- Special Contributions -->
             <div class="card mb-3 p-2">
-                <h6 class="text-center">Special Contributions (Year {{ now.year }})</h6>
+                <h6 class="text-center">Special Contributions</h6>
                 <table class="table table-sm table-bordered mb-0">
                     <thead>
                         <tr>
@@ -220,6 +226,18 @@
         {% endfor %}
     </div>
 </div>
+
+<!-- Search JS -->
+<script>
+function searchOutstation() {
+    const input = document.getElementById('outstationSearch').value.toLowerCase();
+    const cards = document.querySelectorAll('.outstation-card');
+    cards.forEach(card => {
+        const name = card.querySelector('.card-title').innerText.toLowerCase();
+        card.style.display = name.includes(input) ? '' : 'none';
+    });
+}
+</script>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

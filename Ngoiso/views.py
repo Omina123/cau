@@ -40,12 +40,13 @@ def jumuiya(request):
         'form': form
     }
     return render(request, 'jumuiya.html', context)
+@login_required(login_url='Login')
 def out_station(request):
     if request.method == 'POST':
         form = OutstationForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success('Recorded station succeffully')
+            messages.success(request, 'Outstation recorded successfully')
             return redirect('out_station')
     else:
         form = OutstationForm()   
@@ -139,13 +140,22 @@ def Dashbd(request):
 
     current_year = date.today().year
 
+    # Parish-wide totals
+    parish_totals = {
+        'sadaka': 0,
+        'mavuno': {'MAIZE': 0, 'BEANS': 0, 'WHEAT': 0},
+        'special': {'NOEL': 0, 'CHRISTMAS': 0, 'PASAKA': 0},
+        'zaka': 0
+    }
+
     for outstation in outstations:
         # Sadaka totals
-        sadaka_weekly = Sadaka.objects.filter(outstation=outstation).order_by('-date_recorded')[:5]  # last 5 weeks
+        sadaka_weekly = Sadaka.objects.filter(outstation=outstation).order_by('-date_recorded')[:5]  # last 5
         sadaka_yearly = Sadaka.objects.filter(
-            outstation=outstation, 
+            outstation=outstation,
             date_recorded__year=current_year
         ).aggregate(total=Sum('amount'))['total'] or 0
+        parish_totals['sadaka'] += sadaka_yearly
 
         # Mavuno totals per produce type
         mavuno_totals = {}
@@ -156,6 +166,7 @@ def Dashbd(request):
                 date_recorded__year=current_year
             ).aggregate(total=Sum('quantity'))['total'] or 0
             mavuno_totals[produce] = total
+            parish_totals['mavuno'][produce] += total
 
         # Special contributions totals
         special_totals = {}
@@ -166,16 +177,15 @@ def Dashbd(request):
                 date_recorded__year=current_year
             ).aggregate(total=Sum('amount'))['total'] or 0
             special_totals[contrib] = total
+            parish_totals['special'][contrib] += total
 
-        # Zaka totals per year
-        zaka_totals = {}
-        zaka_records = Zaka.objects.filter(
-            member__outstation=outstation, 
+        # Zaka totals
+        zaka_total = Zaka.objects.filter(
+            member__outstation=outstation,
             date_recorded__year=current_year
-        )
-        for z in zaka_records:
-            year = z.date_recorded.year
-            zaka_totals[year] = zaka_totals.get(year, 0) + z.amount
+        ).aggregate(total=Sum('amount'))['total'] or 0
+        zaka_totals = {'current_year': zaka_total}
+        parish_totals['zaka'] += zaka_total
 
         outstation_data.append({
             'outstation': outstation,
@@ -188,7 +198,8 @@ def Dashbd(request):
 
     context = {
         'outstation_data': outstation_data,
-        'now': date.today(),  # for templates to show current year
+        'parish_totals': parish_totals,
+        'now': date.today()
     }
 
     return render(request, 'dash.html', context)
