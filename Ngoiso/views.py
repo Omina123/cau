@@ -31,7 +31,8 @@ def jumuiya(request):
         form = JumuiyaForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('register_member')
+            messages.success(request, "Jumuiya recorded successfully!")
+            return redirect('jumuiya')
     else:
         form = JumuiyaForm()   
 
@@ -45,7 +46,7 @@ def out_station(request):
         if form.is_valid():
             form.save()
             messages.success('Recorded station succeffully')
-            return redirect('Dashbd')
+            return redirect('out_station')
     else:
         form = OutstationForm()   
 
@@ -122,7 +123,7 @@ def Special(request):
         form = SpecialForm(request.POST)
         if form.is_valid():   
             form.save()
-            messages.success(request, "Reecorded successfully!")
+            messages.success(request, "Recorded successfully!")
             return redirect('Dashbd')
     else:
         form = SpecialForm()   

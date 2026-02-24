@@ -3,7 +3,7 @@ from django.db import models
 from datetime import date
 class Outstation(models.Model):
     name = models.CharField(max_length=100)
-    parish = models.CharField(max_length=50, choices=[('NGOISA', 'NGOISa Parish')])
+    parish = models.CharField(max_length=50, choices=[('NGOISA', 'NGOISA PARISH')])
 
     def __str__(self):
         return self.name
@@ -15,7 +15,7 @@ class Jumuiya(models.Model):
     def __str__(self):
         return self.name
 class Member(models.Model):
-    parish = models.CharField(max_length=50, choices=[('NGOISA', 'NGOISA Parish')])
+    parish = models.CharField(max_length=50, choices=[('NGOISA', 'NGOISA PARISH')])
     outstation = models.ForeignKey(Outstation, on_delete=models.SET_NULL, null=True)
     jumuiya = models.ForeignKey(Jumuiya, on_delete=models.SET_NULL, null=True)
     group = models.CharField(max_length=50, choices=[('CMA', 'CMA'), ('CWA', 'CWA'), ('YOUTH', 'Youth'), ('PMC', 'PMC')])
