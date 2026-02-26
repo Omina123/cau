@@ -1,7 +1,7 @@
 Django==5.2.11
-psycopg2-binary==2.9.7   # PostgreSQL adapter
-dj-database-url==3.1.2   # optional but useful for DATABASE_URL
-python-decouple==3.8      # for environment variables (optional)
+psycopg2-binary==2.9.7
+dj-database-url==3.1.2
+python-decouple==3.8
 django-crispy-forms==2.5
 crispy-bootstrap5==2025.6
 django-bootstrap5==26.2
@@ -13,9 +13,8 @@ certifi==2026.1.4
 charset-normalizer==3.4.4
 idna==3.11
 urllib3==2.6.3
-psycopg2-binary
-gunicorn
-psycopg[binary]
-whitenoise
-WeasyPrint
+gunicorn==21.2.0
+whitenoise==8.1.0
+WeasyPrint==59.1
 xhtml2pdf==0.2.9
+python-bidi<0.5
