@@ -103,7 +103,7 @@ WSGI_APPLICATION = 'Catholic.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgresql://catholic_uqp1_user:5ze2GuyyUHnlRuzFvbCaDCXYOWCvZxOR@dpg-d6e0m8h4tr6s73d4ls3g-a.oregon-postgres.render.com/catholic_uqp1'
+        default='postgresql://ompl_user:inbWFUO0MEcbcyoS2qN3TGxizcW5ocHA@dpg-d6g5ha56ubrc73agk2pg-a.oregon-postgres.render.com/ompl'
     )
 }
 # Password validation
