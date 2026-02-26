@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Mavuno Report</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            margin: 2px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 4px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f0f0f0;
+        }
+
+        .subtotal {
+            font-weight: bold;
+            background-color: #f9f9f9;
+        }
+
+        .grandtotal {
+            font-weight: bold;
+            background-color: #d9d9d9;
+        }
+
+        .left {
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+    <h2>{{ parish_name }}</h2>
+    <h3>MAVUNO ANNUAL REPORT - {{ year }}</h3>
+
+    <!-- ================= LOOP OUTSTATIONS ================= -->
+    {% for station in report_data %}
+
+        <h3>Outstation: {{ station.outstation }}</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="2">Jumuiya</th>
+
+                    <th colspan="2">Money</th>
+                    <th colspan="2">Maize</th>
+                    <th colspan="2">Beans</th>
+                    <th colspan="2">Wheat</th>
+                    <th colspan="2">Millet</th>
+                    <th colspan="2">Sheep</th>
+                    <th colspan="2">Cow</th>
+                    <th colspan="2">Goat</th>
+                    <th colspan="2">Chicken</th>
+                    <th colspan="2">Other</th>
+                </tr>
+                <tr>
+                    {% for i in "123456789"|make_list %}
+                        <th>P</th>
+                        <th>R</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <!-- ================= JUMUIYA ROWS ================= -->
+                {% for row in station.jumuiyas %}
+                <tr>
+                    <td class="left">{{ row.jumuiya }}</td>
+
+                    <td>{{ row.MONEY.pledged }}</td>
+                    <td>{{ row.MONEY.paid }}</td>
+
+                    <td>{{ row.MAIZE.pledged }}</td>
+                    <td>{{ row.MAIZE.paid }}</td>
+
+                    <td>{{ row.BEANS.pledged }}</td>
+                    <td>{{ row.BEANS.paid }}</td>
+
+                    <td>{{ row.WHEAT.pledged }}</td>
+                    <td>{{ row.WHEAT.paid }}</td>
+
+                    <td>{{ row.MILLET.pledged }}</td>
+                    <td>{{ row.MILLET.paid }}</td>
+
+                    <td>{{ row.SHEEP.pledged }}</td>
+                    <td>{{ row.SHEEP.paid }}</td>
+
+                    <td>{{ row.COW.pledged }}</td>
+                    <td>{{ row.COW.paid }}</td>
+
+                    <td>{{ row.GOAT.pledged }}</td>
+                    <td>{{ row.GOAT.paid }}</td>
+
+                    <td>{{ row.CHICKEN.pledged }}</td>
+                    <td>{{ row.CHICKEN.paid }}</td>
+
+                    <td>{{ row.OTHER.pledged }}</td>
+                    <td>{{ row.OTHER.paid }}</td>
+                </tr>
+                {% endfor %}
+
+                <!-- ================= SUBTOTAL ROW ================= -->
+                <tr class="subtotal">
+                    <td class="left">SUBTOTAL</td>
+
+                    <td>{{ station.subtotal.MONEY.pledged }}</td>
+                    <td>{{ station.subtotal.MONEY.paid }}</td>
+
+                    <td>{{ station.subtotal.MAIZE.pledged }}</td>
+                    <td>{{ station.subtotal.MAIZE.paid }}</td>
+
+                    <td>{{ station.subtotal.BEANS.pledged }}</td>
+                    <td>{{ station.subtotal.BEANS.paid }}</td>
+
+                    <td>{{ station.subtotal.WHEAT.pledged }}</td>
+                    <td>{{ station.subtotal.WHEAT.paid }}</td>
+
+                    <td>{{ station.subtotal.MILLET.pledged }}</td>
+                    <td>{{ station.subtotal.MILLET.paid }}</td>
+
+                    <td>{{ station.subtotal.SHEEP.pledged }}</td>
+                    <td>{{ station.subtotal.SHEEP.paid }}</td>
+
+                    <td>{{ station.subtotal.COW.pledged }}</td>
+                    <td>{{ station.subtotal.COW.paid }}</td>
+
+                    <td>{{ station.subtotal.GOAT.pledged }}</td>
+                    <td>{{ station.subtotal.GOAT.paid }}</td>
+
+                    <td>{{ station.subtotal.CHICKEN.pledged }}</td>
+                    <td>{{ station.subtotal.CHICKEN.paid }}</td>
+
+                    <td>{{ station.subtotal.OTHER.pledged }}</td>
+                    <td>{{ station.subtotal.OTHER.paid }}</td>
+                </tr>
+
+            </tbody>
+        </table>
+
+    {% endfor %}
+
+    <!-- ================= GRAND TOTAL ================= -->
+    <h3>PARISH GRAND TOTAL</h3>
+
+    <table>
+        <tr class="grandtotal">
+            <td class="left">GRAND TOTAL</td>
+
+            <td>{{ grand_total.MONEY.pledged }}</td>
+            <td>{{ grand_total.MONEY.paid }}</td>
+
+            <td>{{ grand_total.MAIZE.pledged }}</td>
+            <td>{{ grand_total.MAIZE.paid }}</td>
+
+            <td>{{ grand_total.BEANS.pledged }}</td>
+            <td>{{ grand_total.BEANS.paid }}</td>
+
+            <td>{{ grand_total.WHEAT.pledged }}</td>
+            <td>{{ grand_total.WHEAT.paid }}</td>
+
+            <td>{{ grand_total.MILLET.pledged }}</td>
+            <td>{{ grand_total.MILLET.paid }}</td>
+
+            <td>{{ grand_total.SHEEP.pledged }}</td>
+            <td>{{ grand_total.SHEEP.paid }}</td>
+
+            <td>{{ grand_total.COW.pledged }}</td>
+            <td>{{ grand_total.COW.paid }}</td>
+
+            <td>{{ grand_total.GOAT.pledged }}</td>
+            <td>{{ grand_total.GOAT.paid }}</td>
+
+            <td>{{ grand_total.CHICKEN.pledged }}</td>
+            <td>{{ grand_total.CHICKEN.paid }}</td>
+
+            <td>{{ grand_total.OTHER.pledged }}</td>
+            <td>{{ grand_total.OTHER.paid }}</td>
+        </tr>
+    </table>
+
+</body>
+</html>

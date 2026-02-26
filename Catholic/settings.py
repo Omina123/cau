@@ -32,13 +32,6 @@ ALLOWED_HOSTS = [
     "localhost","127.0.0.1",
 ]
 
-# "st-peters-ngoisa.onrender.com",
-#     'localhost','127.0.0.1:8000'
-
-#
-
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -106,7 +99,7 @@ WSGI_APPLICATION = 'Catholic.wsgi.application'
 #         'PORT': os.environ.get('DB_PORT', '5432'),
 #     }
 # }
-import dj_database_url
+# import dj_database_url
 
 DATABASES = {
     'default': dj_database_url.config(

@@ -1,14 +1,26 @@
 from django.db import models
+from datetime import date
 from django.core.validators import MinValueValidator
 
-from decimal import Decimal
-from datetime import date
+
+# ===============================
+# OUTSTATION
+# ===============================
+
 class Outstation(models.Model):
     name = models.CharField(max_length=100)
-    parish = models.CharField(max_length=50, choices=[('NGOISA', 'NGOISA PARISH')])
+    parish = models.CharField(
+        max_length=50,
+        choices=[('NGOISA', 'NGOISA PARISH')]
+    )
 
     def __str__(self):
         return self.name
+
+
+# ===============================
+# JUMUIYA
+# ===============================
 
 class Jumuiya(models.Model):
     name = models.CharField(max_length=100)
@@ -16,15 +28,41 @@ class Jumuiya(models.Model):
 
     def __str__(self):
         return self.name
+
+
+# ===============================
+# MEMBER
+# ===============================
+
 class Member(models.Model):
-    parish = models.CharField(max_length=50, choices=[('NGOISA', 'NGOISA PARISH')])
+    parish = models.CharField(
+        max_length=50,
+        choices=[('NGOISA', 'NGOISA PARISH')]
+    )
+
     outstation = models.ForeignKey(Outstation, on_delete=models.SET_NULL, null=True)
     jumuiya = models.ForeignKey(Jumuiya, on_delete=models.SET_NULL, null=True)
-    group = models.CharField(max_length=50, choices=[('CMA', 'CMA'), ('CWA', 'CWA'), ('YOUTH', 'Youth'), ('PMC', 'PMC')])
+
+    group = models.CharField(
+        max_length=50,
+        choices=[
+            ('CMA', 'CMA'),
+            ('CWA', 'CWA'),
+            ('YOUTH', 'Youth'),
+            ('PMC', 'PMC')
+        ]
+    )
+
     full_name = models.CharField(max_length=200)
     phone_number = models.CharField(max_length=20)
+
     def __str__(self):
         return self.full_name
+
+
+# ===============================
+# MONTHLY ZAKA (Minimum 100 KES)
+# ===============================
 
 class Zaka(models.Model):
 
@@ -42,35 +80,41 @@ class Zaka(models.Model):
     amount = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        validators=[MinValueValidator(Decimal('100.00'))]
+        validators=[MinValueValidator(100)]
     )
 
     date_recorded = models.DateField(default=date.today)
 
-    class Meta:
-        unique_together = ('member', 'month', 'year')
-
     def __str__(self):
         return f"{self.member.full_name} - {self.month} {self.year}"
+
+
+# ===============================
+# SPECIAL CONTRIBUTION
+# ===============================
+
 class SpecialContribution(models.Model):
 
     CONTRIBUTION_TYPE = [
-        ('ASSUMPTION', 'Assumption'),
+        ('NOEL', 'Noel'),
         ('CHRISTMAS', 'Christmas'),
         ('PASAKA', 'Pasaka'),
     ]
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
     contribution_type = models.CharField(max_length=20, choices=CONTRIBUTION_TYPE)
-    amount = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        validators=[MinValueValidator(150)]  # Minimum 100
-    )
+
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
     date_recorded = models.DateField(default=date.today)
 
     def __str__(self):
         return f"{self.member.full_name} - {self.contribution_type}"
+
+
+# ===============================
+# MAVUNO (Crops + Animals + Money)
+# ===============================
+
 class Mavuno(models.Model):
 
     PRODUCE_CHOICES = [
@@ -107,18 +151,47 @@ class Mavuno(models.Model):
 
     def __str__(self):
         return f"{self.member.full_name} - {self.produce_type}"
-                              
-class Sadaka(models.Model):
-    outstation = models.ForeignKey('Outstation', on_delete=models.CASCADE)
+
+
+# ===============================
+# JUMUIYA YEARLY CONTRIBUTION (20,000)
+# ===============================
+
+class JumuiyaContribution(models.Model):
+
+    jumuiya = models.ForeignKey(Jumuiya, on_delete=models.CASCADE)
+    year = models.PositiveIntegerField(default=date.today().year)
+
     amount = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        validators=[MinValueValidator(1)]
+        default=20000,
+        validators=[MinValueValidator(20000)]
     )
+
     date_recorded = models.DateField(default=date.today)
 
     def __str__(self):
-        return f"{self.outstation.name} - KES {self.amount} on {self.date_recorded}"
+        return f"{self.jumuiya.name} - {self.year}"
+
+
+# ===============================
+# SADAKA
+# ===============================
+
+class Sadaka(models.Model):
+    outstation = models.ForeignKey(Outstation, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    date_recorded = models.DateField(default=date.today)
+
+    def __str__(self):
+        return f"{self.outstation.name} - KES {self.amount}"
+
+
+# ===============================
+# 🔥 NEW: PLEDGES MODEL
+# ===============================
+
 class Pledge(models.Model):
 
     PURPOSE_CHOICES = [
@@ -154,19 +227,3 @@ class Pledge(models.Model):
 
     def __str__(self):
         return f"{self.member.full_name} - {self.purpose}"
-class JumuiyaContribution(models.Model):
-
-    jumuiya = models.ForeignKey(Jumuiya, on_delete=models.CASCADE)
-    year = models.PositiveIntegerField(default=date.today().year)
-
-    amount = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        default=20000,
-        validators=[MinValueValidator(20000)]
-    )
-
-    date_recorded = models.DateField(default=date.today)
-
-    def __str__(self):
-        return f"{self.jumuiya.name} - {self.year}"

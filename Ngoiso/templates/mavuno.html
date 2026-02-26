@@ -1,129 +1,151 @@
-{% load crispy_forms_tags %}
-{% load django_bootstrap5 %}
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Capture Details</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Bootstrap -->
+    <title>Mavuno Contributions</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <style>
-        body {
-            min-height: 100vh;
-            background: linear-gradient(135deg, #FFD700, #FFFFFF);
-        }
-
-        /* Navbar */
-        .navbar {
-            background-color: #C9A227;
-        }
-
-        .navbar-brand,
-        .nav-link {
-            color: #fff !important;
-            font-weight: 600;
-        }
-
-        .nav-link:hover {
-            color: #000 !important;
-        }
-
-        /* Form Section */
-        .form-wrapper {
-            min-height: 85vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 15px;
-        }
-
-        .form-card {
-            background: #fff;
-            border-radius: 15px;
-            padding: 40px;
-            width: 100%;
-            max-width: 650px; /* wider for more fields */
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-        }
-
-        .form-card h2 {
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 30px;
-            color: #C9A227;
-        }
-
-        .btn-primary {
-            background-color: #C9A227;
-            border: none;
-            height: 48px;
-            border-radius: 10px;
-            font-weight: 600;
-        }
-
-        .btn-primary:hover {
-            background-color: #a6821f;
-        }
-    </style>
 </head>
 
-<body>
+<body class="bg-light">
 
 <!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar navbar-expand-lg navbar-dark bg-warning">
     <div class="container">
-        <a class="navbar-brand" href="{% url 'Dashbd' %}">Parish System</a>
+        <a class="navbar-brand fw-bold" href="{% url 'Dashbd' %}">
+            Parish System
+        </a>
 
-        <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'Dashbd' %}">DASHBOARD</a>
+                    <a class="nav-link" href="{% url 'Dashbd' %}">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register_user' %}">Register</a>
+                    <a class="nav-link" href="{% url 'register_member' %}">Register Member</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'Login' %}">Login</a>
+                    <a class="nav-link" href="{% url 'zaka' %}">Zaka</a>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
 
-<!-- FORM SECTION -->
-<div class="form-wrapper">
-    <div class="form-card">
-        <h2>MAVUNO CONTRIBUTIONS</h2>
+<div class="container mt-5">
 
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-danger">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
+    <h2 class="text-center mb-4 text-warning">
+        MAVUNO CONTRIBUTIONS - St Peters Ngoisa Parish
+    </h2>
 
-        <form method="POST">
-            {% csrf_token %}
-
-            {% for field in form %}
-                {% bootstrap_field field %}
-            {% endfor %}
-
-            <div class="text-center mt-4">
-                <button type="submit" class="btn btn-primary w-100">
-                    Save
-                </button>
+    <!-- MESSAGES -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-info">
+                {{ message }}
             </div>
-        </form>
-    </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- FILTER FORM -->
+    <form method="GET" class="row mb-4">
+
+        <div class="col-md-4">
+            <select name="outstation" class="form-select">
+                <option value="">Select Outstation</option>
+                {% for o in outstations %}
+                    <option value="{{ o.id }}">{{ o.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <select name="jumuiya" class="form-select">
+                <option value="">Select Jumuiya</option>
+                {% for j in jumuiyas %}
+                    <option value="{{ j.id }}">{{ j.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <button class="btn btn-warning w-100">
+                Search Members
+            </button>
+        </div>
+
+    </form>
+
+    <!-- BULK MAVUNO FORM -->
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <select name="produce_type" class="form-select" required>
+                    <option value="">Select Produce Type</option>
+                    <option value="MAIZE">Maize</option>
+                    <option value="BEANS">Beans</option>
+                    <option value="WHEAT">Wheat</option>
+                    <option value="MILLET">Millet</option>
+                    <option value="COW">Ngombe</option>
+                    <option value="GOAT">Mbuzi</option>
+                    <option value="SHEEP">Kondoo</option>
+                    <option value="CHICKEN">Chicken</option>
+                    <option value="MONEY">Money</option>
+                    <option value="OTHER">Other</option>
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <input type="number" step="0.01" name="quantity"
+                       class="form-control"
+                       placeholder="Quantity or Amount"
+                       required>
+            </div>
+        </div>
+
+        <table class="table table-bordered table-striped">
+            <thead class="table-warning">
+                <tr>
+                    <th>Select</th>
+                    <th>Name</th>
+                    <th>Outstation</th>
+                    <th>Jumuiya</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for member in members %}
+                <tr>
+                    <td>
+                        <input type="checkbox" name="members" value="{{ member.id }}">
+                    </td>
+                    <td>{{ member.full_name }}</td>
+                    <td>{{ member.outstation }}</td>
+                    <td>{{ member.jumuiya }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">
+                        No members found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <button type="submit" class="btn btn-success w-100">
+            Record Mavuno for Selected Members
+        </button>
+
+    </form>
+
+ <a href="{% url 'pledge_view' %}" class="d-block p-3 text-dark text-decoration-none">
+                    <i class="bi bi-building me-2"></i> Make A Pledge
+                </a>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

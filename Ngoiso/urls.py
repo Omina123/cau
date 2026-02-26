@@ -15,6 +15,12 @@ urlpatterns = [
     path('ajax/load-outstations/', views.load_outstations, name='ajax_load_outstations'),
     path('ajax/load-jumuiya/', views.load_jumuiya, name='ajax_load_jumuiya'),
     path('jumuiya', views.jumuiya, name='jumuiya'),
+    path('Gallary', views.Gallary, name='Gallary'),
+    path('pledge', views.pledge_view, name='pledge_view'),
+    path('jumuiya_contribution', views.jumuiya_contribution, name='jumuiya_contribution'),  
+    path('mavuno_pdf_report', views.mavuno_pdf_report, name='mavuno_pdf_report'),
     path('out_station', views.out_station, name='out_station'),
-    path('outstation/<int:pk>/', views.outstation, name='outstation')
+    path('outstation/<int:pk>/', views.outstation, name='outstation'),
+    path('stations', views.stations, name='stations'),
+    path('groups', views.groups, name='groups'),
 ]

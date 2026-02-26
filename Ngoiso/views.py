@@ -5,6 +5,9 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from datetime import date
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.http import HttpResponse
 
 
 from django.contrib import messages
@@ -20,7 +23,7 @@ def register_member(request):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            messages.success("Registered Member succefully")
+            messages.success(request,"Registered Member succefully")
             return redirect('register_member')  # You can also redirect to a success page or the member list page after saving
             # redirect to members page or success message
     context = {'form': form}
@@ -73,93 +76,173 @@ def load_jumuiya(request):
 @login_required(login_url='Login')
 def zaka(request):
 
+    members = Member.objects.select_related('outstation', 'jumuiya').all()
+
+    # FILTERING
+    outstation_id = request.GET.get('outstation')
+    jumuiya_id = request.GET.get('jumuiya')
+
+    if outstation_id:
+        members = members.filter(outstation_id=outstation_id)
+
+    if jumuiya_id:
+        members = members.filter(jumuiya_id=jumuiya_id)
+
+    # SAVE BULK ZAKA
+    if request.method == "POST":
+
+        month = request.POST.get("month")
+        year = request.POST.get("year")
+        amount = request.POST.get("amount")
+        selected_members = request.POST.getlist("members")
+
+        if not selected_members:
+            messages.error(request, "Please select at least one member.")
+            return redirect('zaka')
+
+        for member_id in selected_members:
+            if not Zaka.objects.filter(
+                member_id=member_id,
+                month=month,
+                year=year
+            ).exists():
+
+                Zaka.objects.create(
+                    member_id=member_id,
+                    month=month,
+                    year=year,
+                    amount=amount
+                )
+
+        messages.success(request, "Monthly Mavuno recorded successfully!")
+        return redirect('zaka')
+
+    context = {
+        "members": members,
+        "outstations": Outstation.objects.all(),
+        "jumuiyas": Jumuiya.objects.all(),
+    }
+
+    return render(request, "zaka.html", context)
+def mavuno(request):
+
+    # Filters
+    outstation_id = request.GET.get('outstation')
+    jumuiya_id = request.GET.get('jumuiya')
+
     members = Member.objects.all()
 
-    # # SEARCH FILTER
-    # outstation = request.GET.get('outstation')
-    # jumuiya = request.GET.get('jumuiya')
+    if outstation_id:
+        members = members.filter(outstation_id=outstation_id)
 
-    # if outstation:
-    #     members = members.filter(outstation__icontains=outstation)
+    if jumuiya_id:
+        members = members.filter(jumuiya_id=jumuiya_id)
 
-    # if jumuiya:
-    #     members = members.filter(jumuiya__icontains=jumuiya)
+    # Handle POST (Bulk Save)
+    if request.method == "POST":
 
-    # FORM SAVE
-    if request.method == 'POST':
-        form = ZakaForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "zaka recorded successfully!")
-            return redirect('zaka')
-    else:
-        form = ZakaForm()
+        produce_type = request.POST.get('produce_type')
+        quantity = request.POST.get('quantity')
+        selected_members = request.POST.getlist('members')
 
-    context = {
-        'form': form,
-        'members': members
-    }
-
-    return render(request, 'zaka.html', context)
-@login_required(login_url='Login')
-def mavuno(request):
-    if request.method == 'POST':
-        form = MavunoForm(request.POST)
-        if form.is_valid():   
-            form.save()
-            messages.success(request, "Mavuno recorded successfully!")
+        if not selected_members:
+            messages.error(request, "Please select at least one member.")
             return redirect('mavuno')
-            
-    else:
-        form = MavunoForm()   
+
+        for member_id in selected_members:
+            Mavuno.objects.create(
+                member_id=member_id,
+                produce_type=produce_type,
+                quantity=quantity,
+                date_recorded=date.today()
+            )
+
+        messages.success(request, "Mavuno recorded successfully!")
+        return redirect('mavuno')
 
     context = {
-        'form': form
-        
+        'members': members,
+        'outstations': Outstation.objects.all(),
+        'jumuiyas': Jumuiya.objects.all(),
     }
+
     return render(request, 'mavuno.html', context)
 @login_required(login_url='Login')
 def Special(request):
-    if request.method == 'POST':
-        form = SpecialForm(request.POST)
-        if form.is_valid():   
-            form.save()
-            messages.success(request, "Recorded successfully!")
-            return redirect('Dashbd')
-    else:
-        form = SpecialForm()   
+
+    # Filters
+    outstation_id = request.GET.get('outstation')
+    jumuiya_id = request.GET.get('jumuiya')
+
+    members = Member.objects.all()
+
+    if outstation_id:
+        members = members.filter(outstation_id=outstation_id)
+
+    if jumuiya_id:
+        members = members.filter(jumuiya_id=jumuiya_id)
+
+    # Handle Bulk POST
+    if request.method == "POST":
+
+        contribution_type = request.POST.get('contribution_type')
+        amount = request.POST.get('amount')
+        selected_members = request.POST.getlist('members')
+
+        if not selected_members:
+            messages.error(request, "Please select at least one member.")
+            return redirect('Special')
+
+        if float(amount) < 100:
+            messages.error(request, "Amount must be 100 or above.")
+            return redirect('Special')
+
+        for member_id in selected_members:
+            SpecialContribution.objects.create(
+                member_id=member_id,
+                contribution_type=contribution_type,
+                amount=amount,
+                date_recorded=date.today()
+            )
+
+        messages.success(request, "Special Contribution recorded successfully!")
+        return redirect('Special')
 
     context = {
-        'form': form
+        'members': members,
+        'outstations': Outstation.objects.all(),
+        'jumuiyas': Jumuiya.objects.all(),
     }
+
     return render(request, 'special.html', context)
 @login_required(login_url='Login')
 def Dashbd(request):
     outstations = Outstation.objects.all()
     outstation_data = []
-
     current_year = date.today().year
 
     # Parish-wide totals
     parish_totals = {
         'sadaka': 0,
-        'mavuno': {'MAIZE': 0, 'BEANS': 0, 'WHEAT': 0},
-        'special': {'NOEL': 0, 'CHRISTMAS': 0, 'PASAKA': 0},
-        'zaka': 0
+        'mavuno': {p: 0 for p in ['MAIZE','BEANS','WHEAT','MILLET','COW','GOAT','SHEEP','CHICKEN','MONEY','OTHER']},
+        'special': {'ASSUMPTION': 0, 'CHRISTMAS': 0, 'PASAKA': 0},
+        'zaka': 0,
+        'pledge': 0,
+        'jumuiya': 0
     }
 
     for outstation in outstations:
         # Sadaka totals
-        sadaka_weekly = Sadaka.objects.filter(outstation=outstation).order_by('-date_recorded')[:5]  # last 5
+        sadaka_weekly = Sadaka.objects.filter(outstation=outstation).order_by('-date_recorded')[:5]
         sadaka_yearly = Sadaka.objects.filter(
             outstation=outstation,
             date_recorded__year=current_year
         ).aggregate(total=Sum('amount'))['total'] or 0
         parish_totals['sadaka'] += sadaka_yearly
 
-        # Mavuno totals per produce type
+        # Mavuno totals per produce
         mavuno_totals = {}
-        for produce in ['MAIZE', 'BEANS', 'WHEAT']:
+        for produce in ['MAIZE','BEANS','WHEAT','MILLET','COW','GOAT','SHEEP','CHICKEN','MONEY','OTHER']:
             total = Mavuno.objects.filter(
                 member__outstation=outstation,
                 produce_type=produce,
@@ -170,7 +253,7 @@ def Dashbd(request):
 
         # Special contributions totals
         special_totals = {}
-        for contrib in ['NOEL', 'CHRISTMAS', 'PASAKA']:
+        for contrib in ['ASSUMPTION','CHRISTMAS','PASAKA']:
             total = SpecialContribution.objects.filter(
                 member__outstation=outstation,
                 contribution_type=contrib,
@@ -184,8 +267,22 @@ def Dashbd(request):
             member__outstation=outstation,
             date_recorded__year=current_year
         ).aggregate(total=Sum('amount'))['total'] or 0
-        zaka_totals = {'current_year': zaka_total}
         parish_totals['zaka'] += zaka_total
+        zaka_totals = {'current_year': zaka_total}
+
+        # Pledge totals
+        pledge_total = Pledge.objects.filter(
+            member__outstation=outstation,
+            date_pledged__year=current_year
+        ).aggregate(total=Sum('pledged_amount'))['total'] or 0
+        parish_totals['pledge'] += pledge_total
+
+        # JumuiyaContribution totals
+        jumuiya_total = JumuiyaContribution.objects.filter(
+            jumuiya__outstation=outstation,
+            date_recorded__year=current_year
+        ).aggregate(total=Sum('amount'))['total'] or 0
+        parish_totals['jumuiya'] += jumuiya_total
 
         outstation_data.append({
             'outstation': outstation,
@@ -194,6 +291,8 @@ def Dashbd(request):
             'mavuno_totals': mavuno_totals,
             'special_totals': special_totals,
             'zaka_totals': zaka_totals,
+            'pledge_total': pledge_total,
+            'jumuiya_total': jumuiya_total,
         })
 
     context = {
@@ -205,67 +304,314 @@ def Dashbd(request):
     return render(request, 'dash.html', context)
 
 
-
 @login_required(login_url='Login')
+
+
 def outstation(request, pk):
     outstation = get_object_or_404(Outstation, id=pk)
     members = Member.objects.filter(outstation=outstation)
 
     member_data = []
 
-    for m in members:
-        # Zaka: group by year
-        zaka_qs = Zaka.objects.filter(member=m).order_by('date_recorded')
-        zaka = {'A': [], 'B': [], 'C': []}
+    for member in members:
+
+        # -------------------------
+        # ZAKA (Grouped by Month)
+        # -------------------------
+        zaka_qs = Zaka.objects.filter(member=member).order_by('date_recorded')
+
+        # Automatically generate dictionary from model choices
+        zaka = {key: [] for key, _ in Zaka.MONTH_CHOICES}
+
         for z in zaka_qs:
-            zaka[z.year].append({
-                'amount': z.amount,
-                'year': z.year,
-                'date': z.date_recorded,
-            })
+            if z.month in zaka:   # Safety check
+                zaka[z.month].append({
+                    'amount': z.amount,
+                    'year': z.year,
+                    'date': z.date_recorded,
+                })
 
-        # Special Contributions: group by type
-        special_qs = SpecialContribution.objects.filter(member=m).order_by('date_recorded')
-        special = {'NOEL': [], 'CHRISTMAS': [], 'PASAKA': []}
+        # -------------------------
+        # SPECIAL CONTRIBUTIONS
+        # -------------------------
+        special_qs = SpecialContribution.objects.filter(member=member).order_by('date_recorded')
+
+        special = {key: [] for key, _ in SpecialContribution.CONTRIBUTION_TYPE}
+
         for s in special_qs:
-            special[s.contribution_type].append({
-                'amount': s.amount,
-                'date': s.date_recorded,
-                'year': s.date_recorded.year,
-            })
+            if s.contribution_type in special:   # Safety check
+                special[s.contribution_type].append({
+                    'amount': s.amount,
+                    'date': s.date_recorded,
+                    'year': s.date_recorded.year,
+                })
 
-        # Mavuno: group by produce type
-        mavuno_qs = Mavuno.objects.filter(member=m).order_by('date_recorded')
-        mavuno = {'MAIZE': [], 'BEANS': [], 'WHEAT': []}
+        # -------------------------
+        # MAVUNO (Produce)
+        # -------------------------
+        mavuno_qs = Mavuno.objects.filter(member=member).order_by('date_recorded')
+
+        mavuno = {key: [] for key, _ in Mavuno.PRODUCE_CHOICES}
+
         for p in mavuno_qs:
-            mavuno[p.produce_type].append({
-                'quantity': p.quantity,
-                'date': p.date_recorded,
-                'year': p.date_recorded.year,
-            })
+            if p.produce_type in mavuno:   # Safety check
+                mavuno[p.produce_type].append({
+                    'quantity': p.quantity,
+                    'date': p.date_recorded,
+                    'year': p.date_recorded.year,
+                })
 
+        # -------------------------
+        # APPEND MEMBER DATA
+        # -------------------------
         member_data.append({
-            'member': m,
+            'member': member,
             'zaka': zaka,
             'special': special,
             'mavuno': mavuno,
         })
 
     context = {
+        'outstation': outstation,
         'outstation_name': outstation.name,
         'member_data': member_data,
-        'now': None,
     }
 
     return render(request, 'detail.html', context)
 @login_required(login_url='Login')
 def sadaka(request):
-    if request.method == 'POST':
-        form = SadakaForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Sadaka recorded successfully!")
+
+    outstations = Outstation.objects.all()
+    sadaka_list = Sadaka.objects.order_by('-date_recorded')
+
+    if request.method == "POST":
+
+        outstation_id = request.POST.get('outstation')
+        amount = request.POST.get('amount')
+
+        if not outstation_id:
+            messages.error(request, "Please select an outstation.")
             return redirect('sadaka')
-    else:
-        form = SadakaForm()
-    return render(request, 'sdk.html', {'form': form})
+
+        if float(amount) <= 0:
+            messages.error(request, "Amount must be greater than 0.")
+            return redirect('sadaka')
+
+        Sadaka.objects.create(
+            outstation_id=outstation_id,
+            amount=amount,
+            date_recorded=date.today()
+        )
+
+        messages.success(request, "Sadaka recorded successfully!")
+        return redirect('sadaka')
+
+    context = {
+        'outstations': outstations,
+        'sadaka_list': sadaka_list
+    }
+
+    return render(request, 'sdk.html', context)
+
+def Gallary(request):
+    # Example photo list; replace with actual media files
+    photos = [
+        {'url': '/static/images/event1.jpg', 'title': 'Christmas Celebration', 'alt': 'Christmas'},
+        {'url': '/static/images/event2.jpg', 'title': 'Youth Gathering', 'alt': 'Youth'},
+        {'url': '/static/images/event3.jpg', 'title': 'Easter Service', 'alt': 'Easter'},
+    ]
+    return render(request, 'gallary.html', {'photos': photos})
+def jumuiya_contribution(request):
+
+    jumuiyas = Jumuiya.objects.all()
+    contributions = JumuiyaContribution.objects.order_by('-date_recorded')
+
+    if request.method == "POST":
+
+        jumuiya_id = request.POST.get('jumuiya')
+        year = request.POST.get('year')
+        amount = request.POST.get('amount')
+
+        if not jumuiya_id:
+            messages.error(request, "Please select a Jumuiya.")
+            return redirect('jumuiya_contribution')
+
+        if float(amount) < 20000:
+            messages.error(request, "Amount must be 20,000 or above.")
+            return redirect('jumuiya_contribution')
+
+        # Optional: Prevent duplicate year entry
+        if JumuiyaContribution.objects.filter(
+            jumuiya_id=jumuiya_id,
+            year=year
+        ).exists():
+            messages.error(request, "Contribution for this Jumuiya and year already exists.")
+            return redirect('jumuiya_contribution')
+
+        JumuiyaContribution.objects.create(
+            jumuiya_id=jumuiya_id,
+            year=year,
+            amount=amount,
+            date_recorded=date.today()
+        )
+
+        messages.success(request, "Jumuiya Contribution recorded successfully!")
+        return redirect('jumuiya_contribution')
+
+    context = {
+        'jumuiyas': jumuiyas,
+        'contributions': contributions
+    }
+
+    return render(request, 'jumuiya_contribution.html', context)
+
+def pledge_view(request):
+    members = Member.objects.all()
+    pledges = Pledge.objects.order_by('-date_pledged')
+
+    if request.method == "POST":
+        member_id = request.POST.get('member')
+        purpose = request.POST.get('purpose')
+        pledged_amount = request.POST.get('pledged_amount')
+        amount_paid = request.POST.get('amount_paid') or 0
+        due_date = request.POST.get('due_date')
+
+        if not member_id:
+            messages.error(request, "Please select a member.")
+            return redirect('pledge_view')
+
+        if float(pledged_amount) < 1:
+            messages.error(request, "Pledged amount must be at least 1.")
+            return redirect('pledge_view')
+
+        Pledge.objects.create(
+            member_id=member_id,
+            purpose=purpose,
+            pledged_amount=pledged_amount,
+            amount_paid=amount_paid,
+            date_pledged=date.today(),
+            due_date=due_date or None
+        )
+
+        messages.success(request, "Pledge recorded successfully!")
+        return redirect('pledge_view')
+
+    context = {
+        'members': members,
+        'pledges': pledges,
+    }
+
+    return render(request, 'pledge.html', context)
+
+
+def mavuno_pdf_report(request):
+    current_year = date.today().year
+    outstations = Outstation.objects.all()
+
+    PRODUCE_TYPES = ['MAIZE','BEANS','WHEAT','MILLET','SHEEP','COW','GOAT','CHICKEN','OTHER']
+
+    report_data = []
+
+    # GRAND TOTAL HOLDER
+    grand_totals = {
+        'MONEY': {'pledged': 0, 'paid': 0}
+    }
+    for produce in PRODUCE_TYPES:
+        grand_totals[produce] = {'pledged': 0, 'paid': 0}
+
+    # LOOP OUTSTATIONS
+    for outstation in outstations:
+        jumuiyas = Jumuiya.objects.filter(outstation=outstation)
+
+        jumuiya_data = []
+
+        # OUTSTATION SUBTOTAL HOLDER
+        outstation_totals = {
+            'MONEY': {'pledged': 0, 'paid': 0}
+        }
+        for produce in PRODUCE_TYPES:
+            outstation_totals[produce] = {'pledged': 0, 'paid': 0}
+
+        # LOOP JUMUIYA
+        for jumuiya in jumuiyas:
+            row = {'jumuiya': jumuiya.name}
+
+            # ---------------- MONEY ----------------
+            pledges = Pledge.objects.filter(
+                member__jumuiya=jumuiya,
+                date_pledged__year=current_year
+            )
+
+            pledged_total = sum(p.pledged_amount for p in pledges)
+            paid_total = sum(p.amount_paid for p in pledges)
+
+            row['MONEY'] = {
+                'pledged': pledged_total,
+                'paid': paid_total
+            }
+
+            # Add to outstation subtotal
+            outstation_totals['MONEY']['pledged'] += pledged_total
+            outstation_totals['MONEY']['paid'] += paid_total
+
+            # Add to grand total
+            grand_totals['MONEY']['pledged'] += pledged_total
+            grand_totals['MONEY']['paid'] += paid_total
+
+
+            # ---------------- PRODUCE ----------------
+            for produce in PRODUCE_TYPES:
+                produce_entries = Mavuno.objects.filter(
+                    member__jumuiya=jumuiya,
+                    produce_type=produce,
+                    date_recorded__year=current_year
+                )
+
+                pledged = sum(e.quantity for e in produce_entries)
+                paid = pledged  # adjust if you separate paid later
+
+                row[produce] = {
+                    'pledged': pledged,
+                    'paid': paid
+                }
+
+                # Add to outstation subtotal
+                outstation_totals[produce]['pledged'] += pledged
+                outstation_totals[produce]['paid'] += paid
+
+                # Add to grand total
+                grand_totals[produce]['pledged'] += pledged
+                grand_totals[produce]['paid'] += paid
+
+            jumuiya_data.append(row)
+
+        report_data.append({
+            'outstation': outstation.name,
+            'jumuiyas': jumuiya_data,
+            'subtotal': outstation_totals   # ✅ OUTSTATION SUBTOTAL
+        })
+
+    context = {
+        'parish_name': 'ST PETERS NGOISA PARISH',
+        'year': current_year,
+        'report_data': report_data,
+        'grand_total': grand_totals   # ✅ PARISH GRAND TOTAL
+    }
+
+    template_path = 'mavuno_pdf.html'
+    template = get_template(template_path)
+    html = template.render(context)
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'inline; filename="Mavuno_Report_{current_year}.pdf"'
+
+    pisa_status = pisa.CreatePDF(html, dest=response)
+
+    if pisa_status.err:
+        return HttpResponse('Error generating PDF <pre>' + html + '</pre>')
+
+    return response
+def stations(request):
+    return render(request, 'stations.html')
+def groups(request):
+    return render(request, 'groups.html')

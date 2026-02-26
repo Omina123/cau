@@ -184,15 +184,17 @@
             </a>
         </div>
 
-        <nav class="header-nav-wrap">
+       <nav class="header-nav-wrap">
             <ul class="header-nav">
                 <li class="current"><a href="" title="Home">Home</a></li>
                 <li><a href="{% url 'about' %}" title="">About</a></li>
+                <li><a href="{% url 'Gallary' %}" title="">Gallary</a></li>
+                <li><a href="{% url 'stations' %}" title="">Station</a></li>
+                <li><a href="{% url 'groups' %}" title="">Groups</a></li>
+
                
                 <li><a href="{% url "Contact" %}" title="Contact us">Contact</a></li>	
-                <li><a href="https://shcathedral-eld.org/" title="Contact us">Cathedral</a></li>
-                 <li><a href="https://holyfamilybasilica.info/about-us/" title="Contact us">Holy family basilica</a></li>
-                 <li><a href="https://www.basilicasanpietro.va/en/san-pietro/the-square" title="Contact us">ST Peters square vertcan</a></li>
+     
             </ul>
         </nav>
 
@@ -267,23 +269,11 @@
                     <li>
                         <h4>Main Church Mass
                         
-                        Sunday Mass -7.00- 9:00 AM |9.00- 11:00 AM|<br>
+                        Sunday Mass -7.00- 9:00 AM |9.00- 11:00 AM<br>
                         Eldoret</h4>
                         
                     </li>
-                    <li>
-                        <h4>PMC MASS
-                        
-                        Sunday - 9:00 AM |  <br>
-                        </h4>
-                    </li>
-                    <li>
-                        <h4>Daily mass Meeting
-                        
-                       Monday- Saturday - 7:00 am <br>
-                        Eldoret
-                        </h4>
-                    </li>
+                 
                 </ul> <!-- end about-sched-->
             </div>
 
@@ -297,7 +287,7 @@
     <section class="s-connect">
 
         <div class="row connect-content">
-           <h3 class="display-1">  St Peters Ngoiso parish</h3>
+           <h3 class="display-1">  St Peters Ngoisa parish</h3>
                 <p class="lead">
               Welcome to our Parish community! Together with our outstations and church groups, we grow in faith, support one another, and serve in Christ’s love. May you encounter Christ, find peace, and grow spiritually.
                 </p>
@@ -448,6 +438,9 @@ Grow in faith and fellowship by joining one of our parish groups such as CWA, CM
                         <li><a href="{% url 'Dashbd' %}">Admin</a></li>
                         <li><a href="{% url 'about' %}">About</a></li>
                         <li><a href="{% url 'Contact' %}">Contact</a></li>
+                                   <li><a href="https://shcathedral-eld.org/" title="Contact us">Cathedral</a></li>
+                 <li><a href="https://holyfamilybasilica.info/about-us/" title="Contact us">Holy family basilica</a></li>
+                 <li><a href="https://www.basilicasanpietro.va/en/san-pietro/the-square" title="Contact us">ST Peters square vertcan</a></li>
                     </ul>
                 </div>
             </div>

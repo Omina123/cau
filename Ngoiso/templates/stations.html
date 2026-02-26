@@ -1,0 +1,61 @@
+{% load static %}
+
+<doctype html>
+<html lang="en">    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Stations - St Peters Ngoisa Parish</title>
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+        <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    </head>
+    <body>  
+        <header class="s-header">
+            <div class="header-logo">
+                <a class="site-logo" href="{% url 'home' %}">
+                    <img src="{% static 'images/logo.png' %}" alt="Homepage">
+                </a>
+            </div>
+
+            <nav class="header-nav-wrap">
+                <ul class="header-nav">
+                    <li><a href="{% url 'home' %}" title="Home">Home</a></li>
+                    <li><a href="{% url 'about' %}" title="">About</a></li>
+                    <li><a href="{% url 'Gallary' %}" title="">Gallary</a></li>
+                    <li class="current"><a href="{% url 'stations' %}" title="">Station</a></li>
+                    <li><a href="{% url 'groups' %}" title="">Groups</a></li>
+                    <li><a href="{% url 'Contact' %}" title="Contact us">Contact</a></li>
+                </ul>
+            </nav>
+        </header>   
+        <section class="page-header">       
+            <div class="gradient-overlay"></div>
+            <div class="row page-header__content">
+                <div class="column">
+                    <h1>ST PETERS NGOISA PARISH OUTSTATIONS</h1>
+                </div>  
+            </div>
+        </section>
+
+
+        <section class="page-content">
+            <div class="row">
+                <div class="column">
+                    <p class="lead">
+                        St Peters Ngoisa Parish has several outstations that serve the spiritual needs of the community. 
+                        These outstations are located in different areas and provide a place for worship, fellowship, and community engagement. 
+                        Each outstation has its own unique character and serves as a vital part of the parish's mission to spread the Gospel and serve the people of God.
+                    </p>
+                    <p class="lead drop-cap">
+                        The outstations of St Peters Ngoisa Parish include:   DEVELOPEMENT IN PROGRESS  
+                        </p> 
+                       <!-- <ul>
+                            <li><strong>St. Joseph's Outstation:</strong> Located in the eastern part of the parish, St. Joseph's Outstation is known for its vibrant community and active youth ministry.</li>
+                            <li><strong>Our Lady of Perpetual Help Outstation:</strong> Situated in the western area, this outstation is renowned for its beautiful liturgical celebrations and strong devotion to the Virgin Mary.</li>
+                            <li><strong>St. Francis of Assisi Outstation:</strong> Found in the northern region, St. Francis of Assisi Outstation is recognized for its commitment to social justice and outreach programs.</li>
+                            <li><strong>St. Anthony's Outstation:</strong> Located in the southern part of the parish, St. Anthony's Outstation is celebrated for its welcoming atmosphere and active involvement in community service.</li>
+                --></div>
+            </div>
+        </section>
+    </body>     
+    </html>

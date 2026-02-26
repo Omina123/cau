@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}St Peters Ngoisa Parish{% endblock %}</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+    <script src="{% static 'js/modernizr.js' %}"></script>
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body id="top">
+
+    <!-- HEADER -->
+    <header class="s-header">
+        <div class="header-logo">
+            <a class="site-logo" href="">
+                <h>ST PETERS NGOISA PARISH</h>
+            </a>
+        </div>
+
+        <nav class="header-nav-wrap">
+            <ul class="header-nav">
+                <li><a href="">Home</a></li>
+                <li><a href="{% url 'about' %}">About</a></li>
+                <li><a href="{% url 'Gallary' %}">Gallery</a></li>
+                <li><a href="{% url 'Contact' %}">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- PAGE CONTENT -->
+    {% block content %}{% endblock %}
+
+    <!-- FOOTER -->
+    <footer class="s-footer">
+        <div class="row footer-bottom">
+            <div class="column ss-copyright">
+                <span>© 2026 Ngoiso Catholic Church. All Rights Reserved.</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS -->
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'js/plugins.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+</html>
