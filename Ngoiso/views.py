@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from datetime import date
 from django.template.loader import get_template
-from xhtml2pdf import pisa
+#from xhtml2pdf import pisa
 from django.http import HttpResponse
 
 
@@ -504,111 +504,111 @@ def pledge_view(request):
     return render(request, 'pledge.html', context)
 
 
-def mavuno_pdf_report(request):
-    current_year = date.today().year
-    outstations = Outstation.objects.all()
+# def mavuno_pdf_report(request):
+#     current_year = date.today().year
+#     outstations = Outstation.objects.all()
 
-    PRODUCE_TYPES = ['MAIZE','BEANS','WHEAT','MILLET','SHEEP','COW','GOAT','CHICKEN','OTHER']
+#     PRODUCE_TYPES = ['MAIZE','BEANS','WHEAT','MILLET','SHEEP','COW','GOAT','CHICKEN','OTHER']
 
-    report_data = []
+#     report_data = []
 
-    # GRAND TOTAL HOLDER
-    grand_totals = {
-        'MONEY': {'pledged': 0, 'paid': 0}
-    }
-    for produce in PRODUCE_TYPES:
-        grand_totals[produce] = {'pledged': 0, 'paid': 0}
+#     # GRAND TOTAL HOLDER
+#     grand_totals = {
+#         'MONEY': {'pledged': 0, 'paid': 0}
+#     }
+#     for produce in PRODUCE_TYPES:
+#         grand_totals[produce] = {'pledged': 0, 'paid': 0}
 
-    # LOOP OUTSTATIONS
-    for outstation in outstations:
-        jumuiyas = Jumuiya.objects.filter(outstation=outstation)
+#     # LOOP OUTSTATIONS
+#     for outstation in outstations:
+#         jumuiyas = Jumuiya.objects.filter(outstation=outstation)
 
-        jumuiya_data = []
+#         jumuiya_data = []
 
-        # OUTSTATION SUBTOTAL HOLDER
-        outstation_totals = {
-            'MONEY': {'pledged': 0, 'paid': 0}
-        }
-        for produce in PRODUCE_TYPES:
-            outstation_totals[produce] = {'pledged': 0, 'paid': 0}
+#         # OUTSTATION SUBTOTAL HOLDER
+#         outstation_totals = {
+#             'MONEY': {'pledged': 0, 'paid': 0}
+#         }
+#         for produce in PRODUCE_TYPES:
+#             outstation_totals[produce] = {'pledged': 0, 'paid': 0}
 
-        # LOOP JUMUIYA
-        for jumuiya in jumuiyas:
-            row = {'jumuiya': jumuiya.name}
+#         # LOOP JUMUIYA
+#         for jumuiya in jumuiyas:
+#             row = {'jumuiya': jumuiya.name}
 
-            # ---------------- MONEY ----------------
-            pledges = Pledge.objects.filter(
-                member__jumuiya=jumuiya,
-                date_pledged__year=current_year
-            )
+#             # ---------------- MONEY ----------------
+#             pledges = Pledge.objects.filter(
+#                 member__jumuiya=jumuiya,
+#                 date_pledged__year=current_year
+#             )
 
-            pledged_total = sum(p.pledged_amount for p in pledges)
-            paid_total = sum(p.amount_paid for p in pledges)
+#             pledged_total = sum(p.pledged_amount for p in pledges)
+#             paid_total = sum(p.amount_paid for p in pledges)
 
-            row['MONEY'] = {
-                'pledged': pledged_total,
-                'paid': paid_total
-            }
+#             row['MONEY'] = {
+#                 'pledged': pledged_total,
+#                 'paid': paid_total
+#             }
 
-            # Add to outstation subtotal
-            outstation_totals['MONEY']['pledged'] += pledged_total
-            outstation_totals['MONEY']['paid'] += paid_total
+#             # Add to outstation subtotal
+#             outstation_totals['MONEY']['pledged'] += pledged_total
+#             outstation_totals['MONEY']['paid'] += paid_total
 
-            # Add to grand total
-            grand_totals['MONEY']['pledged'] += pledged_total
-            grand_totals['MONEY']['paid'] += paid_total
+#             # Add to grand total
+#             grand_totals['MONEY']['pledged'] += pledged_total
+#             grand_totals['MONEY']['paid'] += paid_total
 
 
-            # ---------------- PRODUCE ----------------
-            for produce in PRODUCE_TYPES:
-                produce_entries = Mavuno.objects.filter(
-                    member__jumuiya=jumuiya,
-                    produce_type=produce,
-                    date_recorded__year=current_year
-                )
+#             # ---------------- PRODUCE ----------------
+#             for produce in PRODUCE_TYPES:
+#                 produce_entries = Mavuno.objects.filter(
+#                     member__jumuiya=jumuiya,
+#                     produce_type=produce,
+#                     date_recorded__year=current_year
+#                 )
 
-                pledged = sum(e.quantity for e in produce_entries)
-                paid = pledged  # adjust if you separate paid later
+#                 pledged = sum(e.quantity for e in produce_entries)
+#                 paid = pledged  # adjust if you separate paid later
 
-                row[produce] = {
-                    'pledged': pledged,
-                    'paid': paid
-                }
+#                 row[produce] = {
+#                     'pledged': pledged,
+#                     'paid': paid
+#                 }
 
-                # Add to outstation subtotal
-                outstation_totals[produce]['pledged'] += pledged
-                outstation_totals[produce]['paid'] += paid
+#                 # Add to outstation subtotal
+#                 outstation_totals[produce]['pledged'] += pledged
+#                 outstation_totals[produce]['paid'] += paid
 
-                # Add to grand total
-                grand_totals[produce]['pledged'] += pledged
-                grand_totals[produce]['paid'] += paid
+#                 # Add to grand total
+#                 grand_totals[produce]['pledged'] += pledged
+#                 grand_totals[produce]['paid'] += paid
 
-            jumuiya_data.append(row)
+#             jumuiya_data.append(row)
 
-        report_data.append({
-            'outstation': outstation.name,
-            'jumuiyas': jumuiya_data,
-            'subtotal': outstation_totals   # ✅ OUTSTATION SUBTOTAL
-        })
+#         report_data.append({
+#             'outstation': outstation.name,
+#             'jumuiyas': jumuiya_data,
+#             'subtotal': outstation_totals   # ✅ OUTSTATION SUBTOTAL
+#         })
 
-    context = {
-        'parish_name': 'ST PETERS NGOISA PARISH',
-        'year': current_year,
-        'report_data': report_data,
-        'grand_total': grand_totals   # ✅ PARISH GRAND TOTAL
-    }
+#     context = {
+#         'parish_name': 'ST PETERS NGOISA PARISH',
+#         'year': current_year,
+#         'report_data': report_data,
+#         'grand_total': grand_totals   # ✅ PARISH GRAND TOTAL
+#     }
 
-    template_path = 'mavuno_pdf.html'
-    template = get_template(template_path)
-    html = template.render(context)
+#     template_path = 'mavuno_pdf.html'
+#     template = get_template(template_path)
+#     html = template.render(context)
 
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = f'inline; filename="Mavuno_Report_{current_year}.pdf"'
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = f'inline; filename="Mavuno_Report_{current_year}.pdf"'
 
-    pisa_status = pisa.CreatePDF(html, dest=response)
+#     pisa_status = pisa.CreatePDF(html, dest=response)
 
-    if pisa_status.err:
-        return HttpResponse('Error generating PDF <pre>' + html + '</pre>')
+#     if pisa_status.err:
+#         return HttpResponse('Error generating PDF <pre>' + html + '</pre>')
 
     return response
 def stations(request):
