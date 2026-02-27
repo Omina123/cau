@@ -88,13 +88,13 @@
         </div>
         <div class="col-md-3">
             <div class="card p-3 text-center bg-info text-white">
-                <h6>Total Zaka ({{ now.year }})</h6>
+                <h6>Total Monthly Mavuno ({{ now.year }})</h6>
                 <p>KES {{ parish_totals.zaka }}</p>
             </div>
         </div>
         <div class="col-md-3">
             <div class="card p-3 text-center bg-primary text-white">
-                <h6>Total Special Contributions ({{ now.year }})</h6>
+                <h6>Total ZAKA ({{ now.year }})</h6>
                 {% for key, val in parish_totals.special.items %}
                 <p>{{ key }}: KES {{ val }}</p>
                 {% endfor %}
@@ -112,7 +112,7 @@
         </div>
         <div class="col-md-6">
             <div class="card p-3 text-center bg-dark text-white">
-                <h6>Total Jumuiya Contributions ({{ now.year }})</h6>
+                <h6>Total St Thomas Contributions ({{ now.year }})</h6>
                 <p>KES {{ parish_totals.jumuiya }}</p>
             </div>
         </div>
@@ -157,13 +157,13 @@
 
             <!-- Zaka -->
             <div class="card mb-3 p-2">
-                <h6 class="text-center">Zaka</h6>
+                <h6 class="text-center">Monthly</h6>
                 <p>Total: KES {{ data.zaka_totals.current_year }}</p>
             </div>
 
             <!-- Special Contributions -->
             <div class="card mb-3 p-2">
-                <h6 class="text-center">Special Contributions</h6>
+                <h6 class="text-center">ZAKA</h6>
                 <table class="table table-sm table-bordered mb-0">
                     <thead><tr><th>Type</th><th>Total</th></tr></thead>
                     <tbody>
