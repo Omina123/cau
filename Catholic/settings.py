@@ -100,6 +100,19 @@ WSGI_APPLICATION = 'Catholic.wsgi.application'
 #     }
 # }
 # import dj_database_url
+# settings.py
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# SMTP server settings
+EMAIL_HOST = 'smtp.gmail.com'  # SMTP server address
+EMAIL_PORT = 587  # SMTP server port (usually 587 for TLS)
+EMAIL_USE_TLS = True  # Whether to use TLS encryption
+EMAIL_HOST_USER = 'kevinmalasa2000@gmail.com'  # SMTP username (email address)
+EMAIL_HOST_PASSWORD = 'qlya ynuj yzsf dlep'  # SMTP password
+
+# Default sender email address
+DEFAULT_FROM_EMAIL = 'kevinmalasa2000@gmail.com'
+
 
 DATABASES = {
     'default': dj_database_url.config(

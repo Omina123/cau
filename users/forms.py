@@ -5,6 +5,14 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
 #creatng authentication form
+class FogotForm(forms.Form):
+    email= forms.CharField(
+        widget=forms.EmailInput(
+            attrs={
+                "placeholder": "Email",
+                "class": "form-control"
+            }
+        ))
 class LoginForm(forms.Form):
     Email = forms.CharField(
         widget=forms.EmailInput(

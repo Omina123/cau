@@ -1,56 +1,368 @@
 {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Groups - St Peters Ngoisa Parish</title>
 
-<doctype!>
-<html lang="en">    
-    <head>  
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Groups - St Peters Ngoisa Parish</title>
-        <link rel="stylesheet" href="{% static 'css/base.css' %}">
-        <link rel="stylesheet" href="{% static 'css/main.css' %}">
-    </head>
-    <body>
-        <header class="s-header">
-            <div class="header-logo">
-                <a class="site-logo" href="{% url 'home' %}">
-                    <img src="{% static 'images/logo.png' %}" alt="Homepage">
+<style>
+:root {
+    --gold: #C9A227;
+    --red: #8B0000;
+    --white: #ffffff;
+    --dark: #222;
+    --nav-height: 70px;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family: 'Segoe UI', sans-serif;
+    background:#f8f9fa;
+    color:var(--dark);
+}
+
+/* ================= NAVIGATION ================= */
+header{
+    background:var(--white);
+    border-bottom:3px solid var(--gold);
+    position:sticky;
+    top:0;
+    z-index:1000;
+    height:var(--nav-height);
+}
+
+.nav-container{
+    max-width:1200px;
+    margin:0 auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    height:100%;
+    padding:0 20px;
+}
+
+.logo-link{
+    display:flex;
+    align-items:center;
+    text-decoration:none;
+}
+
+.logo-link img{
+    height:55px;
+    width:55px;
+    object-fit:cover;
+    border-radius:50%;
+    border:3px solid var(--gold);
+    margin-right:12px;
+}
+
+.logo-text h1{
+    font-size:20px;
+    color:var(--red);
+    margin:0;
+    font-weight:700;
+    line-height:1.2;
+}
+
+.logo-text span{
+    font-size:13px;
+    color:var(--gold);
+    font-weight:600;
+}
+
+/* Desktop Menu */
+.nav-links{
+    display:flex;
+    list-style:none;
+    gap:30px;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:var(--red);
+    font-weight:600;
+    padding:5px 0;
+    position:relative;
+}
+
+.nav-links a::after{
+    content:"";
+    position:absolute;
+    width:0;
+    height:2px;
+    background:var(--gold);
+    left:0;
+    bottom:0;
+    transition:0.3s;
+}
+
+.nav-links a:hover::after,
+.nav-links li.current a::after{
+    width:100%;
+}
+
+/* Mobile Menu Button */
+.menu-toggle{
+    display:none;
+    font-size:28px;
+    cursor:pointer;
+    color:var(--red);
+}
+
+/* ================= MOBILE ================= */
+@media(max-width:900px){
+    .nav-links{
+        position:absolute;
+        top:var(--nav-height);
+        right:0;
+        background:white;
+        flex-direction:column;
+        width:100%;
+        text-align:center;
+        display:none;
+        padding:20px 0;
+        box-shadow:0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .nav-links.active{
+        display:flex;
+    }
+
+    .menu-toggle{
+        display:block;
+    }
+}
+
+/* ================= HEADER / PAGE TITLE ================= */
+.page-header{
+    position:relative;
+    height:350px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    text-align:center;
+    background:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), 
+               url('{% static "images/church-bg.jpg" %}') center/cover no-repeat;
+}
+
+.page-header h1{
+    font-size:2.5rem;
+    letter-spacing:2px;
+}
+
+/* ================= INTRO ================= */
+.intro-text{
+    text-align:center;
+    max-width:900px;
+    margin:40px auto;
+    padding:0 20px;
+    line-height:1.7;
+}
+
+/* ================= GROUP CARDS ================= */
+.groups-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:25px;
+    padding:40px 8%;
+}
+
+.group-card{
+    background:white;
+    padding:30px 20px;
+    border-radius:15px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+    border-top:5px solid var(--gold);
+    text-align:center;
+    transition:0.3s;
+}
+
+.group-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 15px 30px rgba(0,0,0,0.15);
+}
+
+.group-card h3{
+    color:var(--gold);
+    margin-bottom:15px;
+}
+
+/* ================= FOOTER ================= */
+footer{
+    background:var(--gold);
+    color:white;
+    text-align:center;
+    padding:20px;
+    margin-top:40px;
+}
+
+/* ================= RESPONSIVE ================= */
+@media(max-width:768px){
+    .page-header{
+        height:250px;
+    }
+
+    .page-header h1{
+        font-size:1.6rem;
+        padding:0 10px;
+    }
+    .logo-text h1{
+        font-size:16px;
+    }
+    .logo-text span{
+        font-size:11px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= NAVIGATION ================= -->
+<header>
+    <div class="nav-container">
+         <a href="/" class="logo-link">
+            <img src="{% static 'images/logo.png' %}" alt="Ngoisa Parish">
+            <div class="logo-text">
+                <h1>St Peters Ngoisa</h1>
+                <span>Catholic Parish</span>
+            </div>
+        </a>
+
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/Gallary">Gallery</a></li>
+            <li><a href="/stations">Stations</a></li>
+            <li class="current"><a href="/groups">Groups</a></li>
+            <li><a href="/Contact">Contact</a></li>
+        </ul>
+    </div>
+</header>
+
+<!-- ================= PAGE HEADER ================= -->
+<section class="page-header">
+    <h1>ST PETERS NGOISA PARISH GROUPS</h1>
+</section>
+
+<!-- ================= INTRO ================= -->
+<div class="intro-text">
+    St Peters Ngoisa Parish is blessed with vibrant Catholic groups that strengthen faith, 
+    promote unity, and support the mission of the Church. 
+    Each group plays a unique and important role in building our parish community.
+</div>
+
+<!-- ================= GROUP CARDS ================= -->
+<section class="groups-grid">
+
+    <div class="group-card">
+        <h3>CMA</h3>
+        <p>Catholic Men Association dedicated to spiritual growth, leadership, and service within the parish.</p>
+    </div>
+
+    <div class="group-card">
+        <h3>CWA</h3>
+        <p>Catholic Women Association promoting faith, family values, and active participation in church life.</p>
+    </div>
+
+    <div class="group-card">
+        <h3>PMY</h3>
+        <p>Pontifical Missionary Youth nurturing young Catholics in missionary spirit and evangelization.</p>
+    </div>
+
+    <div class="group-card">
+        <h3>PMC</h3>
+        <p>Pontifical Missionary Children guiding children to grow in faith, prayer, and love for the Church.</p>
+    </div>
+
+    <div class="group-card">
+        <h3>JUMUIYA</h3>
+        <p>Small Christian Communities that strengthen fellowship, prayer, and mutual support among families.</p>
+    </div>
+
+    <div class="group-card">
+        <h3>Choir</h3>
+        <p>Leading the congregation in sacred music and enhancing liturgical celebrations.</p>
+    </div>
+
+    <div class="group-card">
+        <h3>Altar Servers</h3>
+        <p>Assisting the priest during Mass and other liturgical celebrations with dedication and reverence.</p>
+    </div>
+
+    <div class="group-card">
+        <h3>Lectors</h3>
+        <p>Proclaiming the Word of God during Mass and guiding the faithful in Scripture reflection.</p>
+    </div>
+
+</section>
+
+<!-- ================= FOOTER ================= -->
+<!-- ================= FOOTER ================= -->
+<footer>
+    <div class="footer-container" style="background: var(--gold); color: white; padding: 50px 8%; font-family:'Segoe UI', sans-serif;">
+        <div class="footer-top" style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:30px;">
+
+            <!-- Logo + About -->
+            <div class="footer-about" style="flex:1; min-width:250px;">
+                <a href="{% url 'home' %}" style="display:flex; align-items:center; text-decoration:none; margin-bottom:15px;">
+                    <img src="{% static 'images/logo.png' %}" alt="Parish Logo" style="height:50px; width:50px; object-fit:cover; border-radius:50%; border:2px solid white; margin-right:10px;">
+                    <div>
+                        <h3 style="margin:0; color:white;">St Peters Ngoisa</h3>
+                        <span style="font-size:12px; color:#fff;">Catholic Parish</span>
+                    </div>
                 </a>
+                <p style="line-height:1.6; font-size:0.95rem;">
+                    We are a Catholic community worshipping God and serving others with love and faith.
+                </p>
             </div>
 
-            <nav class="header-nav-wrap">
-                <ul class="header-nav">
-                    <li><a href="{% url 'home' %}" title="Home">Home</a></li>
-                    <li><a href="{% url 'about' %}" title="">About</a></li>
-                    <li><a href="{% url 'Gallary' %}" title="">Gallary</a></li>
-                    <li><a href="{% url 'stations' %}" title="">Station</a></li>
-                    <li class="current"><a href="{% url 'groups' %}" title="">Groups</a></li>
-                        <li><a href="{% url 'Contact' %}" title="Contact us">Contact</a></li>
+            <!-- Location -->
+            <div class="footer-location" style="flex:1; min-width:200px;">
+                <h4 style="margin-bottom:10px; color:white;">Our Location</h4>
+                <p style="line-height:1.6; font-size:0.95rem;">
+                    Ngoiso Catholic Church<br>
+                    Ngoiso, Eldoret<br>
+                    Kenya
+                </p>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="footer-links" style="flex:1; min-width:200px;">
+                <h4 style="margin-bottom:10px; color:white;">Quick Links</h4>
+                <ul style="list-style:none; padding:0; line-height:1.8; font-size:0.95rem;">
+                    <li><a href="{% url 'home' %}" style="color:white; text-decoration:none;">Home</a></li>
+                    <li><a href="{% url 'Dashbd' %}" style="color:white; text-decoration:none;">Admin</a></li>
+                    <li><a href="{% url 'about' %}" style="color:white; text-decoration:none;">About</a></li>
+                    <li><a href="{% url 'Contact' %}" style="color:white; text-decoration:none;">Contact</a></li>
                 </ul>
-            </nav>
-        </header>
-        <section class="page-header">
-            <div class="gradient-overlay"></div>
-            <div class="row page-header__content">
-                <div class="column">
-                    <h1>ST PETERS NGOISA PARISH GROUPS</h1>
-                </div>  
             </div>
-            </div>
-        </section>
-            <section class="page-content">
-                <div class="row">
-                <div class="column">
-                    <p class="lead">
-                        St Peters Ngoisa Parish has several groups that play a vital role in the life of the parish community. 
-                        These groups are made up of dedicated individuals who come together to serve the church and its members in various ways. 
-                        Each group has its own unique focus and contributes to the overall mission of the parish.
-                    </p>
-                    <p class="lead drop-cap">
-                        The groups of St Peters Ngoisa Parish include: DEVELOPEMENT IN PROGRESS
-                        </p> 
-                       <!-- <ul>
-                            <li><strong>Lectors:</strong> The Lectors are responsible for proclaiming the Word of God during Mass and other liturgical celebrations. They play a crucial role in helping the congregation understand and connect with the Scriptures.</li>
-                            <li><strong>Altar Servers:</strong> Altar Servers assist the priest during Mass by carrying out various tasks such as holding the book, preparing the altar, and assisting with the distribution of Holy Communion.</li>
-                            <li><strong>Choir:</strong> The Choir is responsible for leading the congregation in singing hymns and songs during Mass. They contribute to creating a joyful and uplifting atmosphere during worship.</li>
-                            <li><strong>Ushers:</strong> Ushers help to maintain order and provide assistance to parishioners during Mass. They greet attendees, distribute bulletins, and assist with seating arrangements.</li>
-                            <li><strong>Social Justice Group:</strong> This group is dedicated to promoting social justice and advocating for the marginalized in society. They organize events and initiatives to raise awareness about social issues and encourage action within the parish community.</li>
+
+        </div>
+
+        <!-- Bottom Copyright -->
+        <div class="footer-bottom" style="text-align:center; margin-top:40px; font-size:0.9rem;">
+            © 2026 St Peters Ngoisa Parish. All Rights Reserved.
+        </div>
+    </div>
+</footer>
+
+<!-- ================= SCRIPTS ================= -->
+<script>
+// MOBILE MENU
+function toggleMenu(){
+    document.getElementById("navLinks").classList.toggle("active");
+}
+</script>
+
+</body>
+</html>

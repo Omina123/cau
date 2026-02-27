@@ -15,30 +15,28 @@ class CustomUser(AbstractUser):
         choices=USER_TYPE_CHOICES,
         default='2'
     )
-
+    email = models.EmailField(unique=True)  # important for password reset
 
 class Admin(models.Model):
-    id=models.AutoField(primary_key=True)
-    admin= models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    #phone_number = PhoneNumberField(blank=True, null=True)
-    created_at =models.DateTimeField(auto_now_add=True)
-    updated_at =models.DateTimeField(auto_now_add=True)
-    objects  = models.Manager() 
+    id = models.AutoField(primary_key=True)
+    admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='admin')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
+
 class Staff(models.Model):
     GENDER_CHOICES = [
         ('M', 'Male'),
         ('F', 'Female'),
         ('O', 'Other'),
     ]
-    id=models.AutoField(primary_key=True)
-    address=models.CharField(max_length=200, blank=True, null=True)
-    admin= models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    id = models.AutoField(primary_key=True)
+    admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='staff')
+    address = models.CharField(max_length=200, blank=True, null=True)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
-    created_at =models.DateTimeField(auto_now_add=True)
-    updated_at =models.DateTimeField(auto_now_add=True)
-   
-    objects=models.Manager()
-    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
 @receiver(post_save, sender=CustomUser)
 def create_user_profile(sender,instance,created, **kwargs):
     if created:
@@ -52,7 +50,7 @@ def save_user_profile(sender, instance, **kwargs):
     if instance.user_type == 1:
         instance.admin.save()
     elif instance.user_type == 2:
-        if hasattr(instance, 'Staff'):  # Check if the user has a related Staff
-            instance.Staff.save()
+        if hasattr(instance, 'staff'):  # Check if the user has a related Staff
+            instance.staff.save()
     
             

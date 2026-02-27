@@ -1,61 +1,403 @@
 {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stations - St Peters Ngoisa Parish</title>
 
-<doctype html>
-<html lang="en">    
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Stations - St Peters Ngoisa Parish</title>
-        <link rel="stylesheet" href="{% static 'css/base.css' %}">
-        <link rel="stylesheet" href="{% static 'css/main.css' %}">
-    </head>
-    <body>  
-        <header class="s-header">
-            <div class="header-logo">
-                <a class="site-logo" href="{% url 'home' %}">
-                    <img src="{% static 'images/logo.png' %}" alt="Homepage">
+
+<style>
+:root {
+    --gold: #C9A227;
+    --red: #8B0000;
+    --white: #ffffff;
+    --dark: #222;
+    --nav-height: 70px;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family: 'Segoe UI', sans-serif;
+    background:#f8f9fa;
+}
+
+/* ================= NAVIGATION ================= */
+header{
+    background:var(--white);
+    border-bottom:3px solid var(--gold);
+    position:sticky;
+    top:0;
+    z-index:1000;
+    height:var(--nav-height);
+}
+
+.nav-container{
+    max-width:1200px;
+    margin:0 auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    height:100%;
+    padding:0 20px;
+}
+
+.logo-link{
+    display:flex;
+    align-items:center;
+    text-decoration:none;
+}
+
+.logo-link img{
+    height:55px;
+    width:55px;
+    object-fit:cover;
+    border-radius:50%;
+    border:3px solid var(--gold);
+    margin-right:12px;
+}
+
+.logo-text h1{
+    font-size:20px;
+    color:var(--red);
+    margin:0;
+    font-weight:700;
+    line-height:1.2;
+}
+
+.logo-text span{
+    font-size:13px;
+    color:var(--gold);
+    font-weight:600;
+}
+
+/* Desktop Menu */
+.nav-links{
+    display:flex;
+    list-style:none;
+    gap:30px;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:var(--red);
+    font-weight:600;
+    padding:5px 0;
+    position:relative;
+}
+
+.nav-links a::after{
+    content:"";
+    position:absolute;
+    width:0;
+    height:2px;
+    background:var(--gold);
+    left:0;
+    bottom:0;
+    transition:0.3s;
+}
+
+.nav-links a:hover::after{
+    width:100%;
+}
+
+.menu-toggle{
+    display:none;
+    font-size:28px;
+    cursor:pointer;
+    color:var(--red);
+}
+
+/* ================= MOBILE ================= */
+@media(max-width:900px){
+    .nav-links{
+        position:absolute;
+        top:var(--nav-height);
+        right:0;
+        background:white;
+        flex-direction:column;
+        width:100%;
+        text-align:center;
+        display:none;
+        padding:20px 0;
+        box-shadow:0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .nav-links.active{
+        display:flex;
+    }
+
+    .menu-toggle{
+        display:block;
+    }
+}
+
+/* ================= SLIDER ================= */
+.page-header{
+    position:relative;
+    height:450px;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    text-align:center;
+}
+
+.slider{
+    position:absolute;
+    width:100%;
+    height:100%;
+}
+
+.slide{
+    position:absolute;
+    width:100%;
+    height:100%;
+    background-size:cover;
+    background-position:center;
+    opacity:0;
+    transition:opacity 1.5s ease-in-out;
+}
+
+.slide.active{
+    opacity:1;
+}
+
+.page-header::after{
+    content:"";
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.6);
+}
+
+.header-content{
+    position:relative;
+    z-index:2;
+}
+
+.header-content h1{
+    font-size:2.5rem;
+    letter-spacing:2px;
+}
+
+/* ================= INTRO ================= */
+.intro-text{
+    text-align:center;
+    max-width:900px;
+    margin:60px auto;
+    padding:0 20px;
+    line-height:1.7;
+    color:#000;
+}
+
+/* ================= STATIONS ================= */
+.stations-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:25px;
+    padding:40px 8%;
+}
+
+.station-card{
+    background:white;
+    padding:30px 20px;
+    border-radius:15px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+    border-top:5px solid var(--gold);
+    text-align:center;
+    transition:0.3s;
+}
+
+.station-card:hover{
+    transform:translateY(-8px);
+}
+
+.station-card h3{
+    color:var(--gold);
+    margin-bottom:15px;
+}
+
+/* ================= FOOTER ================= */
+footer{
+    background:var(--gold);
+    color:white;
+    text-align:center;
+    padding:20px;
+    margin-top:40px;
+}
+
+/* ================= RESPONSIVE ================= */
+@media(max-width:768px){
+    .page-header{
+        height:350px;
+    }
+
+    .header-content h1{
+        font-size:1.6rem;
+        padding:0 10px;
+    }
+    .logo-text h1{
+        font-size:16px;
+    }
+    .logo-text span{
+        font-size:11px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= NAVIGATION ================= -->
+<header>
+    <div class="nav-container">
+         <a href="{% url 'home' %}" class="logo-link">
+            <img src="{% static 'images/logo.png' %}" alt="Ngoisa Parish">
+            <div class="logo-text">
+                <h1>St Peters Ngoisa</h1>
+                <span>Catholic Parish</span>
+            </div>
+        </a>
+
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'about' %}">About</a></li>
+            <li><a href="{% url 'Gallary' %}">Gallery</a></li>
+            <li><a href="{% url 'stations' %}">Stations</a></li>
+            <li><a href="{% url 'groups' %}">Groups</a></li>
+            <li><a href="{% url 'Contact' %}">Contact</a></li>
+        </ul>
+    </div>
+</header>
+
+<!-- ================= SLIDER ================= -->
+<section class="page-header">
+    <div class="slider">
+        <div class="slide active" style="background-image:url('{% static "images/u.jpg" %}')"></div>
+        <div class="slide" style="background-image:url('{% static "images/slide2.jpg" %}')"></div>
+        <div class="slide" style="background-image:url('{% static "images/slide3.jpg" %}')"></div>
+    </div>
+
+    <div class="header-content">
+        <h1>ST PETERS NGOISA PARISH OUTSTATIONS</h1>
+    </div>
+</section>
+
+<!-- ================= INTRO ================= -->
+<div class="intro-text">
+    St Peters Ngoisa Parish is blessed with several vibrant outstations serving different communities. 
+    Each outstation strengthens faith, promotes unity, and supports the mission of the Church.
+</div>
+
+<!-- ================= STATIONS ================= -->
+<section class="stations-grid">
+    <div class="station-card">
+        <h3>St Peters Ngoisa</h3>
+        <p>The central parish church serving as the spiritual heart.</p>
+    </div>
+    <div class="station-card">
+        <h3>St Augustine Merit</h3>
+        <p>A growing Christian community committed to faith formation.</p>
+    </div>
+    <div class="station-card">
+        <h3>St Thomas Lamaiwet</h3>
+        <p>Known for vibrant Small Christian Communities.</p>
+    </div>
+    <div class="station-card">
+        <h3>St Thomas Tungurewet</h3>
+        <p>A united outstation fostering spiritual growth.</p>
+    </div>
+    <div class="station-card">
+        <h3>St Michael Kabobo</h3>
+        <p>Active in evangelization and outreach ministries.</p>
+    </div>
+    <div class="station-card">
+        <h3>St Mary’s Kimokochui</h3>
+        <p>A Marian-centered community devoted to prayer.</p>
+    </div>
+    <div class="station-card">
+        <h3>St Raphael Samuget</h3>
+        <p>A welcoming community focused on unity and faith.</p>
+    </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<!-- ================= FOOTER ================= -->
+<footer>
+    <div class="footer-container" style="background: var(--gold); color: white; padding: 50px 8%; font-family:'Segoe UI', sans-serif;">
+        <div class="footer-top" style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:30px;">
+
+            <!-- Logo + About -->
+            <div class="footer-about" style="flex:1; min-width:250px;">
+                <a href="{% url 'home' %}" style="display:flex; align-items:center; text-decoration:none; margin-bottom:15px;">
+                    <img src="{% static 'images/logo.png' %}" alt="Parish Logo" style="height:50px; width:50px; object-fit:cover; border-radius:50%; border:2px solid white; margin-right:10px;">
+                    <div>
+                        <h3 style="margin:0; color:white;">St Peters Ngoisa</h3>
+                        <span style="font-size:12px; color:#fff;">Catholic Parish</span>
+                    </div>
                 </a>
+                <p style="line-height:1.6; font-size:0.95rem;">
+                    We are a Catholic community worshipping God and serving others with love and faith.
+                </p>
             </div>
 
-            <nav class="header-nav-wrap">
-                <ul class="header-nav">
-                    <li><a href="{% url 'home' %}" title="Home">Home</a></li>
-                    <li><a href="{% url 'about' %}" title="">About</a></li>
-                    <li><a href="{% url 'Gallary' %}" title="">Gallary</a></li>
-                    <li class="current"><a href="{% url 'stations' %}" title="">Station</a></li>
-                    <li><a href="{% url 'groups' %}" title="">Groups</a></li>
-                    <li><a href="{% url 'Contact' %}" title="Contact us">Contact</a></li>
+            <!-- Location -->
+            <div class="footer-location" style="flex:1; min-width:200px;">
+                <h4 style="margin-bottom:10px; color:white;">Our Location</h4>
+                <p style="line-height:1.6; font-size:0.95rem;">
+                    Ngoiso Catholic Church<br>
+                    Ngoiso, Eldoret<br>
+                    Kenya
+                </p>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="footer-links" style="flex:1; min-width:200px;">
+                <h4 style="margin-bottom:10px; color:white;">Quick Links</h4>
+                <ul style="list-style:none; padding:0; line-height:1.8; font-size:0.95rem;">
+                    <li><a href="{% url 'home' %}" style="color:white; text-decoration:none;">Home</a></li>
+                    <li><a href="{% url 'Dashbd' %}" style="color:white; text-decoration:none;">Admin</a></li>
+                    <li><a href="{% url 'about' %}" style="color:white; text-decoration:none;">About</a></li>
+                    <li><a href="{% url 'Contact' %}" style="color:white; text-decoration:none;">Contact</a></li>
                 </ul>
-            </nav>
-        </header>   
-        <section class="page-header">       
-            <div class="gradient-overlay"></div>
-            <div class="row page-header__content">
-                <div class="column">
-                    <h1>ST PETERS NGOISA PARISH OUTSTATIONS</h1>
-                </div>  
             </div>
-        </section>
+
+        </div>
+
+        <!-- Bottom Copyright -->
+        <div class="footer-bottom" style="text-align:center; margin-top:40px; font-size:0.9rem;">
+            © 2026 St Peters Ngoisa Parish. All Rights Reserved.
+        </div>
+    </div>
+</footer>
 
 
-        <section class="page-content">
-            <div class="row">
-                <div class="column">
-                    <p class="lead">
-                        St Peters Ngoisa Parish has several outstations that serve the spiritual needs of the community. 
-                        These outstations are located in different areas and provide a place for worship, fellowship, and community engagement. 
-                        Each outstation has its own unique character and serves as a vital part of the parish's mission to spread the Gospel and serve the people of God.
-                    </p>
-                    <p class="lead drop-cap">
-                        The outstations of St Peters Ngoisa Parish include:   DEVELOPEMENT IN PROGRESS  
-                        </p> 
-                       <!-- <ul>
-                            <li><strong>St. Joseph's Outstation:</strong> Located in the eastern part of the parish, St. Joseph's Outstation is known for its vibrant community and active youth ministry.</li>
-                            <li><strong>Our Lady of Perpetual Help Outstation:</strong> Situated in the western area, this outstation is renowned for its beautiful liturgical celebrations and strong devotion to the Virgin Mary.</li>
-                            <li><strong>St. Francis of Assisi Outstation:</strong> Found in the northern region, St. Francis of Assisi Outstation is recognized for its commitment to social justice and outreach programs.</li>
-                            <li><strong>St. Anthony's Outstation:</strong> Located in the southern part of the parish, St. Anthony's Outstation is celebrated for its welcoming atmosphere and active involvement in community service.</li>
-                --></div>
-            </div>
-        </section>
-    </body>     
-    </html>
+<!-- ================= SCRIPTS ================= -->
+<script>
+// SLIDER
+const slides = document.querySelectorAll('.slide');
+let currentSlide = 0;
+function changeSlide(){
+    slides[currentSlide].classList.remove('active');
+    currentSlide = (currentSlide + 1) % slides.length;
+    slides[currentSlide].classList.add('active');
+}
+setInterval(changeSlide, 5000);
+
+// MOBILE MENU
+function toggleMenu(){
+    document.getElementById("navLinks").classList.toggle("active");
+}
+</script>
+
+</body>
+</html>

@@ -30,7 +30,130 @@
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="manifest" href="site.webmanifest">
+    <style>
+:root {
+    --vatican-gold: #C9A227;
+    --vatican-white: #FFFFFF;
+    --vatican-red: #8B0000;
+}
 
+/* HEADER */
+.s-header {
+    background-color: var(--vatican-white);
+    border-bottom: 3px solid var(--vatican-gold);
+}
+
+.header-logo h {
+    color: var(--vatican-gold);
+    font-weight: bold;
+    font-size: 20px;
+}
+
+/* NAV LINKS */
+.header-nav a {
+    color: var(--vatican-red);
+    font-weight: 600;
+}
+
+.header-nav a:hover {
+    color: var(--vatican-gold);
+}
+
+/* HERO SECTION */
+.s-hero::before {
+    background: linear-gradient(
+        rgba(139,0,0,0.6),
+        rgba(201,162,39,0.6)
+    );
+}
+
+/* BUTTONS */
+.btn,
+.btn--primary,
+.btn--stroke {
+    background-color: var(--vatican-gold);
+    border-color: var(--vatican-gold);
+    color: #fff;
+}
+
+.btn:hover {
+    background-color: var(--vatican-red);
+    border-color: var(--vatican-red);
+}
+
+/* SOCIAL ICONS */
+.hero-social a {
+    color: var(--vatican-gold);
+}
+
+.hero-social a:hover {
+    color: var(--vatican-red);
+}
+
+/* ABOUT SECTION */
+.s-about {
+    background-color: var(--vatican-white);
+}
+
+/* CONNECT SECTION */
+.s-connect {
+    background-color: #fdf8e6;
+}
+
+/* FOOTER */
+.s-footer {
+    background-color: var(--vatican-red);
+    color: #fff;
+}
+
+.footer-list a {
+    color: var(--vatican-gold);
+}
+
+.footer-list a:hover {
+    color: #fff;
+}
+
+/* GO TOP BUTTON */
+.ss-go-top {
+    background-color: var(--vatican-gold);
+}
+<style>
+
+/* ABOUT SECTION TEXT FIX */
+#about .subhead,
+#about .lead,
+#about p,
+#about h3 {
+    color: #000 !important;
+}
+
+#about .btn--about {
+    background-color: #C9A227; /* Vatican Gold */
+    color: #000;
+    border: none;
+}
+
+#about .btn--about:hover {
+    background-color: #8B0000; /* Vatican Red */
+    color: #fff;
+}
+/* HEADER RIGHT PHOTO */
+.header-photo {
+    position: absolute;
+    right: 80px;   /* adjust if needed */
+    top: 15px;
+}
+
+.header-photo img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;   /* makes it circle */
+    object-fit: cover;
+    border: 3px solid var(--vatican-gold);
+}
+
+</style>
 
 </head>
 
@@ -52,8 +175,8 @@
     <header class="s-header">
 
         <div class="header-logo">
-            <a class="site-logo" href="index.html">
-                <img src="" alt="Homepage">
+            <a class="site-logo" href="">
+                <h>ST PETERS NGOISA PARISH</H>
             </a>
         </div>
  <nav class="header-nav-wrap">
