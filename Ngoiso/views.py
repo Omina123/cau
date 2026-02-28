@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from httpx import request
 from .forms import *
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -615,3 +616,110 @@ def stations(request):
     return render(request, 'stations.html')
 def groups(request):
     return render(request, 'groups.html')
+from django.db.models import Prefetch
+
+def zakao(request, outstation_id):
+    outstation = get_object_or_404(Outstation, id=outstation_id)
+    selected_year = int(request.GET.get('year', date.today().year))
+    
+    months_list = [
+        ('JAN', 'Jan'), ('FEB', 'Feb'), ('MAR', 'Mar'), ('APR', 'Apr'), 
+        ('MAY', 'May'), ('JUN', 'Jun'), ('JUL', 'Jul'), ('AUG', 'Aug'), 
+        ('SEP', 'Sep'), ('OCT', 'Oct'), ('NOV', 'Nov'), ('DEC', 'Dec')
+    ]
+
+    # Optimization: Prefetch all zaka for this year in ONE go
+    zaka_qs = Zaka.objects.filter(year=selected_year)
+    members = Member.objects.filter(outstation=outstation)\
+                    .select_related('jumuiya')\
+                    .prefetch_related(Prefetch('zaka_set', queryset=zaka_qs, to_attr='yearly_zaka'))
+    
+    report_data = []
+    for member in members:
+        # Now we look at the 'yearly_zaka' list we already fetched
+        zaka_map = {z.month: z.amount for z in member.yearly_zaka}
+        
+        monthly_amounts = [zaka_map.get(code, 0) for code, name in months_list]
+        
+        report_data.append({
+            'jumuiya': member.jumuiya.name if member.jumuiya else "No Jumuiya",
+            'full_name': member.full_name,
+            'months': monthly_amounts,
+            'total': sum(zaka_map.values())
+        })
+
+    context = {
+        'outstation': outstation,
+        'report_data': report_data,
+        'months_list': [m[1] for m in months_list],
+        'selected_year': selected_year,
+    }
+    return render(request, 'zakao.html', context)
+from django.shortcuts import render, get_object_or_404
+from .models import Outstation, Member, SpecialContribution, Mavuno
+from datetime import date
+from django.db.models import Prefetch
+
+# --- SPECIAL CONTRIBUTIONS REPORT ---
+def special_report(request, outstation_id):
+    outstation = get_object_or_404(Outstation, id=outstation_id)
+    selected_year = int(request.GET.get('year', date.today().year))
+    
+    # These are your model CHOICES
+    types = ['ASSUMPTION', 'CHRISTMAS', 'PASAKA']
+    
+    # Optimization: Prefetch contributions for the year
+    specials_qs = SpecialContribution.objects.filter(date_recorded__year=selected_year)
+    members = Member.objects.filter(outstation=outstation).select_related('jumuiya')\
+                    .prefetch_related(Prefetch('specialcontribution_set', queryset=specials_qs, to_attr='yearly_specials'))
+    
+    report_data = []
+    for member in members:
+        # Map: { 'CHRISTMAS': 500, 'PASAKA': 1000 }
+        special_map = {s.contribution_type: s.amount for s in member.yearly_specials}
+        row_amounts = [special_map.get(t, 0) for t in types]
+        
+        report_data.append({
+            'jumuiya': member.jumuiya.name if member.jumuiya else "-",
+            'name': member.full_name,
+            'types': row_amounts,
+            'total': sum(row_amounts)
+        })
+
+    return render(request, 'special_rpt.html', {
+        'outstation': outstation,
+        'report_data': report_data,
+        'types': types,
+        'year': selected_year
+    })
+
+# --- MAVUNO REPORT ---
+def mavuno_report(request, outstation_id):
+    outstation = get_object_or_404(Outstation, id=outstation_id)
+    selected_year = int(request.GET.get('year', date.today().year))
+    
+    # List of produce types from your model
+    produce_list = ['MAIZE', 'BEANS', 'WHEAT', 'MILLET', 'COW', 'GOAT', 'SHEEP', 'CHICKEN', 'MONEY']
+    
+    mavuno_qs = Mavuno.objects.filter(date_recorded__year=selected_year)
+    members = Member.objects.filter(outstation=outstation).select_related('jumuiya')\
+                    .prefetch_related(Prefetch('mavuno_set', queryset=mavuno_qs, to_attr='yearly_mavuno'))
+    
+    report_data = []
+    for member in members:
+        # Map: { 'MAIZE': 2, 'COW': 1 }
+        mavuno_map = {m.produce_type: m.quantity for m in member.yearly_mavuno}
+        row_quantities = [mavuno_map.get(p, 0) for p in produce_list]
+        
+        report_data.append({
+            'jumuiya': member.jumuiya.name if member.jumuiya else "-",
+            'name': member.full_name,
+            'items': row_quantities,
+        })
+
+    return render(request, 'mavuno_report.html', {
+        'outstation': outstation,
+        'report_data': report_data,
+        'produce_list': produce_list,
+        'year': selected_year
+    })

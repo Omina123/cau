@@ -44,6 +44,16 @@
 <nav class="navbar navbar-light bg-white shadow-sm px-3 mb-4">
     <li class="nav-item">
         <a class="nav-link" href="{% url 'Dashbd' %}">DASHBOARD</a>
+             {% for data in outstation_data %}
+    {% if data.outstation.id %}
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 outstation-card">
+            <div class="card card-outstation mb-3 p-3 shadow-sm">
+                <h5 class="card-title">{{ data.outstation.name }}</h5>
+                <a href="{% url 'zakao' data.outstation.id %}" class="btn btn-outline-warning btn-sm">Open Zaka</a>
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
     </li>
     <span>Welcome, {{ request.user.username }}</span>
 </nav>
@@ -58,6 +68,7 @@
            onkeyup="searchMember()">
 
     <!-- Members Table -->
+     
     <div class="table-responsive">
         <table class="table table-bordered table-striped" id="membersTable">
             <thead>

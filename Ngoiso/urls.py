@@ -21,6 +21,12 @@ urlpatterns = [
     # path('mavuno_pdf_report', views.mavuno_pdf_report, name='mavuno_pdf_report'),
     path('out_station', views.out_station, name='out_station'),
     path('outstation/<int:pk>/', views.outstation, name='outstation'),
-    path('stations', views.stations, name='stations'),
-    path('groups', views.groups, name='groups'),
+   
+    # path('outstation/<int:pk>/special/', views.outstation_special, name='outstation_special'),
+    #path('outstation/<int:pk>/mavuno/', views.outstation_mavuno, name='outstation_mavuno'),
+path('outstation/<int:outstation_id>/zakao/', views.zakao, name='zakao'),   
+path('stations', views.stations, name='stations'),
+path('groups', views.groups, name='groups'),
+path('outstation/<int:outstation_id>/specials/', views.special_report, name='special_report'),
+path('outstation/<int:outstation_id>/mavuno/', views.mavuno_report, name='mavuno_report'),
 ]

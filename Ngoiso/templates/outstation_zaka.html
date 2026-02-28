@@ -1,0 +1,30 @@
+<h2>{{ outstation.name }} - Zaka {{ data.0.year }}</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Member</th>
+            <th>Year</th>
+            <th>Jumuiya</th>
+            {% for code,name in months %}
+                <th>{{ name }}</th>
+            {% endfor %}
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in data %}
+        <tr>
+            <td>{{ row.member.full_name }}</td>
+            <td>{{ row.year }}</td>
+            <td>{{ row.jumuiya }}</td>
+
+            {% for code,name in months %}
+                <td>{{ row.monthly|get_item:code }}</td>
+            {% endfor %}
+
+            <td>{{ row.total }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

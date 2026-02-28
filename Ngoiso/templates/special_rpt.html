@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ outstation.name }} - Special Contributions</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body { 
+            background: linear-gradient(to right, #fdfcf8, #f8f6ef);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Page Header */
+        h2 {
+            font-weight: 700;
+            color: #8c6f14;
+            letter-spacing: 0.5px;
+        }
+
+        /* Back Link */
+        .back-link {
+            text-decoration: none;
+            color: #C9A227;
+            font-weight: 600;
+            transition: 0.3s ease;
+            display: inline-block;
+        }
+
+        .back-link:hover { 
+            color: #8c6f14; 
+            transform: translateX(-4px);
+        }
+
+        /* Search + Button */
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: none;
+        }
+
+        .form-control:focus {
+            border-color: #C9A227;
+            box-shadow: 0 0 0 0.2rem rgba(201,162,39,0.2);
+        }
+
+        .btn-outline-secondary {
+            border-radius: 8px;
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: #C9A227;
+            border-color: #C9A227;
+            color: white;
+        }
+
+        /* Card */
+        .card { 
+            border: none; 
+            border-radius: 15px; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        /* Table */
+        .table {
+            font-size: 14px;
+            margin-bottom: 0;
+        }
+
+        .table thead th {
+            background: linear-gradient(135deg, #C9A227, #a88614);
+            color: white;
+            text-align: center;
+            vertical-align: middle;
+            font-weight: 600;
+            border: none;
+            padding: 12px;
+        }
+
+        .table tbody td {
+            vertical-align: middle;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .table tbody tr:hover {
+            background-color: #fff9e6;
+            transition: 0.2s ease;
+        }
+
+        .table tbody td.text-start {
+            text-align: left !important;
+        }
+
+        /* Total Column */
+        .total-column {
+            background-color: #fff4cc !important;
+            font-weight: 700;
+            color: #8c6f14;
+        }
+
+        /* Empty row */
+        .table tbody tr td[colspan] {
+            text-align: center;
+            font-style: italic;
+            color: #777;
+        }
+
+        /* Footer */
+        footer {
+            font-size: 14px;
+            color: #8c6f14;
+        }
+
+        /* Print Styling */
+        @media print {
+            .back-link,
+            .btn,
+            #memberSearch {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+            }
+
+            .card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+
+<body class="p-4">
+
+<div class="container-fluid">
+    <div class="mb-4">
+        <a href="javascript:history.back()" class="back-link">← Back to Dashboard</a>
+        <h2 class="text-center">{{ outstation.name }} - Zaka Contributions ({{ year }})</h2>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <input type="text" id="memberSearch" class="form-control" 
+                   placeholder="Search member or jumuiya..." onkeyup="filterTable()">
+        </div>
+        <div class="col-md-4 text-end">
+            <button onclick="window.print()" class="btn btn-outline-secondary">
+                Print Report
+            </button>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover mb-0" id="specialTable">
+                <thead>
+                    <tr>
+                        <th>Jumuiya</th>
+                        <th>Member Name</th>
+                        {% for type in types %}
+                            <th>{{ type }}</th>
+                        {% endfor %}
+                        <th class="total-column">TOTAL (KES)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in report_data %}
+                    <tr>
+                        <td class="text-start">{{ row.jumuiya }}</td>
+                        <td class="text-start fw-bold">{{ row.name }}</td>
+                        {% for amount in row.types %}
+                            <td>
+                                {% if amount > 0 %}
+                                    {{ amount|floatformat:2 }}
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                        <td class="total-column">{{ row.total|floatformat:2 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="{{ types|length|add:3 }}">No records found for this year.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<footer class="text-center mt-5">
+    &copy; {{ year }} Parish Management System - {{ outstation.name }}
+</footer>
+
+<script>
+function filterTable() {
+    const input = document.getElementById("memberSearch");
+    const filter = input.value.toLowerCase();
+    const table = document.getElementById("specialTable");
+    const tr = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < tr.length; i++) {
+        let rowContent = tr[i].textContent.toLowerCase();
+        tr[i].style.display = rowContent.includes(filter) ? "" : "none";
+    }
+}
+</script>
+
+</body>
+</html>

@@ -11,34 +11,72 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
     <style>
-        body { background-color: #f8f9fa; }
+        body { background-color: #f4f6f9; }
 
-        /* Outstation Card */
-        .card-outstation { border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); transition: 0.3s; text-align: center; padding: 20px; }
-        .card-outstation:hover { transform: translateY(-5px); }
-        .card-title { color: #C9A227; font-weight: bold; margin-bottom: 15px; }
+        h2 {
+            font-weight: 700;
+            color: #333;
+        }
 
-        /* Sidebar links hover */
-        .offcanvas-body a:hover { background-color: #C9A227; color: white !important; }
+        .navbar-brand {
+            font-weight: 600;
+            color: #C9A227 !important;
+        }
 
-        /* Table card spacing */
-        .card p { margin-bottom: 0.5rem; }
-        .card h6 { font-weight: 600; }
+        /* Parish Cards */
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
 
-        /* Search input spacing */
-        #outstationSearch { margin-bottom: 20px; }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Outstation Cards */
+        .card-outstation {
+            border-radius: 18px;
+            transition: 0.3s;
+            background: white;
+        }
+
+        .card-outstation:hover {
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            transform: translateY(-6px);
+        }
+
+        .card-title {
+            color: #C9A227;
+            font-weight: 700;
+        }
+
+        #outstationSearch {
+            margin-bottom: 25px;
+            border-radius: 10px;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+        }
+
+        #outstationSearch:focus {
+            border-color: #C9A227;
+            box-shadow: 0 0 0 0.2rem rgba(201,162,39,0.25);
+        }
     </style>
 </head>
+
 <body>
 
 <!-- TOP NAVBAR -->
 <nav class="navbar navbar-light bg-white shadow-sm px-3">
-    <button class="btn btn-warning" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar">☰ Menu</button>
+    <button class="btn btn-warning" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
+        ☰ Menu
+    </button>
     <span class="navbar-brand mb-0 h5">Parish Dashboard</span>
     <span>Welcome, {{ request.user.username }}</span>
 </nav>
 
-<!-- OFFCANVAS SIDEBAR -->
+<!-- SIDEBAR -->
 <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar">
     <div class="offcanvas-header bg-warning text-white">
         <h5 class="offcanvas-title">Parish Menu</h5>
@@ -46,155 +84,126 @@
     </div>
     <div class="offcanvas-body p-0">
         <ul class="list-unstyled m-0">
-            <li><a href="{% url 'Dashbd' %}" class="d-block p-3 text-dark text-decoration-none {% if request.path == '/Dashbd/' %}bg-warning text-white{% endif %}"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a></li>
-            <li><a href="{% url 'register_member' %}" class="d-block p-3 text-dark text-decoration-none"><i class="bi bi-person-plus me-2"></i> Register Members</a></li>
-            <li><a href="{% url 'zaka' %}" class="d-block p-3 text-dark text-decoration-none"><i class="bi bi-cash-stack me-2"></i> Monthly Mavuno</a></li>
-            <li><a href="{% url 'mavuno' %}" class="d-block p-3 text-dark text-decoration-none"><i class="bi bi-bar-chart-line me-2"></i> Yearly Mavuno</a></li>
-            <li><a href="{% url 'Special' %}" class="d-block p-3 text-dark text-decoration-none"><i class="bi bi-gift me-2"></i> Zaka</a></li>
-            <li><a href="{% url 'jumuiya_contribution' %}" class="d-block p-3 text-dark text-decoration-none"><i class="bi bi-building me-2"></i> ST THOMAS Contributions</a></li>
-            <li><a href="{% url 'sadaka' %}" class="d-block p-3 text-dark text-decoration-none"><i class="bi bi-hand-thumbs-up me-2"></i> Sadaka</a></li>
-            <li><a href="{% url 'out_station' %}" class="d-block p-3 text-dark text-decoration-none"><i class="bi bi-hand-thumbs-up me-2"></i> Outstations</a></li>
-            <li><a href="{% url 'jumuiya' %}" class="d-block p-3 text-dark text-decoration-none"><i class="bi bi-hand-thumbs-up me-2"></i> Jumuiyas</a></li>
-
-            <li><a href="{% url 'Logout' %}" class="d-block p-3 text-dark text-decoration-none"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+            <li><a href="{% url 'Dashbd' %}" class="d-block p-3 text-dark text-decoration-none">Dashboard</a></li>
+            <li><a href="{% url 'register_member' %}" class="d-block p-3 text-dark text-decoration-none">Register Members</a></li>
+            <li><a href="{% url 'zaka' %}" class="d-block p-3 text-dark text-decoration-none">Monthly Mavuno</a></li>
+            <li><a href="{% url 'mavuno' %}" class="d-block p-3 text-dark text-decoration-none">Yearly Mavuno</a></li>
+            <li><a href="{% url 'Special' %}" class="d-block p-3 text-dark text-decoration-none">Zaka</a></li>
+            <li><a href="{% url 'jumuiya_contribution' %}" class="d-block p-3 text-dark text-decoration-none">ST THOMAS Contributions</a></li>
+            <li><a href="{% url 'sadaka' %}" class="d-block p-3 text-dark text-decoration-none">Sadaka</a></li>
+            <li><a href="{% url 'out_station' %}" class="d-block p-3 text-dark text-decoration-none">Outstations</a></li>
+            <li><a href="{% url 'jumuiya' %}" class="d-block p-3 text-dark text-decoration-none">Jumuiyas</a></li>
+            <li><a href="{% url 'Logout' %}" class="d-block p-3 text-dark text-decoration-none">Logout</a></li>
         </ul>
     </div>
 </div>
 
 <!-- MAIN CONTENT -->
-
 <div class="container mt-4">
     <h2 class="mb-4 text-center">Parish Performance</h2>
-    <ul>
-    <li><a href="#" class="d-block p-3 text-dark text-decoration-none">Download PDF Report</a></li>
-        </ul>
 
+    <!-- PARISH TOTALS -->
+    <div class="row g-4 mb-4">
 
-    <!-- Parish totals -->
-    <div class="row mb-4">
+        <!-- Sadaka -->
         <div class="col-md-3">
-            <div class="card p-3 text-center bg-warning text-white">
+            <div class="card p-3 text-center bg-warning text-white h-100">
                 <h6>Total Sadaka ({{ now.year }})</h6>
-                <p>KES {{ parish_totals.sadaka }}</p>
+                <p class="fs-5 fw-bold">KES {{ parish_totals.sadaka }}</p>
             </div>
         </div>
+
+        <!-- Mavuno Compact Grid -->
         <div class="col-md-3">
-            <div class="card p-3 text-center bg-success text-white">
-                <h6>Total Mavuno ({{ now.year }})</h6>
-                {% for produce, total in parish_totals.mavuno.items %}
-                <p>{{ produce }}: {{ total }}</p>
-                {% endfor %}
+            <div class="card p-3 bg-success text-white h-100">
+                <h6 class="text-center">Total Mavuno ({{ now.year }})</h6>
+                <div class="row row-cols-2 g-1 small mt-2">
+                    {% for produce, total in parish_totals.mavuno.items %}
+                    <div class="col text-center">
+                        <div class="border rounded p-1 bg-white text-dark">
+                            <strong>{{ produce }}</strong><br>
+                            {{ total }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
+
+        <!-- Zaka -->
         <div class="col-md-3">
-            <div class="card p-3 text-center bg-info text-white">
+            <div class="card p-3 text-center bg-info text-white h-100">
                 <h6>Total Monthly Mavuno ({{ now.year }})</h6>
-                <p>KES {{ parish_totals.zaka }}</p>
+                <p class="fs-5 fw-bold">KES {{ parish_totals.zaka }}</p>
             </div>
         </div>
+
+        <!-- Special -->
         <div class="col-md-3">
-            <div class="card p-3 text-center bg-primary text-white">
+            <div class="card p-3 text-center bg-primary text-white h-100">
                 <h6>Total ZAKA ({{ now.year }})</h6>
                 {% for key, val in parish_totals.special.items %}
-                <p>{{ key }}: KES {{ val }}</p>
+                <p class="small mb-1">{{ key }}: KES {{ val }}</p>
                 {% endfor %}
             </div>
         </div>
+
     </div>
 
-    <!-- Additional totals: Pledge & Jumuiya -->
-    <div class="row mb-4">
+    <!-- Pledge & Jumuiya -->
+    <div class="row g-4 mb-4">
         <div class="col-md-6">
-            <div class="card p-3 text-center bg-secondary text-white">
+            <div class="card p-3 text-center bg-secondary text-white h-100">
                 <h6>Total Pledges ({{ now.year }})</h6>
-                <p>KES {{ parish_totals.pledge }}</p>
+                <p class="fs-5 fw-bold">KES {{ parish_totals.pledge }}</p>
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card p-3 text-center bg-dark text-white">
+            <div class="card p-3 text-center bg-dark text-white h-100">
                 <h6>Total St Thomas Contributions ({{ now.year }})</h6>
-                <p>KES {{ parish_totals.jumuiya }}</p>
+                <p class="fs-5 fw-bold">KES {{ parish_totals.jumuiya }}</p>
             </div>
         </div>
     </div>
 
-    <!-- Search box -->
-    <input type="text" id="outstationSearch" class="form-control" placeholder="Search outstation..." onkeyup="searchOutstation()">
+    <!-- SEARCH -->
+    <input type="text" id="outstationSearch" class="form-control" 
+           placeholder="Search outstation..." onkeyup="searchOutstation()">
 
-    <!-- Outstations list -->
-    <div class="row g-4 mt-3" id="outstationContainer">
+    <!-- OUTSTATION CARDS -->
+    <div class="row g-4 mt-2">
         {% for data in outstation_data %}
         <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 outstation-card">
-            <div class="card card-outstation mb-3">
-                <h5 class="card-title">{{ data.outstation.name }}</h5>
-                <a href="{% url 'outstation' data.outstation.id %}" class="btn btn-outline-warning btn-sm">Open</a>
+            <div class="card card-outstation h-100 p-3 border-warning shadow-sm d-flex flex-column">
+
+                <h5 class="card-title text-center">
+                    {{ data.outstation.name }}
+                </h5>
+
+                <hr>
+
+                <!-- Totals -->
+                <div class="mb-3 small">
+                    <p><strong>Sadaka:</strong> KES {{ data.sadaka_yearly }}</p>
+                    <p><strong>Jumuiya:</strong> KES {{ data.jumuiya_total }}</p>
+                    <p><strong>Pledge:</strong> KES {{ data.pledge_total }}</p>
+                </div>
+
+                <!-- Buttons -->
+                <div class="mt-auto d-grid gap-2">
+                    <a href="{% url 'zakao' data.outstation.id %}" class="btn btn-warning btn-sm">Monthly Mavuno</a>
+                    <a href="{% url 'special_report' data.outstation.id %}" class="btn btn-outline-dark btn-sm">ZAKA</a>
+                    <a href="{% url 'mavuno_report' data.outstation.id %}" class="btn btn-outline-success btn-sm">Mavuno</a>
+                </div>
 
             </div>
-
-            <!-- Sadaka -->
-            <div class="card mb-3 p-2">
-                <h6 class="text-center">Sadaka</h6>
-                <p>Year Total: KES {{ data.sadaka_yearly }}</p>
-            </div>
-
-            <!-- Mavuno -->
-            <div class="card mb-3 p-2">
-                <h6 class="text-center">Mavuno</h6>
-                <table class="table table-sm table-bordered mb-0">
-                    <thead>
-                        <tr><th>Produce</th><th>Total Quantity</th></tr>
-                    </thead>
-                    <tbody>
-                        {% for produce, total in data.mavuno_totals.items %}
-                        <tr>
-                            <td>{{ produce }}</td>
-                            <td>{{ total }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Zaka -->
-            <div class="card mb-3 p-2">
-                <h6 class="text-center">Monthly</h6>
-                <p>Total: KES {{ data.zaka_totals.current_year }}</p>
-            </div>
-
-            <!-- Special Contributions -->
-            <div class="card mb-3 p-2">
-                <h6 class="text-center">ZAKA</h6>
-                <table class="table table-sm table-bordered mb-0">
-                    <thead><tr><th>Type</th><th>Total</th></tr></thead>
-                    <tbody>
-                        {% for key, total in data.special_totals.items %}
-                        <tr>
-                            <td>{{ key }}</td>
-                            <td>KES {{ total }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Pledge -->
-            <div class="card mb-3 p-2">
-                <h6 class="text-center">Pledges</h6>
-                <p>Total ({{ now.year }}): KES {{ data.pledge_total }}</p>
-            </div>
-
-            <!-- Jumuiya Contributions -->
-            <div class="card mb-3 p-2">
-                <h6 class="text-center">Jumuiya Contributions</h6>
-                <p>Total ({{ now.year }}): KES {{ data.jumuiya_total }}</p>
-            </div>
-
         </div>
         {% endfor %}
     </div>
+
 </div>
 
-<!-- Search JS -->
+<!-- SEARCH SCRIPT -->
 <script>
 function searchOutstation() {
     const input = document.getElementById('outstationSearch').value.toLowerCase();
@@ -206,7 +215,6 @@ function searchOutstation() {
 }
 </script>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

@@ -1,0 +1,13 @@
+<h2>{{ outstation.name }} - Reports</h2>
+
+<ul>
+    <li>
+        <a href="{% url 'outstation_zaka' outstation.id %}">Zaka Contributions</a>
+    </li>
+    <li>
+        <a href="{% url 'outstation_special' outstation.id %}">Special Contributions</a>
+    </li>
+    <li>
+        <a href="{% url 'outstation_mavuno' outstation.id %}">Mavuno</a>
+    </li>
+</ul>

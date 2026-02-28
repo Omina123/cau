@@ -1,0 +1,30 @@
+<h2 class="text-center mb-4">
+    {{ outstation.name }} - Zaka Report ({{ year }})
+</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Jumuiya</th>
+            <th>Member Name</th>
+            {% for m in months %}
+                <th>{{ m }}</th>
+            {% endfor %}
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in report_data %}
+        <tr>
+            <td>{{ row.jumuiya }}</td>
+            <td>{{ row.name }}</td>
+
+            {% for amount in row.months %}
+                <td>{{ amount }}</td>
+            {% endfor %}
+
+            <td><strong>{{ row.total }}</strong></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
