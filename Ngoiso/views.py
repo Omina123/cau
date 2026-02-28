@@ -1,5 +1,7 @@
-from django.shortcuts import render, redirect
-from httpx import request
+
+from django.shortcuts import render,redirect, get_object_or_404
+
+from django.db.models import Prefetch
 from .forms import *
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -655,10 +657,6 @@ def zakao(request, outstation_id):
         'selected_year': selected_year,
     }
     return render(request, 'zakao.html', context)
-from django.shortcuts import render, get_object_or_404
-from .models import Outstation, Member, SpecialContribution, Mavuno
-from datetime import date
-from django.db.models import Prefetch
 
 # --- SPECIAL CONTRIBUTIONS REPORT ---
 def special_report(request, outstation_id):
