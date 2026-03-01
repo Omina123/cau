@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Groups - St Peters Ngoisa Parish</title>
+<title>Institutions - St Peters Ngoisa Parish</title>
 
 <style>
 :root {
@@ -92,39 +92,7 @@ header{
     cursor:pointer;
     color:var(--red);
 }
-/* ================= GROUP CARDS STYLE ONLY ================= */
 
-.groups-grid{
-    padding:60px 8%;
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:40px;
-}
-
-.group-card{
-    background:#ffffff;
-    padding:30px 25px;
-    border-radius:12px;
-    box-shadow:0 8px 25px rgba(0,0,0,0.08);
-    transition:transform 0.3s ease, box-shadow 0.3s ease;
-    border-top:4px solid var(--gold);
-}
-
-.group-card:hover{
-    transform:translateY(-8px);
-    box-shadow:0 12px 30px rgba(0,0,0,0.15);
-}
-
-.group-card h3{
-    color:var(--gold);
-    margin-bottom:15px;
-    font-size:1.2rem;
-}
-
-.group-card p{
-    font-size:0.95rem;
-    line-height:1.6;
-}
 @media(max-width:900px){
     .nav-links{
         position:absolute;
@@ -147,8 +115,40 @@ header{
     }
 }
 
-/* ================= SLIDER HEADER ================= */
+/* ================= INSTITUTION CARDS ================= */
+.institutions-grid{
+    padding:60px 8%;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:40px;
+}
 
+.institution-card{
+    background:#ffffff;
+    padding:30px 25px;
+    border-radius:12px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.08);
+    transition:transform 0.3s ease, box-shadow 0.3s ease;
+    border-top:4px solid var(--gold);
+}
+
+.institution-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 12px 30px rgba(0,0,0,0.15);
+}
+
+.institution-card h3{
+    color:var(--gold);
+    margin-bottom:15px;
+    font-size:1.2rem;
+}
+
+.institution-card p{
+    font-size:0.95rem;
+    line-height:1.6;
+}
+
+/* ================= PAGE HEADER ================= */
 .page-header{
     position:relative;
     height:400px;
@@ -167,6 +167,7 @@ header{
     width:100%;
     height:100%;
 }
+
 .slide{
     position:absolute;
     top:0;
@@ -200,40 +201,6 @@ header{
     letter-spacing:2px;
 }
 
-/* ================= CONTENT ================= */
-
-.intro-text{
-    text-align:center;
-    max-width:900px;
-    margin:40px auto 60px;
-    padding:0 20px;
-    line-height:1.7;
-}
-
-.parish-info{
-    padding:60px 8%;
-    background:#fff;
-}
-
-.info-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:40px;
-}
-
-.info-card h3{
-    color:var(--gold);
-    margin-bottom:15px;
-}
-
-footer{
-    background:var(--gold);
-    color:white;
-    text-align:center;
-    padding:20px;
-    margin-top:40px;
-}
-
 @media(max-width:768px){
     .page-header{
         height:250px;
@@ -243,6 +210,23 @@ footer{
         font-size:1.8rem;
     }
 }
+
+/* ================= INTRO ================= */
+.intro-text{
+    text-align:center;
+    max-width:900px;
+    margin:40px auto 60px;
+    padding:0 20px;
+    line-height:1.7;
+}
+
+footer{
+    background:var(--gold);
+    color:white;
+    text-align:center;
+    padding:20px;
+    margin-top:40px;
+}
 </style>
 </head>
 
@@ -251,7 +235,7 @@ footer{
 <!-- ================= NAVIGATION ================= -->
 <header>
     <div class="nav-container">
-         <a href="/" class="logo-link">
+         <a href="{% url 'home' %}" class="logo-link">
             <img src="{% static 'images/logo.png' %}" alt="Ngoisa Parish">
             <div class="logo-text">
                 <h1>St Peters Ngoisa</h1>
@@ -262,14 +246,13 @@ footer{
         <div class="menu-toggle" onclick="toggleMenu()">☰</div>
 
         <ul class="nav-links" id="navLinks">
-            <li><a href="/">Home</a></li>
-            <li><a href="/about">About</a></li>
-            <li><a href="/Gallary">Gallery</a></li>
-            <li><a href="/stations">Stations</a></li>
-            <li class="current"><a href="/groups">Associations</a></li>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'about' %}">About</a></li>
+            <li><a href="{% url 'Gallary' %}">Gallery</a></li>
+            <li><a href="{% url 'stations' %}">Stations</a></li>
+            <li><a href="{% url 'groups' %}">Associations</a></li>
             <li class="current"><a href="{% url 'station_INT' %}">Institutions</a></li>
-
-            <li><a href="/Contact">Contact</a></li>
+            <li><a href="{% url 'Contact' %}">Contact</a></li>
         </ul>
     </div>
 </header>
@@ -283,62 +266,35 @@ footer{
 </div>
 
 <div class="overlay-text">
-<h1>St Peters Ngoisa Parish Associations (  TO BE REPLACED WITH PARISH PHOTOS)</h1>
+<h1>St Peters Ngoisa Parish Institutions</h1>
 </div>
 </section>
+
 <!-- ================= INTRO ================= -->
 <div class="intro-text">
-    St Peters Ngoisa Parish is blessed with vibrant Catholic associations that strengthen faith, 
-    promote unity, and support the mission of the Church. 
-    Each group plays a unique and important role in building our parish community.
+    St Peters Ngoisa Parish is blessed with excellent institutions that educate and nurture our community.
 </div>
 
-<!-- ================= GROUP CARDS ================= -->
-<section class="groups-grid">
+<!-- ================= INSTITUTION CARDS ================= -->
+<section class="institutions-grid">
 
-    <div class="group-card">
-        <h3>CMA</h3>
-        <p>Catholic Men Association dedicated to spiritual growth, leadership, and service within the parish.</p>
+    <div class="institution-card">
+        <h3>St Peters Ngoisa Secondary School</h3>
+        <p>Providing quality secondary education with strong academic and moral formation.</p>
     </div>
 
-    <div class="group-card">
-        <h3>CWA</h3>
-        <p>Catholic Women Association promoting faith, family values, and active participation in church life.</p>
+    <div class="institution-card">
+        <h3>St Peters Ngoisa Primary School</h3>
+        <p>Offering foundational education for children, nurturing faith, values, and learning.</p>
     </div>
 
-    <div class="group-card">
-        <h3>PMY</h3>
-        <p>Pontifical Missionary Youth nurturing young Catholics in missionary spirit and evangelization.</p>
-    </div>
-
-    <div class="group-card">
-        <h3>PMC</h3>
-        <p>Pontifical Missionary Children guiding children to grow in faith, prayer, and love for the Church.</p>
-    </div>
-
-    <div class="group-card">
-        <h3>JUMUIYA</h3>
-        <p>Small Christian Communities that strengthen fellowship, prayer, and mutual support among families.</p>
-    </div>
-
-    <div class="group-card">
-        <h3>Choir</h3>
-        <p>Leading the congregation in sacred music and enhancing liturgical celebrations.</p>
-    </div>
-
-    <div class="group-card">
-        <h3>Altar Servers</h3>
-        <p>Assisting the priest during Mass and other liturgical celebrations with dedication and reverence.</p>
-    </div>
-
-    <div class="group-card">
-        <h3>Lectors</h3>
-        <p>Proclaiming the Word of God during Mass and guiding the faithful in Scripture reflection.</p>
+    <div class="institution-card">
+        <h3>St Mary’s Kimogoch Primary School</h3>
+        <p>Focused on holistic development of children through academics, faith, and community engagement.</p>
     </div>
 
 </section>
 
-<!-- ================= FOOTER ================= -->
 <!-- ================= FOOTER ================= -->
 <footer>
     <div class="footer-container" style="background: var(--gold); color: white; padding: 50px 8%; font-family:'Segoe UI', sans-serif;">

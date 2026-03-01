@@ -190,7 +190,9 @@
                 <li><a href="{% url 'about' %}" title="">About</a></li>
                 <li><a href="{% url 'Gallary' %}" title="">Gallary</a></li>
                 <li><a href="{% url 'stations' %}" title="">Station</a></li>
-                <li><a href="{% url 'groups' %}" title="">Groups</a></li>
+                <li><a href="{% url 'groups' %}" title="">Associations</a></li>
+    
+                <li><a href="{% url 'station_INT'%}" title="">Institutions</a></li>
 
                
                 <li><a href="{% url "Contact" %}" title="Contact us">Contact</a></li>	
@@ -211,7 +213,7 @@
 
    <section class="s-hero" 
          data-parallax="scroll" 
-         data-image-src="{% static 'static/images/cathlic.jpg' %}" 
+         data-img src="static/images/logo.svg" 
          data-natural-width="3000" 
          data-natural-height="2000" 
          data-position-y="center">
@@ -268,8 +270,7 @@
                 <ul class="about-sched">
                     <li>
                         <h4>Main Church Mass
-                        
-                        Sunday Mass -7.00- 9:00 AM |9.00- 11:00 AM<br>
+                         Either 7.00 AM, 9:00 AM or 11:00 AM<br>
                         Eldoret</h4>
                         
                     </li>
@@ -291,7 +292,7 @@
                 <p class="lead">
               Welcome to our Parish community! Together with our outstations and church groups, we grow in faith, support one another, and serve in Christ’s love. May you encounter Christ, find peace, and grow spiritually.
                 </p>
-                <a href="{% url 'about' %}" class="btn btn--primary btn--about">More About St Ngoiso</a>
+                <a href="{% url 'about' %}" class="btn btn--primary btn--about">More About St Ngoisa</a>
             </div>
 
             </div>
@@ -420,7 +421,7 @@ Grow in faith and fellowship by joining one of our parish groups such as CWA, CM
                     <h4 class="h6">Our Location</h4>
                     <p>
                     Ngoiso Catholic Church <br>
-                    Ngoiso, Eldoret <br>
+                    Ngoisa, Eldoret <br>
                     Eldoret, Kenya
                     </p>
 

@@ -1,0 +1,303 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About - St Peters Ngoisa Parish</title>
+
+<style>
+:root {
+    --gold: #C9A227;
+    --red: #8B0000;
+    --white: #ffffff;
+    --dark: #222;
+    --nav-height: 70px;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family: 'Segoe UI', sans-serif;
+    background:#f8f9fa;
+    color:var(--dark);
+}
+
+/* ================= NAVIGATION ================= */
+header{
+    background:var(--white);
+    border-bottom:3px solid var(--gold);
+    position:sticky;
+    top:0;
+    z-index:1000;
+    height:var(--nav-height);
+}
+
+.nav-container{
+    max-width:1200px;
+    margin:0 auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    height:100%;
+    padding:0 20px;
+}
+
+.logo-link{
+    display:flex;
+    align-items:center;
+    text-decoration:none;
+}
+
+.logo-link img{
+    height:55px;
+    width:55px;
+    object-fit:cover;
+    border-radius:50%;
+    border:3px solid var(--gold);
+    margin-right:12px;
+}
+
+.logo-text h1{
+    font-size:20px;
+    color:var(--red);
+    font-weight:700;
+}
+
+.logo-text span{
+    font-size:13px;
+    color:var(--gold);
+    font-weight:600;
+}
+
+.nav-links{
+    display:flex;
+    list-style:none;
+    gap:30px;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:var(--red);
+    font-weight:600;
+}
+
+.menu-toggle{
+    display:none;
+    font-size:28px;
+    cursor:pointer;
+    color:var(--red);
+}
+
+@media(max-width:900px){
+    .nav-links{
+        position:absolute;
+        top:var(--nav-height);
+        right:0;
+        background:white;
+        flex-direction:column;
+        width:100%;
+        text-align:center;
+        display:none;
+        padding:20px 0;
+    }
+
+    .nav-links.active{
+        display:flex;
+    }
+
+    .menu-toggle{
+        display:block;
+    }
+}
+
+/* ================= SLIDER HEADER ================= */
+
+.page-header{
+    position:relative;
+    height:400px;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:white;
+}
+
+.slider{
+    position:absolute;
+    width:100%;
+    height:100%;
+}
+
+.slide{
+    position:absolute;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    opacity:0;
+    transition:opacity 1s ease-in-out;
+}
+
+.slide.active{
+    opacity:1;
+}
+
+.page-header::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.5);
+    z-index:1;
+}
+
+.overlay-text{
+    position:relative;
+    z-index:2;
+}
+
+.overlay-text h1{
+    font-size:2.5rem;
+    letter-spacing:2px;
+}
+
+/* ================= CONTENT ================= */
+
+.intro-text{
+    text-align:center;
+    max-width:900px;
+    margin:40px auto 60px;
+    padding:0 20px;
+    line-height:1.7;
+}
+
+.parish-info{
+    padding:60px 8%;
+    background:#fff;
+}
+
+.info-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:40px;
+}
+
+.info-card h3{
+    color:var(--gold);
+    margin-bottom:15px;
+}
+
+footer{
+    background:var(--gold);
+    color:white;
+    text-align:center;
+    padding:20px;
+    margin-top:40px;
+}
+
+@media(max-width:768px){
+    .page-header{
+        height:250px;
+    }
+
+    .overlay-text h1{
+        font-size:1.8rem;
+    }
+}
+</style>
+</head>
+<body>
+
+<header>
+<div class="nav-container">
+<a href="{% url 'home' %}" class="logo-link">
+<img src="{% static 'images/logo.png' %}" alt="Ngoisa Parish">
+<div class="logo-text">
+<h1>St Peters Ngoisa</h1>
+<span>Catholic Parish</span>
+</div>
+</a>
+
+<div class="menu-toggle" onclick="toggleMenu()">☰</div>
+
+<ul class="nav-links" id="navLinks">
+<li><a href="{% url 'home' %}">Home</a></li>
+<li><a href="{% url 'about' %}">About</a></li>
+<li><a href="{% url 'stations' %}">Stations</a></li>
+<li><a href="{% url 'groups' %}">Groups</a></li>
+<li><a href="{% url 'Contact' %}">Contact</a></li>
+</ul>
+</div>
+</header>
+
+<!-- SLIDER -->
+<section class="page-header">
+<div class="slider">
+<img src="{% static 'images/slider1.jpg' %}" class="slide active">
+<img src="{% static 'images/slider2.jpg' %}" class="slide">
+<img src="{% static 'images/slider3.jpg' %}" class="slide">
+</div>
+
+<div class="overlay-text">
+<h1>About St Peters Ngoisa Parish</h1>
+</div>
+</section>
+
+<div class="intro-text">
+Welcome to St Peters Ngoisa Parish. We are a Catholic community worshipping God and serving others with love and faith.
+</div>
+
+<section class="parish-info">
+<div class="info-grid">
+<div class="info-card">
+<h3>Our History</h3>
+<p>Established to serve the Catholic faithful in Eldoret and surrounding areas.</p>
+</div>
+
+<div class="info-card">
+<h3>Outstations</h3>
+<ul>
+<li>St Peters Ngoisa</li>
+<li>St Augustine Merewet</li>
+<li>St Thomas Lamaiwet</li>
+<li>St Michael Kabobo</li>
+</ul>
+</div>
+
+<div class="info-card">
+<h3>Verse of the Day</h3>
+<p><em>"For where two or three gather in my name, there am I with them." – Matthew 18:20</em></p>
+</div>
+</div>
+</section>
+
+<footer>
+© 2026 St Peters Ngoisa Parish. All Rights Reserved.
+</footer>
+
+<script>
+function toggleMenu(){
+document.getElementById("navLinks").classList.toggle("active");
+}
+
+let slides = document.querySelectorAll(".slide");
+let index = 0;
+
+function showSlide(){
+slides.forEach(slide => slide.classList.remove("active"));
+index++;
+if(index >= slides.length){
+index = 0;
+}
+slides[index].classList.add("active");
+}
+
+setInterval(showSlide, 4000);
+</script>
+
+</body>
+</html>

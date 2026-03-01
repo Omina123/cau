@@ -89,7 +89,7 @@
             <li><a href="{% url 'zaka' %}" class="d-block p-3 text-dark text-decoration-none">Monthly Mavuno</a></li>
             <li><a href="{% url 'mavuno' %}" class="d-block p-3 text-dark text-decoration-none">Yearly Mavuno</a></li>
             <li><a href="{% url 'Special' %}" class="d-block p-3 text-dark text-decoration-none">Zaka</a></li>
-            <li><a href="{% url 'jumuiya_contribution' %}" class="d-block p-3 text-dark text-decoration-none">ST THOMAS Contributions</a></li>
+            <li><a href="{% url 'jumuiya_contribution' %}" class="d-block p-3 text-dark text-decoration-none">ST Peters Ngoisa Family day Contributions</a></li>
             <li><a href="{% url 'sadaka' %}" class="d-block p-3 text-dark text-decoration-none">Sadaka</a></li>
             <li><a href="{% url 'out_station' %}" class="d-block p-3 text-dark text-decoration-none">Outstations</a></li>
             <li><a href="{% url 'jumuiya' %}" class="d-block p-3 text-dark text-decoration-none">Jumuiyas</a></li>
@@ -160,7 +160,14 @@
         </div>
         <div class="col-md-6">
             <div class="card p-3 text-center bg-dark text-white h-100">
-                <h6>Total St Thomas Contributions ({{ now.year }})</h6>
+                <h6>Total Family  Day Contributions ({{ now.year }})</h6>
+                <p class="fs-5 fw-bold">KES {{ parish_totals.jumuiya }}</p>
+            </div>
+
+        </div>
+         <div class="col-md-6">
+            <div class="card p-3 text-center bg-dark text-white h-100">
+                <h6> Report and summary ({{ now.year }})</h6>
                 <p class="fs-5 fw-bold">KES {{ parish_totals.jumuiya }}</p>
             </div>
         </div>

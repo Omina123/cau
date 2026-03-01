@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Stations - St Peters Ngoisa Parish</title>
 
-
 <style>
 :root {
     --gold: #C9A227;
@@ -25,6 +24,7 @@
 body{
     font-family: 'Segoe UI', sans-serif;
     background:#f8f9fa;
+    color:var(--dark);
 }
 
 /* ================= NAVIGATION ================= */
@@ -65,9 +65,7 @@ header{
 .logo-text h1{
     font-size:20px;
     color:var(--red);
-    margin:0;
     font-weight:700;
-    line-height:1.2;
 }
 
 .logo-text span{
@@ -76,7 +74,6 @@ header{
     font-weight:600;
 }
 
-/* Desktop Menu */
 .nav-links{
     display:flex;
     list-style:none;
@@ -87,23 +84,6 @@ header{
     text-decoration:none;
     color:var(--red);
     font-weight:600;
-    padding:5px 0;
-    position:relative;
-}
-
-.nav-links a::after{
-    content:"";
-    position:absolute;
-    width:0;
-    height:2px;
-    background:var(--gold);
-    left:0;
-    bottom:0;
-    transition:0.3s;
-}
-
-.nav-links a:hover::after{
-    width:100%;
 }
 
 .menu-toggle{
@@ -113,7 +93,6 @@ header{
     color:var(--red);
 }
 
-/* ================= MOBILE ================= */
 @media(max-width:900px){
     .nav-links{
         position:absolute;
@@ -125,7 +104,6 @@ header{
         text-align:center;
         display:none;
         padding:20px 0;
-        box-shadow:0 10px 20px rgba(0,0,0,0.1);
     }
 
     .nav-links.active{
@@ -137,94 +115,118 @@ header{
     }
 }
 
-/* ================= SLIDER ================= */
+/* ================= SLIDER HEADER ================= */
+
 .page-header{
     position:relative;
-    height:450px;
+    height:400px;
     overflow:hidden;
     display:flex;
     align-items:center;
     justify-content:center;
-    color:white;
     text-align:center;
+    color:white;
 }
 
 .slider{
     position:absolute;
+    top:0;
+    left:0;
     width:100%;
     height:100%;
 }
-
 .slide{
     position:absolute;
+    top:0;
+    left:0;
     width:100%;
     height:100%;
-    background-size:cover;
-    background-position:center;
+    object-fit:cover;
     opacity:0;
-    transition:opacity 1.5s ease-in-out;
+    transition:opacity 1s ease-in-out;
 }
 
 .slide.active{
     opacity:1;
 }
 
-.page-header::after{
+.page-header::before{
     content:"";
     position:absolute;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.6);
+    inset:0;
+    background:rgba(0,0,0,0.5);
+    z-index:1;
 }
 
-.header-content{
+.overlay-text{
     position:relative;
     z-index:2;
 }
 
-.header-content h1{
+.overlay-text h1{
     font-size:2.5rem;
     letter-spacing:2px;
 }
 
-/* ================= INTRO ================= */
+/* ================= CONTENT ================= */
+
 .intro-text{
     text-align:center;
     max-width:900px;
-    margin:60px auto;
+    margin:40px auto 60px;
     padding:0 20px;
     line-height:1.7;
-    color:#000;
 }
+/* ================= STATION CARDS STYLE ONLY ================= */
 
-/* ================= STATIONS ================= */
 .stations-grid{
+    padding:60px 8%;
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:25px;
-    padding:40px 8%;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:40px;
 }
 
 .station-card{
-    background:white;
-    padding:30px 20px;
-    border-radius:15px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.08);
-    border-top:5px solid var(--gold);
-    text-align:center;
-    transition:0.3s;
+    background:#ffffff;
+    padding:30px 25px;
+    border-radius:12px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.08);
+    transition:transform 0.3s ease, box-shadow 0.3s ease;
+    border-top:4px solid var(--gold);
 }
 
 .station-card:hover{
     transform:translateY(-8px);
+    box-shadow:0 12px 30px rgba(0,0,0,0.15);
 }
 
 .station-card h3{
     color:var(--gold);
     margin-bottom:15px;
+    font-size:1.2rem;
 }
 
-/* ================= FOOTER ================= */
+.station-card p{
+    font-size:0.95rem;
+    line-height:1.6;
+}
+.parish-info{
+    padding:60px 8%;
+    background:#fff;
+}
+
+.info-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:40px;
+}
+
+.info-card h3{
+    color:var(--gold);
+    margin-bottom:15px;
+}
+
+
 footer{
     background:var(--gold);
     color:white;
@@ -233,21 +235,13 @@ footer{
     margin-top:40px;
 }
 
-/* ================= RESPONSIVE ================= */
 @media(max-width:768px){
     .page-header{
-        height:350px;
+        height:250px;
     }
 
-    .header-content h1{
-        font-size:1.6rem;
-        padding:0 10px;
-    }
-    .logo-text h1{
-        font-size:16px;
-    }
-    .logo-text span{
-        font-size:11px;
+    .overlay-text h1{
+        font-size:1.8rem;
     }
 }
 </style>
@@ -273,7 +267,11 @@ footer{
             <li><a href="{% url 'about' %}">About</a></li>
             <li><a href="{% url 'Gallary' %}">Gallery</a></li>
             <li><a href="{% url 'stations' %}">Stations</a></li>
-            <li><a href="{% url 'groups' %}">Groups</a></li>
+            <li><a href="{% url 'groups' %}" title="">Associations</a></li>
+    
+                <li><a href="{% url 'station_INT'%}" title="">Institutions</a></li>
+
+               
             <li><a href="{% url 'Contact' %}">Contact</a></li>
         </ul>
     </div>
@@ -281,15 +279,15 @@ footer{
 
 <!-- ================= SLIDER ================= -->
 <section class="page-header">
-    <div class="slider">
-        <div class="slide active" style="background-image:url('{% static "images/u.jpg" %}')"></div>
-        <div class="slide" style="background-image:url('{% static "images/slide2.jpg" %}')"></div>
-        <div class="slide" style="background-image:url('{% static "images/slide3.jpg" %}')"></div>
-    </div>
+<div class="slider">
+<img src="{% static 'images/wheel-1000.jpg' %}" class="slide active">
+<img src="{% static 'images/series-2000.jpg' %}" class="slide">
+<img src="{% static 'images/u.jpg' %}" class="slide">
+</div>
 
-    <div class="header-content">
-        <h1>ST PETERS NGOISA PARISH OUTSTATIONS</h1>
-    </div>
+<div class="overlay-text">
+<h1>St Peters Ngoisa Parish Outstations (TO BE REPLACED WITH PARISH PHOTOS)</h1>
+</div>
 </section>
 
 <!-- ================= INTRO ================= -->

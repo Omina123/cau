@@ -721,3 +721,5 @@ def mavuno_report(request, outstation_id):
         'produce_list': produce_list,
         'year': selected_year
     })
+def station_INT(request):
+    return render(request, 'stat.html')
