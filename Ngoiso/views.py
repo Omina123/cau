@@ -507,111 +507,6 @@ def pledge_view(request):
     return render(request, 'pledge.html', context)
 
 
-# def mavuno_pdf_report(request):
-#     current_year = date.today().year
-#     outstations = Outstation.objects.all()
-
-#     PRODUCE_TYPES = ['MAIZE','BEANS','WHEAT','MILLET','SHEEP','COW','GOAT','CHICKEN','OTHER']
-
-#     report_data = []
-
-#     # GRAND TOTAL HOLDER
-#     grand_totals = {
-#         'MONEY': {'pledged': 0, 'paid': 0}
-#     }
-#     for produce in PRODUCE_TYPES:
-#         grand_totals[produce] = {'pledged': 0, 'paid': 0}
-
-#     # LOOP OUTSTATIONS
-#     for outstation in outstations:
-#         jumuiyas = Jumuiya.objects.filter(outstation=outstation)
-
-#         jumuiya_data = []
-
-#         # OUTSTATION SUBTOTAL HOLDER
-#         outstation_totals = {
-#             'MONEY': {'pledged': 0, 'paid': 0}
-#         }
-#         for produce in PRODUCE_TYPES:
-#             outstation_totals[produce] = {'pledged': 0, 'paid': 0}
-
-#         # LOOP JUMUIYA
-#         for jumuiya in jumuiyas:
-#             row = {'jumuiya': jumuiya.name}
-
-#             # ---------------- MONEY ----------------
-#             pledges = Pledge.objects.filter(
-#                 member__jumuiya=jumuiya,
-#                 date_pledged__year=current_year
-#             )
-
-#             pledged_total = sum(p.pledged_amount for p in pledges)
-#             paid_total = sum(p.amount_paid for p in pledges)
-
-#             row['MONEY'] = {
-#                 'pledged': pledged_total,
-#                 'paid': paid_total
-#             }
-
-#             # Add to outstation subtotal
-#             outstation_totals['MONEY']['pledged'] += pledged_total
-#             outstation_totals['MONEY']['paid'] += paid_total
-
-#             # Add to grand total
-#             grand_totals['MONEY']['pledged'] += pledged_total
-#             grand_totals['MONEY']['paid'] += paid_total
-
-
-#             # ---------------- PRODUCE ----------------
-#             for produce in PRODUCE_TYPES:
-#                 produce_entries = Mavuno.objects.filter(
-#                     member__jumuiya=jumuiya,
-#                     produce_type=produce,
-#                     date_recorded__year=current_year
-#                 )
-
-#                 pledged = sum(e.quantity for e in produce_entries)
-#                 paid = pledged  # adjust if you separate paid later
-
-#                 row[produce] = {
-#                     'pledged': pledged,
-#                     'paid': paid
-#                 }
-
-#                 # Add to outstation subtotal
-#                 outstation_totals[produce]['pledged'] += pledged
-#                 outstation_totals[produce]['paid'] += paid
-
-#                 # Add to grand total
-#                 grand_totals[produce]['pledged'] += pledged
-#                 grand_totals[produce]['paid'] += paid
-
-#             jumuiya_data.append(row)
-
-#         report_data.append({
-#             'outstation': outstation.name,
-#             'jumuiyas': jumuiya_data,
-#             'subtotal': outstation_totals   # ✅ OUTSTATION SUBTOTAL
-#         })
-
-#     context = {
-#         'parish_name': 'ST PETERS NGOISA PARISH',
-#         'year': current_year,
-#         'report_data': report_data,
-#         'grand_total': grand_totals   # ✅ PARISH GRAND TOTAL
-#     }
-
-#     template_path = 'mavuno_pdf.html'
-#     template = get_template(template_path)
-#     html = template.render(context)
-
-#     response = HttpResponse(content_type='application/pdf')
-#     response['Content-Disposition'] = f'inline; filename="Mavuno_Report_{current_year}.pdf"'
-
-#     pisa_status = pisa.CreatePDF(html, dest=response)
-
-#     if pisa_status.err:
-#         return HttpResponse('Error generating PDF <pre>' + html + '</pre>')
 
     return response
 def stations(request):
@@ -723,3 +618,166 @@ def mavuno_report(request, outstation_id):
     })
 def station_INT(request):
     return render(request, 'stat.html')
+
+
+def parish_mavuno_report(request):
+    selected_year = int(request.GET.get('year', date.today().year))
+
+    produce_cols = ['MAIZE', 'BEANS', 'WHEAT', 'CHICKEN', 'SHEEP', 'MILLET', 'COW']
+
+    outstations = Outstation.objects.all()
+    report_data = []
+
+    # Parish grand totals
+    grand_total_pledged = 0
+    grand_total_actual = 0
+    grand_total_produce = {p: 0 for p in produce_cols}
+
+    for station in outstations:
+        station_groups = []
+        subtotal_pledged = 0
+        subtotal_actual = 0
+        subtotal_produce = {p: 0 for p in produce_cols}
+
+        jumuiyas = Jumuiya.objects.filter(outstation=station)
+
+        for j in jumuiyas:
+            produce_data = {}
+            for p_type in produce_cols:
+                qty = Mavuno.objects.filter(
+                    member__jumuiya=j,
+                    produce_type=p_type,
+                    date_recorded__year=selected_year
+                ).aggregate(total=Sum('quantity'))['total'] or 0
+                produce_data[p_type] = qty
+                subtotal_produce[p_type] += qty
+                grand_total_produce[p_type] += qty
+
+            # CASH (MONEY)
+            actual = Mavuno.objects.filter(
+                member__jumuiya=j,
+                produce_type='MONEY',
+                date_recorded__year=selected_year
+            ).aggregate(total=Sum('quantity'))['total'] or 0
+
+            # TODO: if you have pledged amount, replace 0
+            pledged = 0
+
+            subtotal_pledged += pledged
+            subtotal_actual += actual
+            grand_total_pledged += pledged
+            grand_total_actual += actual
+
+            station_groups.append({
+                'name': j.name,
+                'pledged': pledged,
+                'actual': actual,
+                'produce': produce_data
+            })
+
+        report_data.append({
+            'station_name': station.name,
+            'jumuiyas': station_groups,
+            'subtotal_pledged': subtotal_pledged,
+            'subtotal_actual': subtotal_actual,
+            'subtotal_produce': subtotal_produce
+        })
+
+    return render(request, 'parish_report.html', {
+        'report_data': report_data,
+        'year': selected_year,
+        'grand_total_pledged': grand_total_pledged,
+        'grand_total_actual': grand_total_actual,
+        'grand_total_produce': grand_total_produce
+    })
+def parish_special_report(request):
+    selected_year = int(request.GET.get('year', date.today().year))
+
+    contribution_types = ['ASSUMPTION', 'CHRISTMAS', 'PASAKA']
+
+    outstations = Outstation.objects.all()
+    report_data = []
+    grand_total = 0
+
+    for station in outstations:
+        station_groups = []
+        station_total = 0
+
+        jumuiyas = Jumuiya.objects.filter(outstation=station)
+
+        for j in jumuiyas:
+            type_totals = {}
+            jumuiya_total = 0
+
+            for ctype in contribution_types:
+                total = SpecialContribution.objects.filter(
+                    member__jumuiya=j,
+                    contribution_type=ctype,
+                    date_recorded__year=selected_year
+                ).aggregate(sum=Sum('amount'))['sum'] or 0
+
+                type_totals[ctype] = total
+                jumuiya_total += total
+
+            station_groups.append({
+                'name': j.name,
+                'types': type_totals,
+                'total': jumuiya_total
+            })
+
+            station_total += jumuiya_total
+
+        report_data.append({
+            'station_name': station.name,
+            'jumuiyas': station_groups,
+            'station_total': station_total
+        })
+
+        grand_total += station_total
+
+    return render(request, 'parish_special_report.html', {
+        'report_data': report_data,
+        'year': selected_year,
+        'grand_total': grand_total
+    })
+
+
+def parish_zaka_report(request):
+    selected_year = int(request.GET.get('year', date.today().year))
+
+    outstations = Outstation.objects.all()
+    report_data = []
+    grand_total = 0
+
+    for station in outstations:
+        station_groups = []
+        station_total = 0
+
+        jumuiyas = Jumuiya.objects.filter(outstation=station)
+
+        for j in jumuiyas:
+            total_zaka = Zaka.objects.filter(
+                member__jumuiya=j,
+                year=selected_year
+            ).aggregate(sum=Sum('amount'))['sum'] or 0
+
+            station_groups.append({
+                'name': j.name,
+                'total': total_zaka
+            })
+
+            station_total += total_zaka
+
+        report_data.append({
+            'station_name': station.name,
+            'jumuiyas': station_groups,
+            'station_total': station_total
+        })
+
+        grand_total += station_total
+
+    return render(request, 'parish_zaka_report.html', {
+        'report_data': report_data,
+        'year': selected_year,
+        'grand_total': grand_total
+    })

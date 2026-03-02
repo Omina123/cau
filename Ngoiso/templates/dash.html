@@ -166,11 +166,27 @@
 
         </div>
          <div class="col-md-6">
-            <div class="card p-3 text-center bg-dark text-white h-100">
-                <h6> Report and summary ({{ now.year }})</h6>
-                <p class="fs-5 fw-bold">KES {{ parish_totals.jumuiya }}</p>
-            </div>
+    <div class="card p-3 text-center bg-dark text-white h-100">
+        <h6>Reports & Summary ({{ now.year }})</h6>
+
+        <div class="d-grid gap-2 mt-3">
+            <a href="{% url 'parish_zaka_report' %}?year={{ now.year }}" 
+               class="btn btn-light btn-sm">
+                View Monthly Mavuno Report
+            </a>
+
+            <a href="{% url 'parish_special_report' %}?year={{ now.year }}" 
+               class="btn btn-light btn-sm">
+                View Zaka Report
+            </a>
+
+            <a href="{% url 'parish_mavuno_report' %}?year={{ now.year }}" 
+               class="btn btn-light btn-sm">
+                View Yearly Mavuno Report
+            </a>
         </div>
+    </div>
+</div>
     </div>
 
     <!-- SEARCH -->
