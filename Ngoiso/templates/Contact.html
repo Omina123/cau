@@ -1,36 +1,18 @@
-
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 <head>
 
-    <!--- basic page needs
-    ================================================== -->
-    <meta charset="utf-8">
-    <title>Ngoiso- Contact</title>
-    <meta name="description" content="">
-    <meta name="author" content="">
+<meta charset="utf-8">
+<title>Ngoiso- Contact</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- mobile specific metas
-    ================================================== -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="static/css/base.css">
+<link rel="stylesheet" href="static/css/vendor.css">
+<link rel="stylesheet" href="static/css/main.css">
 
-    <!-- CSS
-    ================================================== -->
-    <link rel="stylesheet" href="static/css/base.css">
-    <link rel="stylesheet" href="static/css/vendor.css">
-    <link rel="stylesheet" href="static/css/main.css">
+<script src="static/js/modernizr.js"></script>
 
-    <!-- script
-    ================================================== -->
-    <script src="static/js/modernizr.js"></script>
-
-    <!-- favicons
-    ================================================== -->
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <link rel="manifest" href="site.webmanifest">
-    <style>
+<style>
 :root {
     --vatican-gold: #C9A227;
     --vatican-white: #FFFFFF;
@@ -43,7 +25,7 @@
     border-bottom: 3px solid var(--vatican-gold);
 }
 
-.header-logo h {
+.header-logo h2 {
     color: var(--vatican-gold);
     font-weight: bold;
     font-size: 20px;
@@ -59,337 +41,178 @@
     color: var(--vatican-gold);
 }
 
-/* HERO SECTION */
-.s-hero::before {
-    background: linear-gradient(
-        rgba(139,0,0,0.6),
-        rgba(201,162,39,0.6)
-    );
-}
-
-/* BUTTONS */
-.btn,
-.btn--primary,
-.btn--stroke {
-    background-color: var(--vatican-gold);
-    border-color: var(--vatican-gold);
-    color: #fff;
-}
-
-.btn:hover {
-    background-color: var(--vatican-red);
-    border-color: var(--vatican-red);
-}
-
-/* SOCIAL ICONS */
-.hero-social a {
-    color: var(--vatican-gold);
-}
-
-.hero-social a:hover {
-    color: var(--vatican-red);
-}
-
-/* ABOUT SECTION */
-.s-about {
-    background-color: var(--vatican-white);
-}
-
-/* CONNECT SECTION */
-.s-connect {
-    background-color: #fdf8e6;
-}
-
 /* FOOTER */
 .s-footer {
     background-color: var(--vatican-red);
     color: #fff;
 }
 
-.footer-list a {
-    color: var(--vatican-gold);
+/* ========================= */
+/* FORM FIX FOR STYLESHOUT  */
+/* ========================= */
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-size: 16px;
 }
 
-.footer-list a:hover {
-    color: #fff;
+.contact-form input:focus,
+.contact-form textarea:focus {
+    border-color: var(--vatican-gold);
+    outline: none;
 }
 
-/* GO TOP BUTTON */
-.ss-go-top {
-    background-color: var(--vatican-gold);
+.contact-form button {
+    width: 100%;
 }
-<style>
-
-/* ABOUT SECTION TEXT FIX */
-#about .subhead,
-#about .lead,
-#about p,
-#about h3 {
-    color: #000 !important;
-}
-
-#about .btn--about {
-    background-color: #C9A227; /* Vatican Gold */
-    color: #000;
-    border: none;
-}
-
-#about .btn--about:hover {
-    background-color: #8B0000; /* Vatican Red */
-    color: #fff;
-}
-/* HEADER RIGHT PHOTO */
-.header-photo {
-    position: absolute;
-    right: 80px;   /* adjust if needed */
-    top: 15px;
-}
-
-.header-photo img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;   /* makes it circle */
-    object-fit: cover;
-    border: 3px solid var(--vatican-gold);
-}
-
 </style>
 
 </head>
 
 <body id="top">
 
-    <!-- preloader
-    ================================================== -->
-    <div id="preloader">
-        <div id="loader" class="dots-jump">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
+<header class="s-header">
+
+    <div class="header-logo">
+        <a class="site-logo" href="">
+            <h2>ST PETERS NGOISA PARISH</h2>
+        </a>
     </div>
 
+    <nav class="header-nav-wrap">
+        <ul class="header-nav">
+            <li><a href="">Home</a></li>
+            <li><a href="{% url 'about' %}">About</a></li>
+            <li><a href="{% url 'Gallary' %}">Gallary</a></li>
+            <li><a href="{% url 'stations' %}">Station</a></li>
+            <li><a href="{% url 'groups' %}">Associations</a></li>
+            <li><a href="{% url 'station_INT'%}">Institutions</a></li>
+            <li class="current"><a href="{% url 'Contact' %}">Contact</a></li>	
+        </ul>
+    </nav>
 
-    <!-- header
-    ================================================== -->
-    <header class="s-header">
+    <a class="header-menu-toggle" href="#0"><span>Menu</span></a>
 
-        <div class="header-logo">
-            <a class="site-logo" href="">
-                <h>ST PETERS NGOISA PARISH</H>
-            </a>
+</header>
+
+
+<section class="page-header page-header--contact">
+    <div class="gradient-overlay"></div>
+    <div class="row page-header__content">
+        <div class="column">
+            <h1>Contact Us</h1>
         </div>
- <nav class="header-nav-wrap">
-            <ul class="header-nav">
-                <li class="current"><a href="" title="Home">Home</a></li>
-                <li><a href="{% url 'about' %}" title="">About</a></li>
-                <li><a href="{% url 'Gallary' %}" title="">Gallary</a></li>
-                <li><a href="{% url 'stations' %}" title="">Station</a></li>
-                <li><a href="{% url 'groups' %}" title="">Associations</a></li>
-    
-                <li><a href="{% url 'station_INT'%}" title="">Institutions</a></li>
-
-               
-                <li class="current"><a href="{% url "Contact" %}" title="Contact us">Contact</a></li>	
-     
-            </ul>
-        </nav>
-
-        <a class="header-menu-toggle" href="#0"><span>Menu</span></a>
-
-    </header> <!-- end s-header -->
+    </div>
+</section>
 
 
-    <!-- page header
-    ================================================== -->
-    <section class="page-header page-header--contact">
+<section class="page-content">
+<div class="row">
+<div class="column">
 
-        <div class="gradient-overlay"></div>
-        <div class="row page-header__content">
-            <div class="column">
-                <h1>Contact Us</h1>
-            </div>
-        </div>
-
-    </section> <!-- end page-header -->
-
-
-    <!-- page content
-    ================================================== -->
-    <section class="page-content">
-
-        <div class="row">
-            <div class="column">
-
-               <p class="lead drop-cap">
+<p class="lead drop-cap">
 Welcome to our Parish. We grow in faith, support one another, and serve in Christ’s love.
 </p>
 
-<p>
-Whether you are a member, visitor, or exploring the Catholic faith, we are glad you’re here. May you find peace and grow spiritually.
-</p>
-                <div class="row">
-                    <div class="column large-6 tab-full">
-                        <h3>Main Office.</h3>
-                        <p>
-                        ST NGOISA PARISH<br>
-                        Eldoret, kenya<br>
-                        Mon-Fr 8:30am – 4:30pm 
-                        </p>
-                    </div>
-
-                    <div class="column large-6 tab-full">
-                        <h3>Contact Info.</h3>
-                        <p>
-                                                info@ngoisa.com <br>
-                        Phone: +254 7---000
-                        </p>
-                    </div>
-                </div>
-
-
-                <h2>Get In Touched.</h2>
-
-                <form name="contactForm" id="contactForm" method="post" action="" autocomplete="off">
-                    <fieldset>
-
-                        <div class="form-field">
-                            <input name="cName" id="cName" class="h-full-width h-remove-bottom" placeholder="Your Name" value="" type="text">
-                        </div>
-
-                        <div class="form-field">
-                            <input name="cEmail" id="cEmail" class="h-full-width h-remove-bottom" placeholder="Your Email" value="" type="text">
-                        </div>
-
-                        <div class="form-field">
-                            <input name="cWebsite" id="cWebsite" class="h-full-width h-remove-bottom" placeholder="Website" value="" type="text">
-                        </div>
-
-                        <div class="message form-field">
-                            <textarea name="cMessage" id="cMessage" class="h-full-width h-remove-bottom" placeholder="Your Message"></textarea>
-                        </div>
-
-                        <br>
-
-                        <input name="submit" id="submit" class="btn btn--primary btn-wide btn--large h-full-width" value="Send Message" type="submit">
-
-                    </fieldset>
-                </form>
-
-            </div>
-        </div>
-
-    </section> <!-- end page-content -->
-
-
-    <!-- Social
-    ================================================== -->
-    <section class="s-social">
-            
-        <div class="row social-content">
-            <div class="column">
-                <ul class="social-list">
-                    <li class="social-list__item">
-                        <a href="#0" title="">
-                            <span class="social-list__icon social-list__icon--facebook"></span>
-                            <span class="social-list__text">Facebook</span>
-                        </a>
-                    </li>
-                    <li class="social-list__item">
-                        <a href="#0" title="">
-                            <span class="social-list__icon social-list__icon--twitter"></span>
-                            <span class="social-list__text">Twitter</span>
-                        </a>
-                    </li>
-                    <li class="social-list__item">
-                        <a href="#0" title="">
-                            <span class="social-list__icon social-list__icon--instagram"></span>
-                            <span class="social-list__text">Instagram</span>
-                        </a>
-                    </li>
-                    <li class="social-list__item">
-                        <a href="#0" title="">
-                            <span class="social-list__icon social-list__icon--email"></span>
-                            <span class="social-list__text">Email</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div> <!-- end social-content -->
-
-    </section> <!-- end s-social -->
-
-
-    <!-- footer
-    ================================================== -->
-    <footer class="s-footer">
-
-    <div class="row footer-top">
-        <div class="column large-4 medium-5 tab-full">
-            <div class="footer-logo">
-                <a class="site-footer-logo" href="index.html">
-                    <img src="static/ images/logo.svg" alt="Parish Logo">
-                </a>
-            </div>
-            <p>
-            We are a Catholic community committed to worship, evangelization, 
-            and service. Together with our outstations and parish groups, 
-            we strive to grow in faith and build a strong Christian family.
-            </p>
-        </div>
-
-        <div class="column large-half tab-full">
-            <div class="row">
-                <div class="column large-7 medium-full">
-                    <h4 class="h6">Our Location</h4>
-                    <p>
-                    Ngoiso Catholic Church <br>
-                    Ngoiso, Eldoret <br>
-                    Eldoret, Kenya
-                    </p>
-
-                    <p>
-                    <a href="#" target="_blank" class="btn btn--footer">Get Directions</a>
-                    </p>
-                </div>
-
-                <div class="column large-5 medium-full">
-                    <h4 class="h6">Quick Links</h4>
-                    <ul class="footer-list">
-                        <li><a href="{%url 'home'%}">Home</a></li>
-                        <li><a href="{% url 'Dashbd' %}">Admin</a></li>
-                        <li><a href="{% url 'about' %}">About</a></li>
-                        <li><a href="{% url 'Contact' %}">Contact</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+<div class="row">
+    <div class="column large-6 tab-full">
+        <h3>Main Office.</h3>
+        <p>
+        ST NGOISA PARISH<br>
+        Eldoret, Kenya<br>
+        Mon-Fr 8:30am – 4:30pm 
+        </p>
     </div>
 
-    <div class="row footer-bottom">
-        <div class="column ss-copyright">
-            <span>© 2026 Ngoiso Catholic Church. All Rights Reserved.</span>
-        </div>
+    <div class="column large-6 tab-full">
+        <h3>Contact Info.</h3>
+        <p>
+        info@ngoisa.com <br>
+        Phone: +254700000000
+        </p>
     </div>
+</div>
+
+<h2>Get In Touch.</h2>
+
+{% if success %}
+<div style="background:#d4edda; padding:10px; margin-bottom:20px; border-radius:4px;">
+    ✅ Your message has been sent successfully!
+</div>
+{% endif %}
+
+<!-- ================= FORM ================= -->
+<form method="POST" action="{% url 'Contact' %}" class="contact-form">
+    {% csrf_token %}
+
+    <input type="text" name="name" placeholder="Full Name" required>
+
+    <input type="email" name="email" placeholder="Email Address" required>
+
+    <input type="tel"
+           name="phone"
+           pattern="^(\+254|0)[0-9]{9}$"
+           placeholder="Phone (0700000000 or +254700000000)"
+           required>
+
+    <textarea name="message"
+              rows="6"
+              placeholder="Your Message"
+              required></textarea>
+
+    <button type="submit" class="btn btn--primary full-width">
+        Send Message
+    </button>
+</form>
+<!-- ======================================== -->
+
+</div>
+</div>
+</section>
+
+
+<footer class="s-footer">
+
+<div class="row footer-top">
+    <div class="column large-4 tab-full">
+        <p>
+        We are a Catholic community committed to worship and service.
+        </p>
+    </div>
+
+    <div class="column large-4 tab-full">
+        <h4>Location</h4>
+        <p>Ngoiso Catholic Church<br>Eldoret, Kenya</p>
+    </div>
+
+    <div class="column large-4 tab-full">
+        <h4>Quick Links</h4>
+        <ul class="footer-list">
+            <li><a href="{%url 'home'%}">Home</a></li>
+            <li><a href="{% url 'Dashbd' %}">Admin</a></li>
+            <li><a href="{% url 'about' %}">About</a></li>
+            <li><a href="{% url 'Contact' %}">Contact</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="row footer-bottom">
+    <div class="column ss-copyright">
+        <span>© 2026 Ngoiso Catholic Church. All Rights Reserved.</span>
+    </div>
+</div>
 
 </footer>
-                <span>Design by <a href="https://www.styleshout.com/">StyleShout</a></span>
-            </div>
-        </div> <!-- footer-bottom -->
-
-        <div class="ss-go-top">
-            <a class="smoothscroll" title="Back to Top" href="#top">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 0l8 9h-6v15h-4v-15h-6z"/></svg>
-            </a>
-        </div> <!-- ss-go-top -->
-
-    </footer> <!-- end s-footer -->
 
 
-    <!-- Java Script
-    ================================================== -->
-    <script src="static/js/jquery-3.2.1.min.js"></script>
-    <script src="static/js/plugins.js"></script>
-    <script src="static/js/main.js"></script>
+<script src="static/js/jquery-3.2.1.min.js"></script>
+<script src="static/js/plugins.js"></script>
+<script src="static/js/main.js"></script>
 
 </body>
+</html>

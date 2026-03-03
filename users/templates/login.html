@@ -129,15 +129,16 @@
             </div>
 
             <div class="text-center mt-3">
-    <a href="#"><small>Forgot Password?</small></a>
+    <a href="{% url 'password_reset' %}"><small>Forgot Password?</small></a>
+    <p>
+                Don't have an account?
+                <a href="{% url 'register_user' %}">Register</a>
+            </p>
 </div>
         </form>
 
         <div class="login-footer text-center mt-3">
-            <p>
-                Don't have an account?
-                <a href="{% url 'register_user' %}">Register</a>
-            </p>
+            
         </div>
     </div>
 </div>

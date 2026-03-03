@@ -11,6 +11,8 @@ from datetime import date
 from django.template.loader import get_template
 #from xhtml2pdf import pisa
 from django.http import HttpResponse
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 from django.contrib import messages
@@ -19,8 +21,36 @@ def home (request):
 # Create your views here.
 def  about(request):
     return render(request, 'about.html')
-def  Contact(request):
-    return render(request, 'Contact.html')
+def Contact(request):
+    title=  "contact malasa kevin".upper()
+    if request.method == "POST":
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        phone = request.POST.get("phone")
+        message = request.POST.get("message")
+
+        full_message = f"""
+        Name: {name}
+        Email: {email}
+        Phone: {phone}
+
+        Message:
+        {message}
+        """
+
+        send_mail(
+            subject="New Contact Form Message",
+            message=full_message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=["kevinmalasa2000@gmail.com"],  # where you receive messages
+            fail_silently=False,
+        )
+
+        return render(request, "contact.html", {"success": True})
+
+    return render(request, "Contact.html",{'title':title})
+# def CatechistDashboard(request):
+#     return render(request, 'catechist_dashboard.html')
 def register_member(request):
     form = MemberForm(request.POST or None)
     if request.method == 'POST':
@@ -422,6 +452,8 @@ def Gallary(request):
         {'url': '/static/images/event1.jpg', 'title': 'Christmas Celebration', 'alt': 'Christmas'},
         {'url': '/static/images/event2.jpg', 'title': 'Youth Gathering', 'alt': 'Youth'},
         {'url': '/static/images/event3.jpg', 'title': 'Easter Service', 'alt': 'Easter'},
+        {'url': '/static/images/event4.jpg', 'title': 'Community Outreach', 'alt': 'Outreach'}, 
+        {'url': '/static/images/event5.jpg', 'title': 'Annual Picnic', 'alt': 'Picnic'},   
     ]
     return render(request, 'gallary.html', {'photos': photos})
 def jumuiya_contribution(request):
@@ -507,8 +539,8 @@ def pledge_view(request):
     return render(request, 'pledge.html', context)
 
 
-
-    return response
+def Admin(request):
+    return render(request, 'adminstration.html')
 def stations(request):
     return render(request, 'stations.html')
 def groups(request):

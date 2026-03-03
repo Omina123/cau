@@ -62,8 +62,11 @@ def Login(request):
                     messages.success(request, "Login was successful")
                     return redirect('Dashbd')
                 elif user.user_type == '2':
-                    messages.success(request, "staff logged in")
-                    return redirect('')
+                    messages.success(request, "Login was successful")
+                    return redirect('StaffDashboard')
+                elif user.user_type == '3':
+                    messages.success(request, "Login was successful")
+                    return redirect('CatechistDashboard')
                 
                 else:
                     return HttpResponse("error_page")
@@ -89,18 +92,23 @@ def register_user(request):
 
 
 
+
+# 1. This view handles the email submission form
 class CustomPasswordResetView(auth_views.PasswordResetView):
     template_name = 'password_reset.html'
     email_template_name = 'password_reset_email.html'
     subject_template_name = 'password_reset_subject.txt'
     success_url = reverse_lazy('password_reset_done')
 
+# 2. This view shows the "Email Sent" success message
 class CustomPasswordResetDoneView(auth_views.PasswordResetDoneView):
     template_name = 'password_reset_done.html'
 
+# 3. This view handles the actual password change via the secure link
 class CustomPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
     template_name = 'password_reset_confirm.html'
     success_url = reverse_lazy('password_reset_complete')
 
+# 4. This view shows the final "Password Changed" message
 class CustomPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
     template_name = 'password_reset_complete.html'

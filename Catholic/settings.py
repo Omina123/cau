@@ -31,6 +31,7 @@ ALLOWED_HOSTS = [
     "st-peters-ngoisa.onrender.com",
     "localhost","127.0.0.1",
 ]
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 INSTALLED_APPS = [
@@ -88,31 +89,14 @@ WSGI_APPLICATION = 'Catholic.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 #  }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.environ.get('DB_NAME', 'catholic'),
-#         'USER': os.environ.get('DB_USER', 'catholic_uqp1_user'),
-#         'PASSWORD': os.environ.get('DB_PASSWORD', '5ze2GuyyUHnlRuzFvbCaDCXYOWCvZxOR'),
-#         'HOST': os.environ.get('DB_HOST', 'dpg-d6e0m8h4tr6s73d4ls3g-a.abcdef.postgres.render.com'),
-#         'PORT': os.environ.get('DB_PORT', '5432'),
-#     }
-# }
-# import dj_database_url
-# settings.py
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
-# SMTP server settings
-EMAIL_HOST = 'smtp.gmail.com'  # SMTP server address
-EMAIL_PORT = 587  # SMTP server port (usually 587 for TLS)
-EMAIL_USE_TLS = True  # Whether to use TLS encryption
-EMAIL_HOST_USER = 'kevinmalasa2000@gmail.com'  # SMTP username (email address)
-EMAIL_HOST_PASSWORD = 'qlya ynuj yzsf dlep'  # SMTP password
-
-# Default sender email address
-DEFAULT_FROM_EMAIL = 'kevinmalasa2000@gmail.com'
-
+EMAIL_HOST_USER = 'kevinmalasa2000@gmail.com'
+EMAIL_HOST_PASSWORD = 'uydpgdshxgbaxmge'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 DATABASES = {
     'default': dj_database_url.config(

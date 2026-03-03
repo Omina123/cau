@@ -4,13 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About - St Peters Ngoisa Parish</title>
-<link rel="stylesheet" href="static/css/base.css">
-    <link rel="stylesheet" href="static/css/main.css">
-
-    <!-- script
-    ================================================== -->
-
+<title>Administration - St Peters Ngoisa Parish</title>
 <style>
 :root {
     --gold: #C9A227;
@@ -84,36 +78,7 @@ header{
     list-style:none;
     gap:30px;
 }
-/* ================= CARDS STYLE ONLY ================= */
-.info-card{
-    background: #ffffff;
-    padding: 30px 25px;
-    border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border-top: 4px solid var(--gold);
-}
 
-.info-card:hover{
-    transform: translateY(-8px);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
-}
-
-.info-card h3{
-    color: var(--gold);
-    margin-bottom: 15px;
-    font-size: 1.2rem;
-}
-
-.info-card p,
-.info-card ul{
-    font-size: 0.95rem;
-    line-height: 1.6;
-}
-
-.info-card ul{
-    padding-left: 18px;
-}
 .nav-links a{
     text-decoration:none;
     color:var(--red);
@@ -125,6 +90,39 @@ header{
     font-size:28px;
     cursor:pointer;
     color:var(--red);
+}
+
+/* ================= ADMIN CARDS ================= */
+.groups-grid{
+    padding:60px 8%;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:40px;
+}
+
+.group-card{
+    background:#ffffff;
+    padding:30px 25px;
+    border-radius:12px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.08);
+    transition:transform 0.3s ease, box-shadow 0.3s ease;
+    border-top:4px solid var(--gold);
+}
+
+.group-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 12px 30px rgba(0,0,0,0.15);
+}
+
+.group-card h3{
+    color:var(--gold);
+    margin-bottom:15px;
+    font-size:1.2rem;
+}
+
+.group-card p{
+    font-size:0.95rem;
+    line-height:1.6;
 }
 
 @media(max-width:900px){
@@ -150,7 +148,6 @@ header{
 }
 
 /* ================= SLIDER HEADER ================= */
-
 .page-header{
     position:relative;
     height:400px;
@@ -203,29 +200,12 @@ header{
 }
 
 /* ================= CONTENT ================= */
-
 .intro-text{
     text-align:center;
     max-width:900px;
     margin:40px auto 60px;
     padding:0 20px;
     line-height:1.7;
-}
-
-.parish-info{
-    padding:60px 8%;
-    background:#fff;
-}
-
-.info-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:40px;
-}
-
-.info-card h3{
-    color:var(--gold);
-    margin-bottom:15px;
 }
 
 footer{
@@ -247,12 +227,14 @@ footer{
 }
 </style>
 </head>
+
 <body>
 
+<!-- ================= NAVIGATION ================= -->
 <header>
     <div class="nav-container">
-         <a href="{% url 'home' %}" class="logo-link">
-            <img src="{% static 'images/logo.svg' %}" alt="Parish Logo">
+         <a href="/" class="logo-link">
+            <img src="{% static 'images/logo.png' %}" alt="Ngoisa Parish">
             <div class="logo-text">
                 <h1>St Peters Ngoisa</h1>
                 <span>Catholic Parish</span>
@@ -262,26 +244,18 @@ footer{
         <div class="menu-toggle" onclick="toggleMenu()">☰</div>
 
         <ul class="nav-links" id="navLinks">
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'about' %}">About</a></li>
-            <li><a href="{% url 'Gallary' %}">Gallery</a></li>
-            <li><a href="{% url 'stations' %}">Stations</a></li>
-            <li><a href="{% url 'groups' %}" title="">Associations</a></li>
-    
-                <li><a href="{% url 'station_INT'%}" title="">Institutions</a></li>
-
-            <li><a href="{% url 'Contact' %}">Contact</a></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/Gallary">Gallery</a></li>
+            <li><a href="/stations">Stations</a></li>
+            <li class="current"><a href="/administration">Administration</a></li>
+            <li><a href="{% url 'station_INT' %}">Institutions</a></li>
+            <li><a href="/Contact">Contact</a></li>
         </ul>
     </div>
 </header>
- <div id="preloader">
-        <div id="loader" class="dots-jump">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-    </div>
-<!-- SLIDER -->
+
+<!-- ================= PAGE HEADER ================= -->
 <section class="page-header">
 <div class="slider">
 <img src="{% static 'images/wheel-1000.jpg' %}" class="slide active">
@@ -290,62 +264,90 @@ footer{
 </div>
 
 <div class="overlay-text">
-<h1>About St Peters Ngoisa Parish (TO BE REPLACED WITH PARISH PHOTOS)</h1>
+<h1>St Peters Ngoisa Parish Administration</h1>
 </div>
 </section>
 
+<!-- ================= INTRO ================= -->
 <div class="intro-text">
-    Welcome to St Peters Ngoisa Parish. Our parish is committed to nurturing faith, fostering community, 
-    and serving all parishioners through education, worship, and outreach programs.
+    St Peters Ngoisa Parish Administration is committed to spiritual leadership,
+    pastoral care, and guiding the faithful in service to God and the community.
 </div>
 
+<!-- ================= ADMINISTRATION GRID ================= -->
+<section class="groups-grid">
 
-<!-- ================= PARISH INFO ================= -->
-<section class="parish-info">
-    <div class="info-grid">
-        <!-- History -->
-        <div class="info-card">
-            <h3>Our History</h3>
-            <p>St Peters Ngoisa Parish was established in [Year] to serve the Catholic community in Eldoret. 
-            Since then, it has grown to include several outstations, offering vibrant liturgical and spiritual services.</p>
-        </div>
-
-        <!-- Administration -->
-        <div class="info-card">
-            <h3>Parish Administration</h3>
-            <p>
-                <strong>Parish Priest:</strong> Fr. Francis Mbugua <a href="tel:+254700000000"></a><br>
-                <strong>Assistant Priest:</strong> Fr. ------ ----- – <a href="tel:+254700111111"></a><br>
-                <strong> Moderator:</strong> Luke Kiplagat – <a href="tel:+254700222222"></a><br>
-                <strong>Vs Moderator:</strong>Ngososai ------ ------ – <a href="tel:+254700222222"></a><br>
-                <strong> Finance  Moderator:</strong>  – <a href="tel:+254700222222"></a><br>
-                <strong>Secretary:</strong> ------ ------ – <a href="tel:+254700222222"></a><br>
-                <strong>Treasure:</strong> ------ ------ – <a href="tel:+254700222222"></a><br>
-
-            </p>
-            <a href = "{% url 'Admin'%}"> More on adminstration. </a>
-        </div>
-
-        <!-- Outstations -->
-        <div class="info-card">
-            <h3>Outstations</h3>
-            <ul>
-                <li>St Peters Ngoisa (Main Station)</li>
-                <li>St Augustine Merewet</li>
-                <li>St Thomas Lamaiwet</li>
-                <li>St Thomas Tungururwet</li>
-                <li>St Michael Kabobo</li>
-                <li>St Mary’s Kimogoch</li>
-                <li>St Raphael Samutet</li>
-            </ul>
-        </div>
-
-        <!-- Bible Verse -->
-        <div class="info-card">
-            <h3>Verse of the Day</h3>
-            <p><em>"For where two or three gather in my name, there am I with them." – Matthew 18:20</em></p>
-        </div>
+    <!-- Parish Priest -->
+    <div class="group-card">
+        <h3>Parish Priest</h3>
+        <p><strong>1.Fr. John Doe(current)</strong><br>
+            2.Fr. Michael Kipchirchir(2020-2023)<br>
+            3.Fr. Samuel Koech(2015-2020)<br>   
+            4.Fr. Peter Kipchirchir(2010-2015)<br>
+       </p>
     </div>
+
+    <!-- Assistant Priest -->
+    <div class="group-card">
+        <h3>Assistant Priest</h3>
+        <p><strong>Fr. Michael Kipchirchir(current)</strong><br>
+        2.Fr. John Kipchirchir(2020-2023)<br>
+        3.Fr. Samuel Koech(2015-2020)<br>
+        4.Fr. Peter Kipchirchir(2010-2015)<br>
+        </p>
+    </div>
+
+    <!-- Head Catechist -->
+    <div class="group-card">
+        <h3>Head Catechist</h3>
+        <p><strong>Mr.   Kiprono(current)</strong><br>
+        2.Mr. John Kipchirchir(2020-2023)<br>
+        3.Mrs. Grace Kibet(2015-2020)<br>
+        4.Mr. Peter Kipchirchir(2010-2015)<br>
+        </p>
+    </div>
+
+    <!-- Catechist -->
+    <div class="group-card">
+        <h3>Catechist</h3>
+        <p><strong>1.Mrs. Mary Chebet(current)</strong><br>
+        2.Mr. John Kipchirchir(2020-2023)<br>
+        3.Mrs. Grace Kibet(2015-2020)<br>
+        4.Mr. Peter Kipchirchir(2010-2015)<br>
+        </p>
+    </div>
+
+    <!-- Parish Council Chairperson -->
+    <div class="group-card">
+        <h3>Parish Council Chairperson</h3>
+        <p><strong>Mr. Joseph Rotich(current)</strong><br>
+        2.Mr. John Kipchirchir(2020-2023)<br>
+        3.Mrs. Grace Kibet(2015-2020)<br>
+        4.Mr. Peter Kipchirchir(2010-2015)<br>
+        </p>
+    </div>
+
+    <!-- Parish Secretary -->
+    <div class="group-card">
+        <h3>Parish Secretary</h3>
+        <p><strong>1.Ms. Anne Jelagat(current)</strong><br>
+        2.Mr. John Kipchirchir(2020-2023)<br>
+    3.Mrs. Grace Kibet(2015-2020)<br>
+    4.Mr. Peter Kipchirchir(2010-2015)<br>
+    </p>
+    </div>
+
+    <!-- Parish Treasurer -->
+    <div class="group-card">
+        <h3>Parish Treasurers</h3>
+        <p><strong>1. Mr. David Langat(present)</strong><br>
+        2. Mrs. Grace Kibet(2020-2023)<br>
+        3. Mr. Samuel Koech(2015-2020)<br>
+        4. Mrs. Rose Chepkoech(2010-2015)<br>
+        5. Mr. John Kamau(2005-2010)<br>
+    </p>
+    </div>
+
 </section>
 
 <!-- ================= FOOTER ================= -->
@@ -370,11 +372,11 @@ footer{
             <!-- Location -->
             <div class="footer-location" style="flex:1; min-width:200px;">
                 <h4 style="margin-bottom:10px; color:white;">Our Location</h4>
-                <h2 style="line-height:1.6; font-size:0.95rem;">
-                    Ngoisa Catholic Church<br>
-                    Ngoisa, Eldoret<br>
+                <p style="line-height:1.6; font-size:0.95rem;">
+                    Ngoiso Catholic Church<br>
+                    Ngoiso, Eldoret<br>
                     Kenya
-                </h2>
+                </p>
             </div>
 
             <!-- Quick Links -->
@@ -382,13 +384,10 @@ footer{
                 <h4 style="margin-bottom:10px; color:white;">Quick Links</h4>
                 <ul style="list-style:none; padding:0; line-height:1.8; font-size:0.95rem;">
                     <li><a href="{% url 'home' %}" style="color:white; text-decoration:none;">Home</a></li>
-                  <li><a href="{% url 'Dashbd' %}">Admin</a></li>
-                        <li><a href="{% url 'about' %}">About</a></li>
-                        <li><a href="{% url 'Contact' %}">Contact</a></li>
-                                   <li><a href="https://shcathedral-eld.org/" title="Contact us">Cathedral</a></li>
-                 <li><a href="https://holyfamilybasilica.info/about-us/" title="Contact us">Holy family basilica</a></li>
-                 <li><a href="https://www.basilicasanpietro.va/en/san-pietro/the-square" title="Contact us">ST Peters square vertcan</a></li>
-                    </ul>
+                    <li><a href="{% url 'Dashbd' %}" style="color:white; text-decoration:none;">Admin</a></li>
+                    <li><a href="{% url 'about' %}" style="color:white; text-decoration:none;">About</a></li>
+                    <li><a href="{% url 'Contact' %}" style="color:white; text-decoration:none;">Contact</a></li>
+                </ul>
             </div>
 
         </div>
@@ -401,17 +400,11 @@ footer{
 </footer>
 
 <!-- ================= SCRIPTS ================= -->
- <script src="static/js/jquery-3.2.1.min.js"></script>
-<script src="static/js/plugins.js"></script>
-<script src="static/js/main.js"></script>
 <script>
-
-// MOBILE MENU
 function toggleMenu(){
     document.getElementById("navLinks").classList.toggle("active");
 }
 
-// AUTO IMAGE SLIDER
 let slides = document.querySelectorAll(".slide");
 let currentIndex = 0;
 
@@ -421,12 +414,8 @@ function showNextSlide() {
     slides[currentIndex].classList.add("active");
 }
 
-setInterval(showNextSlide, 4000); // change every 4 seconds
-
+setInterval(showNextSlide, 4000);
 </script>
-
-</body>
-</html>
 
 </body>
 </html>

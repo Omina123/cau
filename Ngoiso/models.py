@@ -3,6 +3,14 @@ from django.core.validators import MinValueValidator
 
 from decimal import Decimal
 from datetime import date
+
+class Gallery(models.Model):
+    title = models.CharField(max_length=200, blank=True)
+    image = models.ImageField(upload_to='gallery/')
+    alt = models.CharField(max_length=200, blank=True)
+
+    def __str__(self):
+        return self.title or "Gallery Image"
 class Outstation(models.Model):
     name = models.CharField(max_length=100)
     parish = models.CharField(max_length=50, choices=[('NGOISA', 'NGOISA PARISH')])
