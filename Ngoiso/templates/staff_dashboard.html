@@ -1,0 +1,161 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard | St. Peters Ngoisa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/staff_dashboard.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<style>body {
+   body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f4; /* Light grey to make white cards pop */
+}
+
+/* Vatican Yellow Header */
+.navbar {
+    background-color: #FFD700 !important; 
+    border-bottom: 3px solid #DAA520; /* Darker gold accent */
+}
+
+.navbar-brand, .nav-link {
+    color: #000000 !important; /* Black text on yellow for high visibility */
+    font-weight: bold;
+}
+
+/* Card Styling */
+.card {
+    transition: transform 0.2s;
+    border-radius: 12px;
+    border-left: 5px solid #FFD700; /* Vatican yellow accent on cards */
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Sidebar Styling */
+.list-group-item.active {
+    background-color: #FFD700 !important;
+    border-color: #DAA520 !important;
+    color: #000000 !important;
+    font-weight: bold;
+}
+
+.list-group-item {
+    border-color: #e0e0e0;
+}
+
+/* Text and Icon Colors */
+.text-vatican-gold {
+    color: #DAA520;
+}
+
+.fw-bold {
+    color: #212529;
+}
+
+.btn-vatican {
+    background-color: #000000;
+    color: #FFD700;
+    border: none;
+}
+
+.btn-vatican:hover {
+    background-color: #333333;
+    color: #FFFFFF;
+}</style>
+<body class="bg-light">
+
+    <nav class="navbar navbar-dark bg-primary shadow-sm mb-4">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1"><i class="fas fa-church me-2"></i>St. Peters Ngoisa Parish - Staff Portal</span>
+            <div class="d-flex">
+                <span class="text-white me-3">Welcome, {{ request.user.username }}</span>
+                <a href="{% url 'Logout' %}" class="btn btn-sm btn-outline-light">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="list-group shadow-sm">
+                    <a href="#" class="list-group-item list-group-item-action active"><i class="fas fa-tachometer-alt me-2"></i>Dashboard Overview</a>
+                    <a href="#" class="list-group-item list-group-item-action"><i class="fas fa-users me-2"></i>Members Directory</a>
+                    <a href="#" class="list-group-item list-group-item-action"><i class="fas fa-hand-holding-usd me-2"></i>Mavuno Records</a>
+                    <a href="#" class="list-group-item list-group-item-action"><i class="fas fa-file-invoice-dollar me-2"></i>Zaka / Pledges</a>
+                </div>
+            </div>
+
+            <div class="col-md-9">
+                <h2 class="mb-4">Parish Overview</h2>
+                
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm bg-white text-center p-3">
+                            <i class="fas fa-coins fa-2x text-warning mb-2"></i>
+                            <h6 class="text-muted">Total Cash Pledges</h6>
+                            <h3 class="fw-bold">KES 502,600</h3> </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm bg-white text-center p-3">
+                            <i class="fas fa-seedling fa-2x text-success mb-2"></i>
+                            <h6 class="text-muted">Maize Collected</h6>
+                            <h3 class="fw-bold">17,168 <small class="fs-6">Kors</small></h3> </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm bg-white text-center p-3">
+                            <i class="fas fa-dove fa-2x text-primary mb-2"></i>
+                            <h6 class="text-muted">Total Poultry</h6>
+                            <h3 class="fw-bold">160 Hens</h3> </div>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white fw-bold">Recent Mavuno Contributions</div>
+                    <div class="card-body p-0">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Station</th>
+                                    <th>Maize (Kors)</th>
+                                    <th>Beans</th>
+                                    <th>Livestock</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>St. Peters</td>
+                                    <td>784</td>
+                                    <td>-</td>
+                                    <td>11 Sheep</td>
+                                </tr>
+                                <tr>
+                                    <td>St. Monica</td>
+                                    <td>560</td>
+                                    <td>7</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>St. John</td>
+                                    <td>2,001</td>
+                                    <td>5</td>
+                                    <td>8 Sheep / 1 Cow</td>
+                                </tr>
+                            </tbody>
+                        </table> <h6 class="text-muted small p-2 mb-0">*Under development as of {{ now|date:"F j, Y" }}</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

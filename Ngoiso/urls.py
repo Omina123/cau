@@ -32,7 +32,7 @@ path ('parish_mavuno_report', views.parish_mavuno_report, name='parish_mavuno_re
 path('parish_special_report', views.parish_special_report, name='parish_special_report'),
 path('parish_zaka_report', views.parish_zaka_report, name='parish_zaka_report'),
 path('Admin', views.Admin, name='Admin'),
-
+path('StaffDashboard', views.StaffDashboard, name='StaffDashboard'),
 path('outstation/<int:outstation_id>/specials/', views.special_report, name='special_report'),
 path('outstation/<int:outstation_id>/mavuno/', views.mavuno_report, name='mavuno_report'),
 ]

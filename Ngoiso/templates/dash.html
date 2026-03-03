@@ -69,33 +69,63 @@
 
 <!-- TOP NAVBAR -->
 <nav class="navbar navbar-light bg-white shadow-sm px-3">
-    <button class="btn btn-warning" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
-        ☰ Menu
-    </button>
-    <span class="navbar-brand mb-0 h5">Parish Dashboard</span>
-    <span>Welcome, {{ request.user.username }}</span>
-</nav>
+    <div class="container-fluid">
+        <!-- Sidebar toggle button -->
+        <button class="btn btn-warning me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
+            ☰ Menu
+        </button>
 
+        <!-- Brand -->
+        <span class="navbar-brand mb-0 h1">
+            <i class="fas fa-church me-2"></i>St. Peters Ngoisa Parish - Staff Admin Portal
+        </span>
+
+        <!-- User info -->
+        <div class="d-flex ms-auto">
+            <span class="me-3">Welcome, {{ request.user.username }}</span>
+            <a href="{% url 'Logout' %}" class="btn btn-sm btn-outline-dark">Logout</a>
+        </div>
+    </div>
+</nav>
 <!-- SIDEBAR -->
 <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar">
+
     <div class="offcanvas-header bg-warning text-white">
+
         <h5 class="offcanvas-title">Parish Menu</h5>
+
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+
     </div>
+
     <div class="offcanvas-body p-0">
+
         <ul class="list-unstyled m-0">
-            <li><a href="{% url 'Dashbd' %}" class="d-block p-3 text-dark text-decoration-none">Dashboard</a></li>
-            <li><a href="{% url 'register_member' %}" class="d-block p-3 text-dark text-decoration-none">Register Members</a></li>
-            <li><a href="{% url 'zaka' %}" class="d-block p-3 text-dark text-decoration-none">Monthly Mavuno</a></li>
-            <li><a href="{% url 'mavuno' %}" class="d-block p-3 text-dark text-decoration-none">Yearly Mavuno</a></li>
-            <li><a href="{% url 'Special' %}" class="d-block p-3 text-dark text-decoration-none">Zaka</a></li>
-            <li><a href="{% url 'jumuiya_contribution' %}" class="d-block p-3 text-dark text-decoration-none">ST Peters Ngoisa Family day Contributions</a></li>
-            <li><a href="{% url 'sadaka' %}" class="d-block p-3 text-dark text-decoration-none">Sadaka</a></li>
-            <li><a href="{% url 'out_station' %}" class="d-block p-3 text-dark text-decoration-none">Outstations</a></li>
-            <li><a href="{% url 'jumuiya' %}" class="d-block p-3 text-dark text-decoration-none">Jumuiyas</a></li>
-            <li><a href="{% url 'Logout' %}" class="d-block p-3 text-dark text-decoration-none">Logout</a></li>
+
+            <li><a href="{% url 'Dashbd' %}" class="d-block p-3 text-dark text-decoration-none"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+
+            <li><a href="{% url 'register_member' %}" class="d-block p-3 text-dark text-decoration-none"><i class="bi bi-person-plus me-2"></i>Register Members</a></li>
+
+            <li><a href="{% url 'zaka' %}" class="d-block p-3 text-dark text-decoration-none"><i class="bi bi-cash-stack me-2"></i>Monthly Mavuno</a></li>
+
+            <li><a href="{% url 'mavuno' %}" class="d-block p-3 text-dark text-decoration-none"><i class="bi bi-calendar-event me-2"></i>Yearly Mavuno</a></li>
+
+            <li><a href="{% url 'Special' %}" class="d-block p-3 text-dark text-decoration-none"><i class="bi bi-coin me-2"></i>Zaka</a></li>
+
+            <li><a href="{% url 'jumuiya_contribution' %}" class="d-block p-3 text-dark text-decoration-none"><i class="bi bi-people me-2"></i>ST Peters Ngoisa Family day Contributions</a></li>
+
+            <li><a href="{% url 'sadaka' %}" class="d-block p-3 text-dark text-decoration-none"><i class="bi bi-hand-thumbs-up me-2"></i>Sadaka</a></li>
+
+            <li><a href="{% url 'out_station' %}" class="d-block p-3 text-dark text-decoration-none"><i class="bi bi-geo-alt me-2"></i>Outstations</a></li>
+
+            <li><a href="{% url 'jumuiya' %}" class="d-block p-3 text-dark text-decoration-none"><i class="bi bi-building me-2"></i>Jumuiyas</a></li>
+
+            <li><a href="{% url 'Logout' %}" class="d-block p-3 text-dark text-decoration-none"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+
         </ul>
+
     </div>
+
 </div>
 
 <!-- MAIN CONTENT -->

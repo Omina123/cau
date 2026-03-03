@@ -51,6 +51,8 @@ def Contact(request):
     return render(request, "Contact.html",{'title':title})
 # def CatechistDashboard(request):
 #     return render(request, 'catechist_dashboard.html')
+def StaffDashboard(request):
+    return render(request, 'staff_dashboard.html')
 def register_member(request):
     form = MemberForm(request.POST or None)
     if request.method == 'POST':
