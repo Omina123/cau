@@ -58,15 +58,15 @@ def Login(request):
             user = EmailBackend.authenticate(request, username=email, password=password)
             if user is not None:
                 login(request, user)
+                if user.is_superuser:
+                    messages.success(request, "Login was successful")
+                    return redirect('Dashbd')
                 if user.user_type == '1':
                     messages.success(request, "Login was successful")
                     return redirect('Dashbd')
                 elif user.user_type == '2':
                     messages.success(request, "Login was successful")
                     return redirect('StaffDashboard')
-                elif user.user_type == '3':
-                    messages.success(request, "Login was successful")
-                    return redirect('CatechistDashboard')
                 
                 else:
                     return HttpResponse("error_page")

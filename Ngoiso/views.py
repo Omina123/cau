@@ -12,7 +12,8 @@ from django.template.loader import get_template
 #from xhtml2pdf import pisa
 from django.http import HttpResponse
 from django.core.mail import send_mail
-from django.conf import settings
+from django.conf import settings 
+from .decorators import superuser_or_usertype
 
 
 from django.contrib import messages
@@ -250,7 +251,7 @@ def Special(request):
     }
 
     return render(request, 'special.html', context)
-@login_required(login_url='Login')
+@superuser_or_usertype(allowed_types=['1'])
 def Dashbd(request):
     outstations = Outstation.objects.all()
     outstation_data = []
