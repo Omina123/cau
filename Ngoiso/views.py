@@ -53,7 +53,71 @@ def Contact(request):
 # def CatechistDashboard(request):
 #     return render(request, 'catechist_dashboard.html')
 def StaffDashboard(request):
-    return render(request, 'staff_dashboard.html')
+    selected_year = int(request.GET.get('year', date.today().year))
+    outstations = Outstation.objects.all()
+    
+    report_data = []
+    # Initialize Parish (Grand) Totals
+    parish_totals = {
+        'zaka': 0,
+        'special': 0,
+        'jumuiya': 0,
+        'mavuno_cash': 0,
+    }
+
+    for station in outstations:
+        # 1. Zaka per Station
+        zaka_total = Zaka.objects.filter(
+            member__outstation=station, 
+            year=selected_year
+        ).aggregate(total=Sum('amount'))['total'] or 0
+
+        # 2. Special Contribution per Station
+        special_total = SpecialContribution.objects.filter(
+            member__outstation=station, 
+            date_recorded__year=selected_year
+        ).aggregate(total=Sum('amount'))['total'] or 0
+
+        # 3. Jumuiya Contributions per Station
+        jumuiya_total = JumuiyaContribution.objects.filter(
+            jumuiya__outstation=station, 
+            year=selected_year
+        ).aggregate(total=Sum('amount'))['total'] or 0
+
+        # 4. Mavuno (Money type) per Station
+        mavuno_cash = Mavuno.objects.filter(
+            member__outstation=station, 
+            produce_type='MONEY', 
+            date_recorded__year=selected_year
+        ).aggregate(total=Sum('quantity'))['total'] or 0
+
+        station_sum = zaka_total + special_total + jumuiya_total + mavuno_cash
+
+        # Append to report list
+        report_data.append({
+            'name': station.name,
+            'zaka': zaka_total,
+            'special': special_total,
+            'jumuiya': jumuiya_total,
+            'mavuno_cash': mavuno_cash,
+            'total': station_sum
+        })
+
+        # Add to Grand Totals
+        parish_totals['zaka'] += zaka_total
+        parish_totals['special'] += special_total
+        parish_totals['jumuiya'] += jumuiya_total
+        parish_totals['mavuno_cash'] += mavuno_cash
+
+    parish_grand_total = sum(parish_totals.values())
+
+    context = {
+        'report_data': report_data,
+        'parish_totals': parish_totals,
+        'parish_grand_total': parish_grand_total,
+        'year': selected_year,
+    }
+    return render(request, 'staff_dashboard.html', context)
 def register_member(request):
     form = MemberForm(request.POST or None)
     if request.method == 'POST':
@@ -292,7 +356,7 @@ def Dashbd(request):
         for contrib in ['ASSUMPTION','CHRISTMAS','PASAKA']:
             total = SpecialContribution.objects.filter(
                 member__outstation=outstation,
-                contribution_type=contrib,
+                 contribution_type=contrib,
                 date_recorded__year=current_year
             ).aggregate(total=Sum('amount'))['total'] or 0
             special_totals[contrib] = total

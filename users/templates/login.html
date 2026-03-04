@@ -4,113 +4,198 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | St. Peters Ngoisa</title>
 
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
     <style>
+        :root {
+            --vatican-gold: #FFD700;
+            --vatican-dark: #212529;
+            --vatican-accent: #C9A227;
+        }
+
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #FFD700, #FFFFFF);
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('https://www.transparenttextures.com/patterns/cubes.png'),
+                        linear-gradient(135deg, var(--vatican-gold), #FFFFFF);
+            background-attachment: fixed;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* Navbar */
+        /* Navbar Styling */
         .navbar {
-            background-color: #C9A227;
+            background-color: var(--vatican-dark) !important;
+            border-bottom: 3px solid var(--vatican-gold);
+            padding: 15px 0;
         }
 
-        .navbar-brand,
+        .navbar-brand {
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: var(--vatican-gold) !important;
+            text-transform: uppercase;
+        }
+
         .nav-link {
             color: #fff !important;
-            font-weight: 600;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: 0.3s;
         }
 
         .nav-link:hover {
-            color: #000 !important;
+            color: var(--vatican-gold) !important;
         }
 
-        /* Login Card */
+        /* Login Card Styling */
         .login-wrapper {
-            min-height: 85vh;
+            padding: 60px 0;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .login-card {
-            background: #fff;
-            border-radius: 15px;
-            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 50px 40px;
             width: 100%;
-            max-width: 420px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            max-width: 450px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .church-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--vatican-dark);
+            color: var(--vatican-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
         .login-card h2 {
-            font-weight: 700;
+            font-weight: 800;
             text-align: center;
-            margin-bottom: 25px;
-            color: #C9A227;
+            margin-bottom: 10px;
+            color: var(--vatican-dark);
+            text-transform: uppercase;
+            font-size: 1.5rem;
+        }
+
+        .login-card p.subtitle {
+            text-align: center;
+            color: #6c757d;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+
+        /* Form Customization */
+        .form-control {
+            border-radius: 10px;
+            padding: 12px 15px;
+            border: 1px solid #dee2e6;
+            transition: 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--vatican-accent);
+            box-shadow: 0 0 0 0.25rem rgba(201, 162, 39, 0.2);
         }
 
         .btn-primary {
-            background-color: #C9A227;
+            background: var(--vatican-dark);
             border: none;
-            height: 48px;
-            border-radius: 10px;
-            font-weight: 600;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            color: var(--vatican-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
         }
 
         .btn-primary:hover {
-            background-color: #a6821f;
+            background-color: #000;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .login-footer {
+            margin-top: 25px;
+            font-size: 0.9rem;
+            color: #495057;
         }
 
         .login-footer a {
             text-decoration: none;
-            color: #C9A227;
-            font-weight: 500;
+            color: var(--vatican-accent);
+            font-weight: 700;
+        }
+
+        .forgot-link {
+            font-size: 0.85rem;
+            color: #6c757d;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .forgot-link:hover {
+            color: var(--vatican-dark);
         }
     </style>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
-        <a class="navbar-brand" href="#">Parish System</a>
+        <a class="navbar-brand" href="#"><i class="bi bi-cross me-2"></i>St. Peters Ngoisa</a>
 
         <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav align-items-center">
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'home' %}">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'about' %}">About</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register_user' %}">Register</a>
+                <li class="nav-item ms-lg-3">
+                    <a class="btn btn-outline-warning btn-sm" href="{% url 'register_user' %}">Create Account</a>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
 
-<!-- LOGIN SECTION -->
 <div class="login-wrapper">
     <div class="login-card">
-        <h2>Welcome Back</h2>
+        <div class="church-icon">
+            <i class="bi bi-person-lock"></i>
+        </div>
+        
+        <h2>Staff Portal</h2>
+        <p class="subtitle">Please enter your credentials to access the parish dashboard.</p>
 
         {% if messages %}
             {% for message in messages %}
-                <div class="alert alert-danger">
-                    {{ message }}
+                <div class="alert alert-danger alert-dismissible fade show small" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
             {% endfor %}
         {% endif %}
@@ -118,28 +203,24 @@
         <form method="POST">
             {% csrf_token %}
 
-            {% for field in form %}
-                {% bootstrap_field field %}
-            {% endfor %}
-
-            <div class="text-center mt-4">
-                <button type="submit" class="btn btn-primary w-100">
-                    Login
-                </button>
+            <div class="mb-3">
+                {% for field in form %}
+                    {% bootstrap_field field %}
+                {% endfor %}
             </div>
 
-            <div class="text-center mt-3">
-    <a href="{% url 'password_reset' %}"><small>Forgot Password?</small></a>
-    <p>
-                Don't have an account?
-                <a href="{% url 'register_user' %}">Register</a>
-            </p>
-</div>
-        </form>
+            <div class="d-flex justify-content-end mb-4">
+                <a href="{% url 'password_reset' %}" class="forgot-link">Forgot Password?</a>
+            </div>
 
-        <div class="login-footer text-center mt-3">
-            
-        </div>
+            <button type="submit" class="btn btn-primary w-100 mb-3">
+                <i class="bi bi-box-arrow-in-right me-2"></i> Sign In
+            </button>
+
+            <div class="login-footer text-center">
+                Don't have an account? <a href="{% url 'register_user' %}">Register Here</a>
+            </div>
+        </form>
     </div>
 </div>
 

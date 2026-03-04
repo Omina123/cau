@@ -2,419 +2,254 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Administration - St Peters Ngoisa Parish</title>
-<style>
-:root {
-    --gold: #C9A227;
-    --red: #8B0000;
-    --white: #ffffff;
-    --dark: #222;
-    --nav-height: 70px;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration | St Peters Ngoisa</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+    <style>
+        :root {
+            --gold: #C9A227;
+            --vatican-gold: #FFD700;
+            --red: #8B0000;
+            --white: #ffffff;
+            --dark: #1a1a1a;
+            --light-grey: #f4f4f4;
+            --border-color: #e0e0e0;
+        }
 
-body{
-    font-family: 'Segoe UI', sans-serif;
-    background:#f8f9fa;
-    color:var(--dark);
-}
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--white); color: var(--dark); line-height: 1.6; }
 
-/* ================= NAVIGATION ================= */
-header{
-    background:var(--white);
-    border-bottom:3px solid var(--gold);
-    position:sticky;
-    top:0;
-    z-index:1000;
-    height:var(--nav-height);
-}
+        /* ================= NAVIGATION ================= */
+        header {
+            background: var(--white); border-bottom: 3px solid var(--gold);
+            position: sticky; top: 0; z-index: 1000; height: 75px;
+        }
+        .nav-container {
+            max-width: 1200px; margin: 0 auto; display: flex;
+            justify-content: space-between; align-items: center; height: 100%; padding: 0 20px;
+        }
+        .logo-link { display: flex; align-items: center; text-decoration: none; }
+        .logo-link img { height: 50px; width: 50px; border-radius: 50%; border: 2px solid var(--gold); margin-right: 12px; }
+        .logo-text h1 { font-size: 1.1rem; color: var(--red); font-weight: 800; margin: 0; }
+        .logo-text span { font-size: 0.75rem; color: var(--gold); font-weight: 600; text-transform: uppercase; }
+        
+        .nav-links { display: flex; list-style: none; gap: 20px; }
+        .nav-links a { text-decoration: none; color: var(--red); font-weight: 600; font-size: 0.9rem; }
 
-.nav-container{
-    max-width:1200px;
-    margin:0 auto;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    height:100%;
-    padding:0 20px;
-}
+        /* ================= PAGE HEADER ================= */
+        .page-header {
+            position: relative; height: 280px; overflow: hidden;
+            display: flex; align-items: center; justify-content: center; color: white;
+        }
+        .slider { position: absolute; inset: 0; z-index: -1; }
+        .slide { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 1s; }
+        .slide.active { opacity: 1; }
+        .page-header::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.65); }
+        .overlay-text { position: relative; z-index: 2; text-align: center; }
+        .overlay-text h1 { font-size: 2.2rem; text-transform: uppercase; letter-spacing: 2px; border-bottom: 3px solid var(--vatican-gold); padding-bottom: 5px; }
 
-.logo-link{
-    display:flex;
-    align-items:center;
-    text-decoration:none;
-}
+        /* ================= ARCHIVE LIST ================= */
+        .admin-section { max-width: 1000px; margin: 50px auto; padding: 0 20px; }
+        
+        .role-group { margin-bottom: 60px; }
+        .role-title { 
+            display: flex; align-items: center; gap: 15px;
+            font-size: 1.6rem; color: var(--red); font-weight: 800;
+            margin-bottom: 25px; border-bottom: 2px solid var(--gold);
+            padding-bottom: 8px;
+        }
 
-.logo-link img{
-    height:55px;
-    width:55px;
-    object-fit:cover;
-    border-radius:50%;
-    border:3px solid var(--gold);
-    margin-right:12px;
-}
+        .leader-entry {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            padding: 20px 15px;
+            border-bottom: 1px solid var(--border-color);
+            transition: 0.2s;
+        }
+        .leader-entry:hover { background: var(--light-grey); border-left: 4px solid var(--red); }
 
-.logo-text h1{
-    font-size:20px;
-    color:var(--red);
-    font-weight:700;
-}
+        .years { font-weight: 700; color: var(--gold); font-size: 1rem; }
+        .name-details h4 { font-size: 1.2rem; margin-bottom: 4px; color: var(--dark); display: flex; align-items: center; flex-wrap: wrap; }
+        .name-details p { color: #666; font-size: 0.9rem; }
 
-.logo-text span{
-    font-size:13px;
-    color:var(--gold);
-    font-weight:600;
-}
+        .current-tag {
+            background: var(--red); color: white;
+            padding: 2px 10px; border-radius: 4px;
+            font-size: 0.65rem; text-transform: uppercase;
+            margin-left: 10px; font-weight: 800;
+        }
 
-.nav-links{
-    display:flex;
-    list-style:none;
-    gap:30px;
-}
+        /* ================= FOOTER ================= */
+        footer { background: var(--dark); color: white; padding: 40px 20px; text-align: center; margin-top: 80px; }
+        .footer-logo img { height: 60px; margin-bottom: 15px; border-radius: 50%; border: 2px solid var(--vatican-gold); }
 
-.nav-links a{
-    text-decoration:none;
-    color:var(--red);
-    font-weight:600;
-}
-
-.menu-toggle{
-    display:none;
-    font-size:28px;
-    cursor:pointer;
-    color:var(--red);
-}
-
-/* ================= ADMIN CARDS ================= */
-.groups-grid{
-    padding:60px 8%;
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:40px;
-}
-
-.group-card{
-    background:#ffffff;
-    padding:30px 25px;
-    border-radius:12px;
-    box-shadow:0 8px 25px rgba(0,0,0,0.08);
-    transition:transform 0.3s ease, box-shadow 0.3s ease;
-    border-top:4px solid var(--gold);
-}
-
-.group-card:hover{
-    transform:translateY(-8px);
-    box-shadow:0 12px 30px rgba(0,0,0,0.15);
-}
-
-.group-card h3{
-    color:var(--gold);
-    margin-bottom:15px;
-    font-size:1.2rem;
-}
-
-.group-card p{
-    font-size:0.95rem;
-    line-height:1.6;
-}
-
-@media(max-width:900px){
-    .nav-links{
-        position:absolute;
-        top:var(--nav-height);
-        right:0;
-        background:white;
-        flex-direction:column;
-        width:100%;
-        text-align:center;
-        display:none;
-        padding:20px 0;
-    }
-
-    .nav-links.active{
-        display:flex;
-    }
-
-    .menu-toggle{
-        display:block;
-    }
-}
-
-/* ================= SLIDER HEADER ================= */
-.page-header{
-    position:relative;
-    height:400px;
-    overflow:hidden;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    color:white;
-}
-
-.slider{
-    position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-}
-.slide{
-    position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    opacity:0;
-    transition:opacity 1s ease-in-out;
-}
-
-.slide.active{
-    opacity:1;
-}
-
-.page-header::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:rgba(0,0,0,0.5);
-    z-index:1;
-}
-
-.overlay-text{
-    position:relative;
-    z-index:2;
-}
-
-.overlay-text h1{
-    font-size:2.5rem;
-    letter-spacing:2px;
-}
-
-/* ================= CONTENT ================= */
-.intro-text{
-    text-align:center;
-    max-width:900px;
-    margin:40px auto 60px;
-    padding:0 20px;
-    line-height:1.7;
-}
-
-footer{
-    background:var(--gold);
-    color:white;
-    text-align:center;
-    padding:20px;
-    margin-top:40px;
-}
-
-@media(max-width:768px){
-    .page-header{
-        height:250px;
-    }
-
-    .overlay-text h1{
-        font-size:1.8rem;
-    }
-}
-</style>
+        @media(max-width: 768px) {
+            .leader-entry { grid-template-columns: 1fr; gap: 5px; }
+            .nav-links { display: none; }
+        }
+    </style>
 </head>
-
 <body>
 
-<!-- ================= NAVIGATION ================= -->
 <header>
     <div class="nav-container">
-         <a href="/" class="logo-link">
+        <a href="/" class="logo-link">
             <img src="{% static 'images/logo.png' %}" alt="Ngoisa Parish">
             <div class="logo-text">
                 <h1>St Peters Ngoisa</h1>
                 <span>Catholic Parish</span>
             </div>
         </a>
-
-        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-
-        <ul class="nav-links" id="navLinks">
+        <ul class="nav-links">
             <li><a href="/">Home</a></li>
             <li><a href="/about">About</a></li>
             <li><a href="/Gallary">Gallery</a></li>
-            <li><a href="/stations">Stations</a></li>
-            <li class="current"><a href="/administration">Administration</a></li>
-            <li><a href="{% url 'station_INT' %}">Institutions</a></li>
+            <li><a href="/administration" style="color:var(--gold)">Administration</a></li>
             <li><a href="/Contact">Contact</a></li>
         </ul>
     </div>
 </header>
 
-<!-- ================= PAGE HEADER ================= -->
 <section class="page-header">
-<div class="slider">
-<img src="{% static 'images/wheel-1000.jpg' %}" class="slide active">
-<img src="{% static 'images/series-2000.jpg' %}" class="slide">
-<img src="{% static 'images/slider3.jpg' %}" class="slide">
-</div>
-
-<div class="overlay-text">
-<h1>St Peters Ngoisa Parish Administration</h1>
-</div>
+    <div class="slider">
+        <img src="{% static 'images/wheel-1000.jpg' %}" class="slide active">
+        <img src="{% static 'images/series-2000.jpg' %}" class="slide">
+    </div>
+    <div class="overlay-text">
+        <h1>Parish Administration & History</h1>
+    </div>
 </section>
 
-<!-- ================= INTRO ================= -->
-<div class="intro-text">
-    St Peters Ngoisa Parish Administration is committed to spiritual leadership,
-    pastoral care, and guiding the faithful in service to God and the community.
+<div class="admin-section">
+    
+    <div class="role-group">
+        <h3 class="role-title"><i class="bi bi-person-badge"></i> Parish Priests</h3>
+        <div class="leader-entry">
+            <div class="years">2023 — Present</div>
+            <div class="name-details">
+                <h4>Rev. Fr. John Doe <span class="current-tag">Incumbent</span></h4>
+                <p>Chief Shepherd and Administrator</p>
+            </div>
+        </div>
+        <div class="leader-entry">
+            <div class="years">2020 — 2023</div>
+            <div class="name-details">
+                <h4>Rev. Fr. Michael Kipchirchir</h4>
+                <p>Previous Parish Priest</p>
+            </div>
+        </div>
+        <div class="leader-entry">
+            <div class="years">2015 — 2020</div>
+            <div class="name-details">
+                <h4>Rev. Fr. Samuel Koech</h4>
+                <p>Pastor Emeritus</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="role-group">
+        <h3 class="role-title"><i class="bi bi-person-heart"></i> Assistant Priests</h3>
+        <div class="leader-entry">
+            <div class="years">2023 — Present</div>
+            <div class="name-details">
+                <h4>Rev. Fr. Michael Kipchirchir <span class="current-tag">Incumbent</span></h4>
+                <p>Pastoral Assistant</p>
+            </div>
+        </div>
+        <div class="leader-entry">
+            <div class="years">2020 — 2023</div>
+            <div class="name-details">
+                <h4>Rev. Fr. John Kipchirchir</h4>
+                <p>Historical Assistant</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="role-group">
+        <h3 class="role-title"><i class="bi bi-cash-stack"></i> Parish Treasurers</h3>
+        <div class="leader-entry">
+            <div class="years">2023 — Present</div>
+            <div class="name-details">
+                <h4>Mr. David Langat <span class="current-tag">Current</span></h4>
+                <p>Financial Controller & Records Management</p>
+            </div>
+        </div>
+        <div class="leader-entry">
+            <div class="years">2020 — 2023</div>
+            <div class="name-details">
+                <h4>Mrs. Grace Kibet</h4>
+                <p>Parish Finance Committee Head</p>
+            </div>
+        </div>
+        <div class="leader-entry">
+            <div class="years">2015 — 2020</div>
+            <div class="name-details">
+                <h4>Mr. Samuel Koech</h4>
+                <p>Archived Treasurer</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="role-group">
+        <h3 class="role-title"><i class="bi bi-journal-text"></i> Council & Secretariat</h3>
+        <div class="leader-entry">
+            <div class="years">Council Chair</div>
+            <div class="name-details">
+                <h4>Mr. Joseph Rotich <span class="current-tag">Present</span></h4>
+                <p>Chairman, Parish Pastoral Council (PPC)</p>
+            </div>
+        </div>
+        <div class="leader-entry">
+            <div class="years">Parish Secretary</div>
+            <div class="name-details">
+                <h4>Ms. Anne Jelagat <span class="current-tag">Present</span></h4>
+                <p>Administrative Secretary & Office Coordinator</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="role-group">
+        <h3 class="role-title"><i class="bi bi-mortarboard"></i> Catechists</h3>
+        <div class="leader-entry">
+            <div class="years">Head Catechist</div>
+            <div class="name-details">
+                <h4>Mr. Kiprono <span class="current-tag">Head</span></h4>
+                <p>Lead Instructor in Faith & Sacraments</p>
+            </div>
+        </div>
+        <div class="leader-entry">
+            <div class="years">2021 — Present</div>
+            <div class="name-details">
+                <h4>Mrs. Mary Chebet</h4>
+                <p>Parish Catechist</p>
+            </div>
+        </div>
+    </div>
+
 </div>
 
-<!-- ================= ADMINISTRATION GRID ================= -->
-<section class="groups-grid">
-
-    <!-- Parish Priest -->
-    <div class="group-card">
-        <h3>Parish Priest</h3>
-        <p><strong>1.Fr. John Doe(current)</strong><br>
-            2.Fr. Michael Kipchirchir(2020-2023)<br>
-            3.Fr. Samuel Koech(2015-2020)<br>   
-            4.Fr. Peter Kipchirchir(2010-2015)<br>
-       </p>
-    </div>
-
-    <!-- Assistant Priest -->
-    <div class="group-card">
-        <h3>Assistant Priest</h3>
-        <p><strong>Fr. Michael Kipchirchir(current)</strong><br>
-        2.Fr. John Kipchirchir(2020-2023)<br>
-        3.Fr. Samuel Koech(2015-2020)<br>
-        4.Fr. Peter Kipchirchir(2010-2015)<br>
-        </p>
-    </div>
-
-    <!-- Head Catechist -->
-    <div class="group-card">
-        <h3>Head Catechist</h3>
-        <p><strong>Mr.   Kiprono(current)</strong><br>
-        2.Mr. John Kipchirchir(2020-2023)<br>
-        3.Mrs. Grace Kibet(2015-2020)<br>
-        4.Mr. Peter Kipchirchir(2010-2015)<br>
-        </p>
-    </div>
-
-    <!-- Catechist -->
-    <div class="group-card">
-        <h3>Catechist</h3>
-        <p><strong>1.Mrs. Mary Chebet(current)</strong><br>
-        2.Mr. John Kipchirchir(2020-2023)<br>
-        3.Mrs. Grace Kibet(2015-2020)<br>
-        4.Mr. Peter Kipchirchir(2010-2015)<br>
-        </p>
-    </div>
-
-    <!-- Parish Council Chairperson -->
-    <div class="group-card">
-        <h3>Parish Council Chairperson</h3>
-        <p><strong>Mr. Joseph Rotich(current)</strong><br>
-        2.Mr. John Kipchirchir(2020-2023)<br>
-        3.Mrs. Grace Kibet(2015-2020)<br>
-        4.Mr. Peter Kipchirchir(2010-2015)<br>
-        </p>
-    </div>
-
-    <!-- Parish Secretary -->
-    <div class="group-card">
-        <h3>Parish Secretary</h3>
-        <p><strong>1.Ms. Anne Jelagat(current)</strong><br>
-        2.Mr. John Kipchirchir(2020-2023)<br>
-    3.Mrs. Grace Kibet(2015-2020)<br>
-    4.Mr. Peter Kipchirchir(2010-2015)<br>
-    </p>
-    </div>
-
-    <!-- Parish Treasurer -->
-    <div class="group-card">
-        <h3>Parish Treasurers</h3>
-        <p><strong>1. Mr. David Langat(present)</strong><br>
-        2. Mrs. Grace Kibet(2020-2023)<br>
-        3. Mr. Samuel Koech(2015-2020)<br>
-        4. Mrs. Rose Chepkoech(2010-2015)<br>
-        5. Mr. John Kamau(2005-2010)<br>
-    </p>
-    </div>
-
-</section>
-
-<!-- ================= FOOTER ================= -->
 <footer>
-    <div class="footer-container" style="background: var(--gold); color: white; padding: 50px 8%; font-family:'Segoe UI', sans-serif;">
-        <div class="footer-top" style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:30px;">
-
-            <!-- Logo + About -->
-            <div class="footer-about" style="flex:1; min-width:250px;">
-                <a href="{% url 'home' %}" style="display:flex; align-items:center; text-decoration:none; margin-bottom:15px;">
-                    <img src="{% static 'images/logo.png' %}" alt="Parish Logo" style="height:50px; width:50px; object-fit:cover; border-radius:50%; border:2px solid white; margin-right:10px;">
-                    <div>
-                        <h3 style="margin:0; color:white;">St Peters Ngoisa</h3>
-                        <span style="font-size:12px; color:#fff;">Catholic Parish</span>
-                    </div>
-                </a>
-                <p style="line-height:1.6; font-size:0.95rem;">
-                    We are a Catholic community worshipping God and serving others with love and faith.
-                </p>
-            </div>
-
-            <!-- Location -->
-            <div class="footer-location" style="flex:1; min-width:200px;">
-                <h4 style="margin-bottom:10px; color:white;">Our Location</h4>
-                <p style="line-height:1.6; font-size:0.95rem;">
-                    Ngoiso Catholic Church<br>
-                    Ngoiso, Eldoret<br>
-                    Kenya
-                </p>
-            </div>
-
-            <!-- Quick Links -->
-            <div class="footer-links" style="flex:1; min-width:200px;">
-                <h4 style="margin-bottom:10px; color:white;">Quick Links</h4>
-                <ul style="list-style:none; padding:0; line-height:1.8; font-size:0.95rem;">
-                    <li><a href="{% url 'home' %}" style="color:white; text-decoration:none;">Home</a></li>
-                    <li><a href="{% url 'Dashbd' %}" style="color:white; text-decoration:none;">Admin</a></li>
-                    <li><a href="{% url 'about' %}" style="color:white; text-decoration:none;">About</a></li>
-                    <li><a href="{% url 'Contact' %}" style="color:white; text-decoration:none;">Contact</a></li>
-                </ul>
-            </div>
-
-        </div>
-
-        <!-- Bottom Copyright -->
-        <div class="footer-bottom" style="text-align:center; margin-top:40px; font-size:0.9rem;">
-            © 2026 St Peters Ngoisa Parish. All Rights Reserved.
-        </div>
+    <div class="footer-logo">
+        <img src="{% static 'images/logo.png' %}" alt="Logo">
     </div>
+    <p><strong>St Peters Ngoisa Catholic Parish</strong></p>
+    <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 10px;">
+        © 2026 Diocese of Eldoret. All Rights Reserved.
+    </p>
 </footer>
 
-<!-- ================= SCRIPTS ================= -->
 <script>
-function toggleMenu(){
-    document.getElementById("navLinks").classList.toggle("active");
-}
-
-let slides = document.querySelectorAll(".slide");
-let currentIndex = 0;
-
-function showNextSlide() {
-    slides[currentIndex].classList.remove("active");
-    currentIndex = (currentIndex + 1) % slides.length;
-    slides[currentIndex].classList.add("active");
-}
-
-setInterval(showNextSlide, 4000);
+    // Hero Slider
+    let slides = document.querySelectorAll(".slide");
+    let current = 0;
+    setInterval(() => {
+        slides[current].classList.remove("active");
+        current = (current + 1) % slides.length;
+        slides[current].classList.add("active");
+    }, 5000);
 </script>
 
 </body>

@@ -10,7 +10,7 @@ urlpatterns = [
     path('Login', views.Login, name= 'Login'),
     path('register_user', views.register_user, name= 'register_user'),
     path('Logout/', views.Logout, name='Logout'),
-    
+    path('verify-otp/', views.verify_otp, name='verify_otp'),
 
     # Password Reset Paths
     path('password-reset/', views.CustomPasswordResetView.as_view(), name='password_reset'),

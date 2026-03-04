@@ -1,0 +1,11 @@
+<div class="card p-4 shadow-sm" style="max-width: 400px; margin: 100px auto; border-top: 5px solid #FFD700;">
+    <h3 class="text-center">Verify Account</h3>
+    <p class="small text-muted text-center">Enter the 6-digit code sent to your email.</p>
+    
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="otp" class="form-control text-center mb-3" 
+               placeholder="0 0 0 0 0 0" maxlength="6" style="font-size: 24px; letter-spacing: 5px;">
+        <button type="submit" class="btn btn-dark w-100" style="color: #FFD700;">Verify Code</button>
+    </form>
+</div>

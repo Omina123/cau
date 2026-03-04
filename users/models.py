@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from Ngoiso.models import Outstation
+import random
 
 class CustomUser(AbstractUser):
     USER_TYPE_CHOICES = (
@@ -19,6 +20,12 @@ class CustomUser(AbstractUser):
         default='2'
     )
     email = models.EmailField(unique=True)  # important for password reset
+    is_verified = models.BooleanField(default=False)
+    otp = models.CharField(max_length=6, blank=True, null=True)
+
+    def generate_otp(self):
+        self.otp = str(random.randint(100000, 999999))
+        self.save()
 
 class Admin(models.Model):
     id = models.AutoField(primary_key=True)

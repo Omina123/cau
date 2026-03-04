@@ -2,299 +2,333 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gallery - St Peters Ngoisa Parish</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery | St Peters Ngoisa Parish</title>
 
-<style>
-:root {
-    --gold: #C9A227;
-    --red: #8B0000;
-    --white: #ffffff;
-    --dark: #222;
-    --nav-height: 70px;
-}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+    <style>
+        :root {
+            --gold: #C9A227;
+            --vatican-gold: #FFD700;
+            --red: #8B0000;
+            --white: #ffffff;
+            --dark: #222;
+            --nav-height: 75px;
+        }
 
-body{
-    font-family: 'Segoe UI', sans-serif;
-    background:#f8f9fa;
-    color:var(--dark);
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-/* ================= NAVIGATION ================= */
-header{
-    background:var(--white);
-    border-bottom:3px solid var(--gold);
-    position:sticky;
-    top:0;
-    z-index:1000;
-    height:var(--nav-height);
-}
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f4f4f4;
+            color: var(--dark);
+        }
 
-.nav-container{
-    max-width:1200px;
-    margin:0 auto;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    height:100%;
-    padding:0 20px;
-}
+        /* ================= NAVIGATION ================= */
+        header {
+            background: var(--white);
+            border-bottom: 4px solid var(--gold);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            height: var(--nav-height);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
 
-.logo-link{
-    display:flex;
-    align-items:center;
-    text-decoration:none;
-}
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+            padding: 0 20px;
+        }
 
-.logo-link img{
-    height:55px;
-    width:55px;
-    object-fit:cover;
-    border-radius:50%;
-    border:3px solid var(--gold);
-    margin-right:12px;
-}
+        .logo-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
 
-.logo-text h1{
-    font-size:20px;
-    color:var(--red);
-    font-weight:700;
-}
+        .logo-link img {
+            height: 50px;
+            width: 50px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+            margin-right: 12px;
+        }
 
-.logo-text span{
-    font-size:13px;
-    color:var(--gold);
-    font-weight:600;
-}
+        .logo-text h1 {
+            font-size: 1.2rem;
+            color: var(--red);
+            font-weight: 800;
+            margin: 0;
+            line-height: 1;
+        }
 
-.nav-links{
-    display:flex;
-    list-style:none;
-    gap:30px;
-}
+        .logo-text span {
+            font-size: 0.75rem;
+            color: var(--gold);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
 
-.nav-links a{
-    text-decoration:none;
-    color:var(--red);
-    font-weight:600;
-}
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
 
-.menu-toggle{
-    display:none;
-    font-size:28px;
-    cursor:pointer;
-    color:var(--red);
-}
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: 0.3s;
+        }
 
-@media(max-width:900px){
-    .nav-links{
-        position:absolute;
-        top:var(--nav-height);
-        right:0;
-        background:white;
-        flex-direction:column;
-        width:100%;
-        text-align:center;
-        display:none;
-        padding:20px 0;
-    }
+        .nav-links a:hover {
+            color: var(--red);
+        }
 
-    .nav-links.active{
-        display:flex;
-    }
+        .menu-toggle {
+            display: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--red);
+        }
 
-    .menu-toggle{
-        display:block;
-    }
-}
+        /* ================= SLIDER HEADER ================= */
+        .page-header {
+            position: relative;
+            height: 350px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
 
-/* ================= SLIDER HEADER ================= */
+        .slider {
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+        }
 
-.page-header{
-    position:relative;
-    height:400px;
-    overflow:hidden;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    color:white;
-}
+        .slide {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
 
-.slider{
-    position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-}
-.slide{
-    position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    opacity:0;
-    transition:opacity 1s ease-in-out;
-}
+        .slide.active { opacity: 1; }
 
-.slide.active{
-    opacity:1;
-}
+        .page-header::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 1;
+        }
 
-.page-header::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:rgba(0,0,0,0.5);
-    z-index:1;
-}
+        .overlay-text {
+            position: relative;
+            z-index: 2;
+        }
 
-.overlay-text{
-    position:relative;
-    z-index:2;
-}
+        .overlay-text h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 4px solid var(--vatican-gold);
+            display: inline-block;
+            padding-bottom: 10px;
+        }
 
-.overlay-text h1{
-    font-size:2.5rem;
-    letter-spacing:2px;
-}
+        /* ================= GALLERY GRID ================= */
+        .gallery-section {
+            padding: 60px 5%;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
 
-/* ================= GALLERY STYLE ================= */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
 
-.gallery-section {
-    padding: 60px 8%;
-    background: #fff;
-}
+        .gallery-item {
+            position: relative;
+            height: 300px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            background: #eee;
+        }
 
-.gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 15px;
-}
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
 
-.gallery-item {
-    overflow: hidden;
-}
+        /* Hover Overlay */
+        .item-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(transparent, rgba(139, 0, 0, 0.9));
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px;
+            opacity: 0;
+            transition: 0.4s ease;
+        }
 
-.gallery-item img {
-    width: 100%;
-    height: 280px;
-    object-fit: cover;
-    transition: transform 0.4s ease;
-    cursor: pointer;
-}
+        .item-overlay h3 {
+            color: var(--vatican-gold);
+            font-size: 1.2rem;
+            margin: 0;
+            transform: translateY(20px);
+            transition: 0.4s ease;
+        }
 
-.gallery-item img:hover {
-    transform: scale(1.08);
-}
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
 
-/* ================= FOOTER ================= */
+        .gallery-item:hover .item-overlay {
+            opacity: 1;
+        }
 
-footer{
-    background:var(--gold);
-    color:white;
-    text-align:center;
-    padding:20px;
-    margin-top:40px;
-}
+        .gallery-item:hover .item-overlay h3 {
+            transform: translateY(0);
+        }
 
-@media(max-width:768px){
-    .page-header{
-        height:250px;
-    }
+        /* ================= FOOTER ================= */
+        footer {
+            background: var(--dark);
+            color: var(--vatican-gold);
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 5px solid var(--gold);
+        }
 
-    .overlay-text h1{
-        font-size:1.8rem;
-    }
-}
-</style>
+        /* Responsive */
+        @media(max-width: 900px) {
+            .nav-links {
+                position: absolute;
+                top: var(--nav-height);
+                right: -100%;
+                background: white;
+                flex-direction: column;
+                width: 100%;
+                transition: 0.5s;
+                box-shadow: 0 10px 10px rgba(0,0,0,0.1);
+                padding: 30px;
+            }
+            .nav-links.active { right: 0; }
+            .menu-toggle { display: block; }
+            .overlay-text h1 { font-size: 1.8rem; }
+        }
+    </style>
 </head>
-
 <body>
 
 <header>
-<div class="nav-container">
-    <a href="{% url 'home' %}" class="logo-link">
-        <img src="{% static 'images/logo.svg' %}" alt="Parish Logo">
-        <div class="logo-text">
-            <h1>St Peters Ngoisa</h1>
-            <span>Catholic Parish</span>
-        </div>
-    </a>
+    <div class="nav-container">
+        <a href="{% url 'home' %}" class="logo-link">
+            <img src="{% static 'images/logo.svg' %}" alt="Parish Logo">
+            <div class="logo-text">
+                <h1>St Peters Ngoisa</h1>
+                <span>Catholic Parish</span>
+            </div>
+        </a>
 
-    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
 
-    <ul class="nav-links" id="navLinks">
-        <li><a href="{% url 'home' %}">Home</a></li>
-        <li><a href="{% url 'about' %}">About</a></li>
-        <li><a href="{% url 'Gallary' %}">Gallery</a></li>
-        <li><a href="{% url 'stations' %}">Stations</a></li>
-        <li><a href="{% url 'groups' %}">Associations</a></li>
-        <li><a href="{% url 'station_INT'%}">Institutions</a></li>
-        <li><a href="{% url 'Contact' %}">Contact</a></li>
-    </ul>
-</div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'about' %}">About</a></li>
+            <li><a href="{% url 'Gallary' %}" style="color: var(--red);">Gallery</a></li>
+            <li><a href="{% url 'stations' %}">Stations</a></li>
+            <li><a href="{% url 'groups' %}">Associations</a></li>
+            <li><a href="{% url 'station_INT'%}">Institutions</a></li>
+            <li><a href="{% url 'Contact' %}">Contact</a></li>
+        </ul>
+    </div>
 </header>
 
-<!-- SLIDER -->
 <section class="page-header">
-<div class="slider">
-    <img src="{% static 'images/wheel-1000.jpg' %}" class="slide active">
-    <img src="{% static 'images/series-2000.jpg' %}" class="slide">
-    <img src="{% static 'images/slider3.jpg' %}" class="slide">
-</div>
-
-<div class="overlay-text">
-    <h1>St Peters Ngoisa Parish Events</h1>
-</div>
+    <div class="slider">
+        <img src="{% static 'images/wheel-1000.jpg' %}" class="slide active">
+        <img src="{% static 'images/series-2000.jpg' %}" class="slide">
+        <img src="{% static 'images/slider3.jpg' %}" class="slide">
+    </div>
+    <div class="overlay-text">
+        <h1>Parish Gallery</h1>
+    </div>
 </section>
 
-<!-- GALLERY -->
 <section class="gallery-section">
     <div class="gallery-grid">
-
         {% for photo in photos %}
             <div class="gallery-item">
-                <img src="{{ photo.image.url }}" alt="{{ photo.alt }}">
+                <img src="{{ photo.url }}" alt="{{ photo.alt }}">
+                
+                <div class="item-overlay">
+                    <h3><i class="bi bi-camera me-2"></i>{{ photo.title }}</h3>
+                </div>
             </div>
         {% empty %}
-            <p>No photos available yet.</p>
+            <div style="text-align: center; grid-column: 1 / -1; padding: 50px;">
+                <i class="bi bi-images" style="font-size: 3rem; color: #ccc;"></i>
+                <p style="color: #888; margin-top: 15px;">No event photos have been uploaded yet.</p>
+            </div>
         {% endfor %}
-
     </div>
 </section>
 
 <footer>
-    © 2026 St Peters Ngoisa Parish. All Rights Reserved.
+    <p>© 2026 St Peters Ngoisa Parish Management System</p>
+    <small style="color: #666;">Dedicated to Service and Faith</small>
 </footer>
 
 <script>
-function toggleMenu(){
-    document.getElementById("navLinks").classList.toggle("active");
-}
-
-let slides = document.querySelectorAll(".slide");
-let index = 0;
-
-function showSlide(){
-    slides.forEach(slide => slide.classList.remove("active"));
-    index++;
-    if(index >= slides.length){
-        index = 0;
+    // Navbar Mobile Toggle
+    function toggleMenu(){
+        document.getElementById("navLinks").classList.toggle("active");
     }
-    slides[index].classList.add("active");
-}
 
-setInterval(showSlide, 4000);
+    // Hero Slider Logic
+    let slides = document.querySelectorAll(".slide");
+    let index = 0;
+
+    function showSlide(){
+        slides[index].classList.remove("active");
+        index = (index + 1) % slides.length;
+        slides[index].classList.add("active");
+    }
+
+    if (slides.length > 1) {
+        setInterval(showSlide, 5000); // Change image every 5 seconds
+    }
 </script>
 
 </body>

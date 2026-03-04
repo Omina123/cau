@@ -56,7 +56,15 @@ def Login(request):
             email = form.cleaned_data['Email']
             password = form.cleaned_data['password']
             user = EmailBackend.authenticate(request, username=email, password=password)
+            # Inside your Login view
             if user is not None:
+                if not user.is_verified:
+                    messages.error(request, "Please verify your email before logging in.")
+                    request.session['verification_email'] = user.email
+                    return redirect('verify_otp')
+    
+        
+    # ... rest of your logic
                 login(request, user)
                 if user.is_superuser:
                     messages.success(request, "Login was successful")
@@ -79,24 +87,57 @@ def Login(request):
         return render(request, 'login.html', {'form': form})
 
 #user creation function
+# views.py
 def register_user(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            form.save()  # signals will create Admin/Staff/Client automatically
-            return redirect('Login')
+            user = form.save(commit=False)
+            user.is_active = True # Or False if you want to block login until verified
+            user.save()
+            
+            # Generate and Send OTP
+            user.generate_otp()
+            send_mail(
+                'Verify your Parish Account',
+                f'Your OTP for St. Peters Ngoisa is: {user.otp}',
+                settings.EMAIL_HOST_USER,
+                [user.email],
+                fail_silently=False,
+            )
+            
+            # Redirect to the verification page
+            request.session['verification_email'] = user.email
+            return redirect('verify_otp') 
     else:
         form = UserRegisterForm()
-
     return render(request, 'register.html', {'form': form})
 
-
+# views.py
+def verify_otp(request):
+    if request.method == 'POST':
+        otp_entered = request.POST.get('otp')
+        email = request.session.get('verification_email')
+        
+        try:
+            user = CustomUser.objects.get(email=email, otp=otp_entered)
+            user.is_verified = True
+            user.otp = "" # Clear OTP after use
+            user.save()
+            messages.success(request, "Account verified! You can now login.")
+            return redirect('Login')
+        except CustomUser.DoesNotExist:
+            messages.error(request, "Invalid OTP. Please try again.")
+            
+    return render(request, 'verify_otp.html')
 
 
 # 1. This view handles the email submission form
 class CustomPasswordResetView(auth_views.PasswordResetView):
     template_name = 'password_reset.html'
     email_template_name = 'password_reset_email.html'
+    # THIS LINE IS KEY: It tells Django to render the HTML properly
+    html_email_template_name = 'password_reset_email.html' 
     subject_template_name = 'password_reset_subject.txt'
     success_url = reverse_lazy('password_reset_done')
 
