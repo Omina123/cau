@@ -10,7 +10,7 @@ class CustomUser(AbstractUser):
     USER_TYPE_CHOICES = (
         ('1', 'Priest'),
         ('2', 'Chair'),
-        ('3', "Catechist")
+        # ('3', "Catechist")
         
         
     )
