@@ -97,10 +97,9 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'kevinmalasa2000@gmail.com'
 EMAIL_HOST_PASSWORD = 'uydpgdshxgbaxmge'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgresql://ompl_user:inbWFUO0MEcbcyoS2qN3TGxizcW5ocHA@dpg-d6g5ha56ubrc73agk2pg-a.oregon-postgres.render.com/ompl'
+        default='postgresql://omin_user:HufsxfnDWl0Cugmn2V1DUksG2n6hPbW7@dpg-d6k0l9v5r7bs739vmgkg-a.oregon-postgres.render.com/omin'
     )
 }
 # Password validation
