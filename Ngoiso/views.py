@@ -1,6 +1,6 @@
 
 from django.shortcuts import render,redirect, get_object_or_404
-
+from django.db.models import Q
 from django.db.models import Prefetch
 from .forms import *
 from django.http import JsonResponse
@@ -523,13 +523,29 @@ def Gallary(request):
         {'url': '/static/images/event5.jpg', 'title': 'Annual Picnic', 'alt': 'Picnic'},   
     ]
     return render(request, 'gallary.html', {'photos': photos})
-def jumuiya_contribution(request):
 
+
+def jumuiya_contribution(request):
+    query = request.GET.get('q', '')
+    
+    # Filter Jumuiyas based on search (searches Jumuiya name or Outstation name)
     jumuiyas = Jumuiya.objects.all()
+    if query:
+        jumuiyas = jumuiyas.filter(
+            Q(name__icontains=query) | 
+            Q(outstation__name__icontains=query)
+        )
+
+    # Filter Contribution History
     contributions = JumuiyaContribution.objects.order_by('-date_recorded')
+    if query:
+        contributions = contributions.filter(
+            Q(jumuiya__name__icontains=query) | 
+            Q(jumuiya__outstation__name__icontains=query) |
+            Q(year__icontains=query)
+        )
 
     if request.method == "POST":
-
         jumuiya_id = request.POST.get('jumuiya')
         year = request.POST.get('year')
         amount = request.POST.get('amount')
@@ -538,15 +554,17 @@ def jumuiya_contribution(request):
             messages.error(request, "Please select a Jumuiya.")
             return redirect('jumuiya_contribution')
 
-        if float(amount) < 20000:
-            messages.error(request, "Amount must be 20,000 or above.")
+        # Logic for amount validation
+        try:
+            if float(amount) < 20000:
+                messages.error(request, "Amount must be 20,000 or above.")
+                return redirect('jumuiya_contribution')
+        except ValueError:
+            messages.error(request, "Invalid amount entered.")
             return redirect('jumuiya_contribution')
 
-        # Optional: Prevent duplicate year entry
-        if JumuiyaContribution.objects.filter(
-            jumuiya_id=jumuiya_id,
-            year=year
-        ).exists():
+        # Prevent duplicate year entry
+        if JumuiyaContribution.objects.filter(jumuiya_id=jumuiya_id, year=year).exists():
             messages.error(request, "Contribution for this Jumuiya and year already exists.")
             return redirect('jumuiya_contribution')
 
@@ -562,7 +580,8 @@ def jumuiya_contribution(request):
 
     context = {
         'jumuiyas': jumuiyas,
-        'contributions': contributions
+        'contributions': contributions,
+        'query': query # Pass query back to template to keep search box filled
     }
 
     return render(request, 'jumuiya_contribution.html', context)

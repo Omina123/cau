@@ -2,128 +2,123 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Jumuiya Contribution</title>
+    <title>Family Contribution | St. Peters</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --vatican-gold: #C9A227;
+            --parish-red: #8B0000;
+        }
+        body { background: linear-gradient(135deg, #FFD700 0%, #FFFFFF 100%); min-height: 100vh; }
+        .navbar { background-color: var(--vatican-gold) !important; border-bottom: 3px solid var(--parish-red); }
+        .card { border-radius: 15px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .btn-gold { background: var(--vatican-gold); color: white; font-weight: bold; }
+        .btn-gold:hover { background: #a6821f; color: white; }
+        .table-warning { background-color: var(--vatican-gold) !important; color: white; }
+    </style>
 </head>
 
-<body class="bg-light">
+<body>
 
-<!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-warning">
+<nav class="navbar navbar-expand-lg navbar-dark mb-4">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="{% url 'Dashbd' %}">
-            Parish System
-        </a>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'Dashbd' %}">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'zaka' %}">Zaka</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'mavuno' %}">Mavuno</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'Special' %}">Special</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'sadaka' %}">Sadaka</a>
-                </li>
-            </ul>
-        </div>
+        <a class="navbar-brand fw-bold" href="{% url 'Dashbd' %}">ST. PETERS NGOISA</a>
     </div>
 </nav>
 
-<div class="container mt-5">
-
-    <h2 class="text-center mb-4 text-warning">
-        ST THOMAS DAY YEARLY CONTRIBUTION
+<div class="container">
+    <h2 class="text-center mb-4" style="color: var(--parish-red); font-weight: 800;">
+        FAMILY DAY YEARLY CONTRIBUTION
     </h2>
 
-    <!-- Messages -->
+    <div class="row mb-4 justify-content-center">
+        <div class="col-md-8">
+            <form method="GET" action="" class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="Search Jumuiya or Outstation..." value="{{ query }}">
+                <button class="btn btn-gold" type="submit">
+                    <i class="bi bi-search"></i> Search
+                </button>
+                {% if query %}
+                    <a href="{% url 'jumuiya_contribution' %}" class="btn btn-secondary">Clear</a>
+                {% endif %}
+            </form>
+            <p class="text-muted small mt-1 ps-2">Searching for "{{ query|default:'...' }}" affects the dropdown and the table below.</p>
+        </div>
+    </div>
+
+    <div class="card p-4 mb-5">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Select Jumuiya</label>
+                    <select name="jumuiya" class="form-select" required>
+                        <option value="">-- Choose Jumuiya --</option>
+                        {% for j in jumuiyas %}
+                            <option value="{{ j.id }}">{{ j.name }} ({{ j.outstation.name }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Contribution Year</label>
+                    <input type="number" name="year" class="form-control" value="2026" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Amount (KES)</label>
+                    <input type="number" step="0.01" name="amount" class="form-control" placeholder="Min 20,000" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success w-100 mt-4 fw-bold shadow-sm">
+                <i class="bi bi-cloud-arrow-up"></i> RECORD CONTRIBUTION
+            </button>
+        </form>
+    </div>
+
     {% if messages %}
         {% for message in messages %}
-            <div class="alert alert-info">
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %} alert-dismissible fade show" role="alert">
                 {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         {% endfor %}
     {% endif %}
 
-    <!-- Contribution Form -->
-    <form method="POST" class="mb-4">
-        {% csrf_token %}
-
-        <div class="row">
-            <div class="col-md-4">
-                <select name="jumuiya" class="form-select" required>
-                    <option value="">Select Jumuiya</option>
-                    {% for j in jumuiyas %}
-                        <option value="{{ j.id }}">{{ j.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="col-md-4">
-                <input type="number"
-                       name="year"
-                       class="form-control"
-                       placeholder="Enter Year"
-                       required>
-            </div>
-
-            <div class="col-md-4">
-                <input type="number"
-                       step="0.01"
-                       name="amount"
-                       class="form-control"
-                       placeholder="Amount (Minimum 20,000)"
-                       required>
-            </div>
+    <div class="card overflow-hidden">
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0 fw-bold" style="color: var(--parish-red);">Contribution History</h5>
         </div>
-
-        <button type="submit" class="btn btn-success w-100 mt-3">
-            Record Contribution
-        </button>
-    </form>
-
-    <!-- Contribution Table -->
-    <table class="table table-bordered table-striped">
-        <thead class="table-warning">
-            <tr>
-                <th>Jumuiya</th>
-                <th>Year</th>
-                <th>Amount (KES)</th>
-                <th>Date Recorded</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for c in contributions %}
-            <tr>
-                <td>{{ c.jumuiya.name }}</td>
-                <td>{{ c.year }}</td>
-                <td>{{ c.amount }}</td>
-                <td>{{ c.date_recorded }}</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="4" class="text-center">
-                    No records found.
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Jumuiya</th>
+                        <th>Outstation</th>
+                        <th>Year</th>
+                        <th>Amount (KES)</th>
+                        <th>Date Recorded</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in contributions %}
+                    <tr>
+                        <td class="fw-bold">{{ c.jumuiya.name }}</td>
+                        <td>{{ c.jumuiya.outstation.name }}</td>
+                        <td><span class="badge bg-secondary">{{ c.year }}</span></td>
+                        <td class="text-success fw-bold">{{ c.amount }}</td>
+                        <td class="text-muted">{{ c.date_recorded }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center py-4">No records found matching your search.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>
