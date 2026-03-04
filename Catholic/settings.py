@@ -99,9 +99,9 @@ EMAIL_HOST_PASSWORD = 'uydpgdshxgbaxmge'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgresql://omin_user:HufsxfnDWl0Cugmn2V1DUksG2n6hPbW7@dpg-d6k0l9v5r7bs739vmgkg-a.oregon-postgres.render.com/omin'
-        # conn_max_age=600,
-        # ssl_require=True
+        default='postgresql://omin_user:HufsxfnDWl0Cugmn2V1DUksG2n6hPbW7@dpg-d6k0l9v5r7bs739vmgkg-a.oregon-postgres.render.com/omin',
+        conn_max_age=600,
+        ssl_require=True
     )
 }
 # Password validation
