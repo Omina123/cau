@@ -14,16 +14,138 @@ from django.http import HttpResponse
 from django.core.mail import send_mail
 from django.conf import settings 
 from .decorators import superuser_or_usertype
-
+from .models import *
+from users.models import CustomUser, Catechist
 
 from django.contrib import messages
+# views.py
+
+
+def catechist_list(request):
+    # Ensure only the Priest (user_type 1) can see this list
+    if request.user.user_type != '1':
+        return redirect('Dashbd')
+    
+    # Get all profiles for user type '3'
+    catechists = Catechist.objects.select_related('admin', 'outstation').all()
+    return render(request, 'catechist_list.html', {'catechists': catechists})
+def assign_outstation(request, catechist_id):
+    if request.user.user_type != '1':
+        return redirect('Dashbd')
+
+    catechist = get_object_or_404(Catechist, id=catechist_id)
+    outstations = Outstation.objects.all()
+
+    if request.method == "POST":
+        # Update User Model Fields
+        user = catechist.admin
+        user.first_name = request.POST.get('first_name')
+        user.last_name = request.POST.get('last_name')
+        # Ensure 'phone' exists in your CustomUser model
+        if hasattr(user, 'phone'):
+            user.phone = request.POST.get('phone')
+        user.save()
+
+        # Update Catechist Profile Fields
+        catechist.outstation_id = request.POST.get('outstation')
+        catechist.gender = request.POST.get('gender')
+        catechist.address = request.POST.get('address')
+        catechist.save()
+
+        return redirect('catechist_list')
+
+    return render(request, 'update.html', {'catechist': catechist, 'outstations': outstations})
+
+
+@login_required
+def mon_report(request):
+    catechist = request.user.catechist
+    outstation = catechist.outstation
+    zaka = Zaka.objects.filter(member__outstation=outstation)
+
+    context = {
+        'outstation': outstation,
+        'zaka': zaka,
+    }
+    return render(request, 'aka.html', context)
+
+
+@login_required
+def zak_report(request):
+    catechist = request.user.catechist
+    outstation = catechist.outstation
+    special = SpecialContribution.objects.filter(member__outstation=outstation)
+
+    context = {
+        'outstation': outstation,
+        'special': special,
+    }
+    return render(request, 'cial_report.html', context)
+
+
+@login_required
+def mavreport(request):
+    catechist = request.user.catechist
+    outstation = catechist.outstation
+    mavuno = Mavuno.objects.filter(member__outstation=outstation)
+
+    context = {
+        'outstation': outstation,
+        'mavuno': mavuno,
+    }
+    return render(request, 'vuno_report.html', context)
+
+
+@login_required
+def sadreport(request):
+    catechist = request.user.catechist
+    outstation = catechist.outstation
+    sadaka = Sadaka.objects.filter(outstation=outstation)
+
+    context = {
+        'outstation': outstation,
+        'sadaka': sadaka,
+    }
+    return render(request, 'sada_report.html', context)
+
+
+@login_required
+def jumu_report(request):
+    catechist = request.user.catechist
+    outstation = catechist.outstation
+    jumuiya = JumuiyaContribution.objects.filter(jumuiya__outstation=outstation)
+
+    context = {
+        'outstation': outstation,
+        'jumuiya': jumuiya,
+    }
+    return render(request, 'jumureport.html', context)
+@login_required
+@superuser_or_usertype(allowed_types=[ '3'])
+def catechist_dashboard(request):
+    # Only catechists can access
+    if request.user.user_type != '3':
+        return redirect('Dashbd')  # redirect non-catechists
+
+    catechist_profile = get_object_or_404(Catechist, admin=request.user)
+
+    # Only members in their assigned outstation
+    members = Member.objects.filter(outstation=catechist_profile.outstation)
+
+    context = {
+        'members': members,
+        'outstation': catechist_profile.outstation,
+    }
+    return render(request, 'cate_dashbd.html', context)
 def home (request):
     return render(request, 'home.html')
 # Create your views here.
 def  about(request):
     return render(request, 'about.html')
+from users.utils import send_async_email  # reuse the same function
+
 def Contact(request):
-    title=  "contact malasa kevin".upper()
+    title = "Contact Malasa Kevin".upper()
     if request.method == "POST":
         name = request.POST.get("name")
         email = request.POST.get("email")
@@ -31,27 +153,27 @@ def Contact(request):
         message = request.POST.get("message")
 
         full_message = f"""
-        Name: {name}
-        Email: {email}
-        Phone: {phone}
+Name: {name}
+Email: {email}
+Phone: {phone}
 
-        Message:
-        {message}
-        """
+Message:
+{message}
+"""
 
-        send_mail(
+        send_async_email(
             subject="New Contact Form Message",
             message=full_message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=["kevinmalasa2000@gmail.com"],  # where you receive messages
-            fail_silently=False,
+            recipient_list=["kevinmalasa2000@gmail.com"]
         )
 
         return render(request, "contact.html", {"success": True})
-
-    return render(request, "Contact.html",{'title':title})
+    return render(request, "contact.html")
+    
 # def CatechistDashboard(request):
 #     return render(request, 'catechist_dashboard.html')
+@superuser_or_usertype(allowed_types=['1', '2'])
+
 def StaffDashboard(request):
     selected_year = int(request.GET.get('year', date.today().year))
     outstations = Outstation.objects.all()

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Catechist | St. Peters Ngoisa</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        :root {
+            --vatican-red: #8B0000;
+            --vatican-gold: #C9A227;
+            --soft-gold: #fdf5e6;
+        }
+
+        body {
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), 
+                        url('https://www.transparenttextures.com/patterns/cream-paper.png'), #f8f9fa;
+            min-height: 100vh;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        .update-container {
+            max-width: 800px;
+            margin: 50px auto;
+        }
+
+        .card-custom {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .card-header-vatican {
+            background: var(--vatican-red);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 5px solid var(--vatican-gold);
+        }
+
+        .card-header-vatican i {
+            font-size: 2.5rem;
+            color: var(--vatican-gold);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--vatican-red);
+            margin-bottom: 8px;
+        }
+
+        .form-control, .form-select {
+            border-radius: 10px;
+            padding: 12px 15px;
+            border: 1px solid #dee2e6;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--vatican-gold);
+            box-shadow: 0 0 0 0.25rem rgba(201, 162, 39, 0.2);
+        }
+
+        .section-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .btn-save {
+            background: var(--vatican-red);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border: none;
+            transition: 0.3s;
+            width: 100%;
+        }
+
+        .btn-save:hover {
+            background: #660000;
+            color: var(--vatican-gold);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 0, 0, 0.3);
+        }
+
+        .badge-username {
+            background: var(--soft-gold);
+            color: var(--vatican-red);
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            border: 1px solid var(--vatican-gold);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container update-container">
+    <div class="card card-custom">
+        <div class="card-header-vatican">
+            <i class="bi bi-person-bounding-box mb-3"></i>
+            <h2 class="fw-bold">Update Catechist Profile</h2>
+            <span class="badge-username">ID: {{ catechist.admin.username }}</span>
+        </div>
+
+        <div class="card-body p-4 p-md-5">
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="section-title">Personal Information</div>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label">First Name</label>
+                        <input type="text" name="first_name" class="form-control" value="{{ catechist.admin.first_name }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" name="last_name" class="form-control" value="{{ catechist.admin.last_name }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Phone Number</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="bi bi-telephone"></i></span>
+                            <input type="text" name="phone" class="form-control" value="{{ catechist.admin.phone }}" placeholder="07...">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Gender</label>
+                        <select name="gender" class="form-select">
+                            <option value="M" {% if catechist.gender == 'M' %}selected{% endif %}>Male</option>
+                            <option value="F" {% if catechist.gender == 'F' %}selected{% endif %}>Female</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="section-title">Parish Assignment</div>
+                <div class="row g-3 mb-4">
+                    <div class="col-12">
+                        <label class="form-label">Target Outstation</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="bi bi-geo-alt"></i></span>
+                            <select name="outstation" class="form-select shadow-none" required>
+                                <option value="" disabled>-- Select Station --</option>
+                                {% for station in outstations %}
+                                    <option value="{{ station.id }}" {% if catechist.outstation.id == station.id %}selected{% endif %}>
+                                        {{ station.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-title">Location Details</div>
+                <div class="mb-5">
+                    <label class="form-label">Physical Address / Residence</label>
+                    <textarea name="address" class="form-control" rows="2" placeholder="Describe the residence or home area...">{{ catechist.address }}</textarea>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-save shadow">
+                        <i class="bi bi-check-circle me-2"></i>Save Catechist Records
+                    </button>
+                    <a href="{% url 'catechist_list' %}" class="btn btn-link text-decoration-none text-muted mt-2">
+                        <i class="bi bi-x-circle me-1"></i> Discard Changes
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

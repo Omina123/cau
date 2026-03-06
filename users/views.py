@@ -75,6 +75,9 @@ def Login(request):
                 elif user.user_type == '2':
                     messages.success(request, "Login was successful")
                     return redirect('StaffDashboard')
+                elif user.user_type == '3':
+                    messages.success(request, "Login was successful")
+                    return redirect('catechist_dashboard')
                 
                 else:
                     return HttpResponse("error_page")
@@ -88,27 +91,28 @@ def Login(request):
 
 #user creation function
 # views.py
+from .utils import send_async_email
+
 def register_user(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.is_active = True # Or False if you want to block login until verified
+            user.is_active = True
             user.save()
             
-            # Generate and Send OTP
+            # Generate OTP
             user.generate_otp()
-            send_mail(
-                'Verify your Parish Account',
-                f'Your OTP for St. Peters Ngoisa is: {user.otp}',
-                settings.EMAIL_HOST_USER,
-                [user.email],
-                fail_silently=False,
+
+            # Send OTP asynchronously
+            send_async_email(
+                subject='Verify your Parish Account',
+                message=f'Your OTP for St. Peters Ngoisa is: {user.otp}',
+                recipient_list=[user.email]
             )
-            
-            # Redirect to the verification page
+
             request.session['verification_email'] = user.email
-            return redirect('verify_otp') 
+            return redirect('verify_otp')
     else:
         form = UserRegisterForm()
     return render(request, 'register.html', {'form': form})
@@ -134,10 +138,10 @@ def verify_otp(request):
 
 # 1. This view handles the email submission form
 class CustomPasswordResetView(auth_views.PasswordResetView):
+    form_class = PasswordResetForm
     template_name = 'password_reset.html'
     email_template_name = 'password_reset_email.html'
-    # THIS LINE IS KEY: It tells Django to render the HTML properly
-    html_email_template_name = 'password_reset_email.html' 
+    html_email_template_name = 'password_reset_email.html'
     subject_template_name = 'password_reset_subject.txt'
     success_url = reverse_lazy('password_reset_done')
 

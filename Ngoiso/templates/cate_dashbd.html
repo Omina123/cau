@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ outstation.name }} | Catechist Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --vatican-red: #8B0000;
+            --vatican-gold: #C9A227;
+            --glass-white: rgba(255, 255, 255, 0.9);
+        }
+        body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
+        
+        /* Navbar & Header */
+        .header-bar {
+            background: var(--vatican-red);
+            color: white;
+            padding: 15px 30px;
+            border-bottom: 4px solid var(--vatican-gold);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Sidebar Style */
+        .sidebar {
+            min-height: 100vh;
+            background: white;
+            border-right: 1px solid #ddd;
+        }
+        .nav-link { color: #333; padding: 12px 20px; border-bottom: 1px solid #eee; }
+        .nav-link:hover { background: var(--vatican-gold); color: white; }
+        .nav-link.active { background: var(--vatican-red); color: white; }
+
+        /* Table & Cards */
+        .stat-card {
+            border: none;
+            border-left: 5px solid var(--vatican-gold);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .table-container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+        .btn-vatican {
+            background: var(--vatican-red);
+            color: white;
+            font-size: 0.8rem;
+            margin: 2px;
+            border-radius: 6px;
+        }
+        .btn-vatican:hover { background: var(--vatican-gold); color: white; }
+    </style>
+</head>
+<body>
+
+<div class="header-bar d-flex justify-content-between align-items-center">
+    <div>
+        <h4 class="mb-0"><i class="bi bi-church me-2"></i> {{ outstation.name|upper }} OUTSTATION</h4>
+        <small class="text-white-50">Catechist Control Panel</small>
+    </div>
+    <div class="text-end">
+        <span class="me-3">Welcome, <strong>{{ request.user.username }}</strong></span>
+        <a href="{% url 'Logout' %}" class="btn btn-sm btn-outline-light">Logout</a>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-2 d-none d-md-block sidebar p-0">
+            <div class="position-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a class="nav-link active" href="#"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'register_member' %}"><i class="bi bi-person-plus me-2"></i> Add Member</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'sadaka' %}"><i class="bi bi-people me-2"></i> Update Sadaka</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#reportsSubmenu" data-bs-toggle="collapse" aria-expanded="false">
+                            <i class="bi bi-file-earmark-bar-graph me-2"></i> Reports
+                            <i class="bi bi-caret-down-fill float-end"></i>
+                        </a>
+                        <div class="collapse" id="reportsSubmenu">
+                            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                <li><a href="{% url 'zak_report' %}" class="nav-link ps-4 py-2" style="color: var(--vatican-red);">
+                                    <i class="bi bi-wallet2 me-1"></i> Zaka Reports
+                                </a></li>
+                                <li><a href="{% url 'mon_report' %}" class="nav-link ps-4 py-2" style="color: var(--vatican-red);">
+                                    <i class="bi bi-calendar-check me-1"></i> Monthly Mavuno Report
+                                </a></li>
+                                <li><a href="{% url 'mavreport' %}" class="nav-link ps-4 py-2" style="color: var(--vatican-red);">
+                                    <i class="bi bi-flower1 me-1"></i> Yearly Mavuno Report
+                                </a></li>
+                                <li><a href="{% url 'jumu_report' %}" class="nav-link ps-4 py-2" style="color: var(--vatican-red);">
+                                    <i class="bi bi-people me-1"></i> Family Day Contributions Report
+                                </a></li>
+                                <li><a href="{% url 'sadreport' %}" class="nav-link ps-4 py-2" style="color: var(--vatican-red);">
+                                    <i class="bi bi-cash-stack me-1"></i> Sadaka Report
+                                </a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="col-md-10 ms-sm-auto px-md-4 py-4">
+            
+            <div class="row g-3 mb-4">
+                <div class="col-md-3">
+                    <div class="card stat-card p-3">
+                        <small class="text-muted fw-bold">TOTAL MEMBERS</small>
+                        <h2 class="mb-0">{{ members|length }}</h2>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card p-3" style="border-left-color: var(--vatican-red);">
+                        <small class="text-muted fw-bold">STATION</small>
+                        <h2 class="mb-0 h4 text-truncate">{{ outstation.name }}</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="fw-bold mb-0">Member Directory</h5>
+                    <div class="input-group w-25">
+                        <input type="text" class="form-control form-control-sm" placeholder="Search members...">
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>#</th>
+                                <th>Full Name</th>
+                                <th>Jumuiya</th>
+                                <th>Phone</th>
+                                <th class="text-center">Contributions / Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for member in members %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td class="fw-bold text-dark">{{ member.full_name }}</td>
+                                <td><span class="badge bg-light text-dark border">{{ member.jumuiya.name }}</span></td>
+                                <td>{{ member.phone_number }}</td>
+                                <td class="text-center">
+                                    <div class="btn-group">
+                                        <a href="{% url 'Special' %}?member_id={{ member.id }}" class="btn btn-vatican">
+                                            <i class="bi bi-wallet2"></i> Zaka
+                                        </a>
+                                        <a href="{% url 'zaka' %}?member_id={{ member.id }}" class="btn btn-vatican">
+                                            <i class="bi bi-calendar-check"></i> Monthly
+                                        </a>
+                                        <a href="{% url 'mavuno' %}?member_id={{ member.id }}" class="btn btn-vatican">
+                                            <i class="bi bi-flower1"></i> Yearly
+                                        </a>
+                                        <a href="{% url 'jumuiya_contribution' %}?member_id={{ member.id }}" class="btn btn-vatican">
+                                            <i class="bi bi-people"></i> Family
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center py-5 text-muted">
+                                    <i class="bi bi-info-circle fs-2 d-block mb-2"></i>
+                                    No members registered in {{ outstation.name }} yet.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Functional Search JS -->
+<script>
+  const searchInput = document.querySelector('input[placeholder="Search members..."]');
+  const tableRows = document.querySelectorAll('tbody tr');
+
+  searchInput.addEventListener('keyup', function() {
+    const query = this.value.toLowerCase();
+    tableRows.forEach(row => {
+      const name = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+      const jumuiya = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+      const phone = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+
+      if (name.includes(query) || jumuiya.includes(query) || phone.includes(query)) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  });
+</script>
+</body>
+</html>

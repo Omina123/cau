@@ -10,7 +10,7 @@ class CustomUser(AbstractUser):
     USER_TYPE_CHOICES = (
         ('1', 'Priest'),
         ('2', 'Chair'),
-        # ('3', "Catechist")
+         ('3', "Catechist")
         
         
     )
@@ -47,20 +47,30 @@ class Staff(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
-# class Catechist(models.Model):
-#     GENDER_CHOICES = [
-#         ('M', 'Male'),
-#         ('F', 'Female'),
-#         ('O', 'Other'),
-#     ]
-#     id = models.AutoField(primary_key=True)
-#     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='catechist_profile')
-#     outstation = models.ForeignKey(Outstation, on_delete=models.CASCADE, related_name="catechists")
-#     address = models.CharField(max_length=200, blank=True, null=True)
-#     gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-#     objects = models.Manager()
+class Catechist(models.Model):
+    GENDER_CHOICES = [
+        ('M', 'Male'),
+        ('F', 'Female'),
+        ('O', 'Other'),
+    ]
+    id = models.AutoField(primary_key=True)
+    admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='catechist')
+    # Link to Outstation from Ngoiso app
+    outstation = models.ForeignKey(
+        Outstation, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True, 
+        related_name="catechists"
+    )
+    address = models.CharField(max_length=200, blank=True, null=True)
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
+
+    def __str__(self):
+        return f"Catechist: {self.admin.username}"
 @receiver(post_save, sender=CustomUser)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -68,17 +78,18 @@ def create_user_profile(sender, instance, created, **kwargs):
             Admin.objects.create(admin=instance)
         elif instance.user_type == '2':
             Staff.objects.create(admin=instance)
-        # elif instance.user_type == '3': # Fixed typo: user_typeb
-        #     # Note: You'll need to assign an outstation manually or allow null
-        #     Catechist.objects.create(admin=instance)
+        elif instance.user_type == '3':
+            # Creates the profile; outstation can be assigned later in the Admin panel
+            Catechist.objects.create(admin=instance)
+
 @receiver(post_save, sender=CustomUser)
 def save_user_profile(sender, instance, **kwargs):
-    if instance.user_type == 1:
-        instance.admin.save()
-    elif instance.user_type == 2:
-        if hasattr(instance, 'staff'):  # Check if the user has a related Staff
+    if instance.user_type == '1':
+        if hasattr(instance, 'admin'):
+            instance.admin.save()
+    elif instance.user_type == '2':
+        if hasattr(instance, 'staff'):
             instance.staff.save()
-    # elif instance.user_type ==3:
-    #     instance.catechist.save()
-    
-            
+    elif instance.user_type == '3':
+        if hasattr(instance, 'catechist'):
+            instance.catechist.save()

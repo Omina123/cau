@@ -10,70 +10,127 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        :root {
-            --vatican-red: #8B0000;
-            --vatican-gold: #C9A227;
-            --vatican-gold-light: #FFD700;
-            --charcoal: #212529;
-            --off-white: #f8f9fa;
-        }
+:root {
+    --vatican-red: #8B0000;
+    --vatican-red-dark: #6e0000;
+    --vatican-gold: #C9A227;
+    --vatican-gold-light: #FFD700;
+    --charcoal: #212529;
+    --off-white: #f8f9fa;
+}
 
-        body { background-color: #f0f2f5; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+body { 
+    background-color: #f5f5f5; 
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+}
 
-        /* Sidebar Styling */
-        .sidebar {
-            background-color: var(--vatican-red);
-            min-height: 100vh;
-            color: white;
-            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
-        }
-        
-        .sidebar .nav-link {
-            color: rgba(255,255,255,0.75);
-            padding: 12px 20px;
-            margin: 4px 15px;
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
+/* Sidebar Styling */
+.sidebar {
+    background-color: var(--vatican-red);
+    min-height: 100vh;
+    color: white;
+    box-shadow: 4px 0 10px rgba(0,0,0,0.15);
+}
 
-        .sidebar .nav-link:hover {
-            color: var(--vatican-gold-light);
-            background: rgba(255,255,255,0.1);
-        }
+.sidebar .nav-link {
+    color: rgba(255,255,255,0.8);
+    padding: 12px 20px;
+    margin: 4px 15px;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
 
-        .sidebar .nav-link.active {
-            color: white;
-            background: var(--vatican-gold);
-            font-weight: 600;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
+.sidebar .nav-link:hover {
+    color: var(--vatican-gold-light);
+    background: rgba(255,255,255,0.08);
+}
 
-        /* Card Styling */
-        .stat-card {
-            border: none;
-            border-radius: 12px;
-            background: white;
-            transition: transform 0.2s;
-            border-left: 5px solid transparent;
-        }
-        .stat-card:hover { transform: translateY(-3px); }
-        .card-zaka { border-left-color: var(--vatican-red); }
-        .card-special { border-left-color: #28a745; }
-        .card-jumuiya { border-left-color: var(--vatican-gold); }
-        .card-total { border-left-color: var(--charcoal); }
+.sidebar .nav-link.active {
+    color: white;
+    background: var(--vatican-gold);
+    font-weight: 600;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
 
-        .table-container {
-            background: white;
-            border-radius: 12px;
-            border: none;
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-        }
+/* Card Styling */
+.stat-card {
+    border: none;
+    border-radius: 12px;
+    background: white;
+    transition: transform 0.2s;
+    border-left: 5px solid transparent;
+}
 
-        .header-title { color: var(--vatican-red); font-weight: 800; }
-        
-        .btn-vatican { background-color: var(--vatican-red); color: white; }
-        .btn-vatican:hover { background-color: #660000; color: white; }
-    </style>
+.stat-card:hover { 
+    transform: translateY(-3px); 
+}
+
+/* Vatican themed borders */
+
+.card-zaka { 
+    border-left-color: var(--vatican-red); 
+}
+
+.card-special { 
+    border-left-color: var(--vatican-gold); 
+}
+
+.card-jumuiya { 
+    border-left-color: var(--vatican-gold-light); 
+}
+
+.card-total { 
+    border-left-color: var(--charcoal); 
+}
+
+/* Table container */
+
+.table-container {
+    background: white;
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+/* Header title */
+
+.header-title { 
+    color: var(--vatican-red); 
+    font-weight: 800; 
+}
+
+/* Vatican button */
+
+.btn-vatican { 
+    background-color: var(--vatican-red); 
+    color: white; 
+}
+
+.btn-vatican:hover { 
+    background-color: var(--vatican-red-dark); 
+    color: white; 
+}
+
+/* Table header */
+
+.table thead {
+    background-color: var(--vatican-red);
+    color: white;
+}
+
+/* Row hover */
+
+.table-hover tbody tr:hover {
+    background-color: #fff7e0;
+}
+
+/* Badge adjustment */
+
+.badge.bg-danger{
+    background-color: rgba(201,162,39,0.15) !important;
+    color: var(--vatican-red) !important;
+}
+</style>
 </head>
 <body>
 
@@ -87,12 +144,12 @@
             
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link active" href="/dashboard">
+                    <a class="nav-link active" href="/Staff_dashboard">
                         <i class="bi bi-speedometer2 me-2"></i> Dashboard
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/zaka">
+                    <a class="nav-link" href="#">
                         <i class="bi bi-cash-stack me-2"></i> ZakaMONTHLY CONTRIBUTIONS RECORDS
                     </a>
                 </li>
@@ -102,12 +159,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/special">
+                    <a class="nav-link" href="#">
                         <i class="bi bi-star-fill me-2"></i> ZAKA CONTRIBUTIONS RECORDS
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/jumuiya_contribution">
+                    <a class="nav-link" href="#">
                         <i class="bi bi-people-fill me-2"></i> FAMILLY CONTRIBUTIONS RECORDS
                     </a>
                 </li>
@@ -115,8 +172,8 @@
                     <hr class="mx-3 opacity-25">
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/settings">
-                        <i class="bi bi-gear-fill me-2"></i> Settings
+                    <a class="nav-link" href="">
+                        <i class="bi bi-gear-fill me-2"></i> Home
                     </a>
                 </li>
                 <li class="nav-item">
