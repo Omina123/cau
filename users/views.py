@@ -21,21 +21,38 @@ from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
 
 # Password Reset Views
+import threading
+
 class CustomPasswordResetView(auth_views.PasswordResetView):
+    form_class = PasswordResetForm
     template_name = 'password_reset.html'
     email_template_name = 'password_reset_email.html'
+    html_email_template_name = 'password_reset_email.html'
     subject_template_name = 'password_reset_subject.txt'
     success_url = reverse_lazy('password_reset_done')
 
-class CustomPasswordResetDoneView(auth_views.PasswordResetDoneView):
-    template_name = 'password_reset_done.html'
-
-class CustomPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
-    template_name = 'password_reset_confirm.html'
-    success_url = reverse_lazy('password_reset_complete')
-
-class CustomPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
-    template_name = 'password_reset_complete.html'
+    def form_valid(self, form):
+        """
+        Overriding form_valid to send the reset email in a background thread.
+        This prevents Render.com from timing out while waiting for the SMTP server.
+        """
+        opts = {
+            'use_https': self.request.is_secure(),
+            'token_generator': self.token_generator,
+            'from_email': self.from_email,
+            'email_template_name': self.email_template_name,
+            'subject_template_name': self.subject_template_name,
+            'request': self.request,
+            'html_email_template_name': self.html_email_template_name,
+            'extra_email_context': self.extra_email_context,
+        }
+        
+        # Start a thread to handle the slow SMTP connection
+        # form.save() is what actually triggers the email sending logic
+        threading.Thread(target=form.save, kwargs=opts).start()
+        
+        # Immediately return the success URL so the user doesn't wait
+        return redirect(self.success_url)
 
 def Logout(request):
     logout(request)
@@ -90,9 +107,8 @@ def Login(request):
         return render(request, 'login.html', {'form': form})
 
 #user creation function
-# views.py
-from .utils import send_async_email
-
+# 
+from .utils import send_background_email
 def register_user(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
@@ -100,19 +116,18 @@ def register_user(request):
             user = form.save(commit=False)
             user.is_active = True
             user.save()
-            
-            # Generate OTP
             user.generate_otp()
-
-            # Send OTP asynchronously
-            send_async_email(
+            
+            # Hand off to background thread
+            send_background_email(
                 subject='Verify your Parish Account',
-                message=f'Your OTP for St. Peters Ngoisa is: {user.otp}',
-                recipient_list=[user.email]
+                recipient_email=user.email,
+                template_name='emails/otp_email.html', # Create this template
+                context={'otp': user.otp, 'name': user.username}
             )
-
+            
             request.session['verification_email'] = user.email
-            return redirect('verify_otp')
+            return redirect('verify_otp') 
     else:
         form = UserRegisterForm()
     return render(request, 'register.html', {'form': form})

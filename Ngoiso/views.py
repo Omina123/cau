@@ -142,34 +142,32 @@ def home (request):
 # Create your views here.
 def  about(request):
     return render(request, 'about.html')
-from users.utils import send_async_email  # reuse the same function
-
-def Contact(request):
-    title = "Contact Malasa Kevin".upper()
+  
+from users.utils import send_background_email
+def Contact(request): 
     if request.method == "POST":
         name = request.POST.get("name")
         email = request.POST.get("email")
         phone = request.POST.get("phone")
         message = request.POST.get("message")
 
-        full_message = f"""
-Name: {name}
-Email: {email}
-Phone: {phone}
+        context = {
+            'name': name,
+            'email': email,
+            'phone': phone,
+            'message': message
+        }
 
-Message:
-{message}
-"""
-
-        send_async_email(
+        # Send to yourself in background
+        send_background_email(
             subject="New Contact Form Message",
-            message=full_message,
-            recipient_list=["kevinmalasa2000@gmail.com"]
+            recipient_email="kevinmalasa2000@gmail.com",
+            template_name='emails/contact_notification.html',
+            context=context
         )
 
-        return render(request, "contact.html", {"success": True})
-    return render(request, "contact.html")
-    
+        return render(request, "contact.html", {"success": True, "title": title})
+    return render(request, "contact.html", {"title": title})
 # def CatechistDashboard(request):
 #     return render(request, 'catechist_dashboard.html')
 @superuser_or_usertype(allowed_types=['1', '2'])
