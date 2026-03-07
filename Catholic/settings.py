@@ -13,23 +13,34 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url  # Optional but recommended
+import environ
+BASE_DIR = Path(__file__).resolve().parent.parent
 
+
+# Initialize environ
+env = environ.Env()
+# Read the .env file
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+# Now replace your hardcoded key with this:
+BREVO_API_KEY = env('BREVO_API_KEY')
+
+# You can also use it for your Django Secret Key
+SECRET_KEY = env('SECRET_KEY')
+DEBUG = env.bool('DEBUG', default=False)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-wxuyzr(t=q%&krapya$&86h02-yj9fq%3ru%*i$z&a@n@nql%c'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
 ALLOWED_HOSTS = [
     "st-peters-ngoisa.onrender.com",
     "localhost","127.0.0.1",
+    "localhost"
 ]
 
 
@@ -90,12 +101,12 @@ WSGI_APPLICATION = 'Catholic.wsgi.application'
 #     }
 #  }
 # settings.py
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'kevinmalasa2000@gmail.com'
-EMAIL_HOST_PASSWORD = 'uydpgdshxgbaxmge' # Ensure this is a 16-character App Password
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_USE_TLS = True
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'kevinmalasa2000@gmail.com'
+# EMAIL_HOST_PASSWORD = 'uydpgdshxgbaxmge' # Ensure this is a 16-character App Password
 DATABASES = {
     'default': dj_database_url.config(
         default='postgresql://omin_user:HufsxfnDWl0Cugmn2V1DUksG2n6hPbW7@dpg-d6k0l9v5r7bs739vmgkg-a.oregon-postgres.render.com/omin',

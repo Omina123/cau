@@ -1,71 +1,20 @@
-from django.shortcuts import render,redirect
-from  .models import *
-from .forms import*
-from .EmailBackend import EmailBackend
-from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.http import HttpResponse
-from django.core.mail import send_mail
-from django.conf import settings
-from Ngoiso import views
-from django.contrib.auth import logout
-from django.contrib.auth.views import (
-    PasswordResetView,
-    PasswordResetConfirmView,
-    PasswordResetDoneView,
-    PasswordResetCompleteView,
-)
+from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse_lazy
-from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth import views as auth_views
-from django.urls import reverse_lazy
+from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.http import HttpResponse
 
-# Password Reset Views
-import threading
+from .models import CustomUser
+from .forms import LoginForm, UserRegisterForm
+from .utils import send_brevo_email
+from .EmailBackend import EmailBackend
 
-class CustomPasswordResetView(auth_views.PasswordResetView):
-    form_class = PasswordResetForm
-    template_name = 'password_reset.html'
-    email_template_name = 'password_reset_email.html'
-    html_email_template_name = 'password_reset_email.html'
-    subject_template_name = 'password_reset_subject.txt'
-    success_url = reverse_lazy('password_reset_done')
-
-    def form_valid(self, form):
-        """
-        Overriding form_valid to send the reset email in a background thread.
-        This prevents Render.com from timing out while waiting for the SMTP server.
-        """
-        opts = {
-            'use_https': self.request.is_secure(),
-            'token_generator': self.token_generator,
-            'from_email': self.from_email,
-            'email_template_name': self.email_template_name,
-            'subject_template_name': self.subject_template_name,
-            'request': self.request,
-            'html_email_template_name': self.html_email_template_name,
-            'extra_email_context': self.extra_email_context,
-        }
-        
-        # Start a thread to handle the slow SMTP connection
-        # form.save() is what actually triggers the email sending logic
-        threading.Thread(target=form.save, kwargs=opts).start()
-        
-        # Immediately return the success URL so the user doesn't wait
-        return redirect(self.success_url)
-
-def Logout(request):
-    logout(request)
-    return redirect('Login')
-
-def error_page(request):
-    title ="Access Denied"
-    message= "You must login/Register to continue"
-    context = {
-         'title':title,
-         'message':message
-     }
-    return render(request, "error.html", context)
+# --- LOGIN / LOGOUT ---
 def Login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -73,66 +22,57 @@ def Login(request):
             email = form.cleaned_data['Email']
             password = form.cleaned_data['password']
             user = EmailBackend.authenticate(request, username=email, password=password)
-            # Inside your Login view
+            
             if user is not None:
-                if not user.is_verified:
-                    messages.error(request, "Please verify your email before logging in.")
-                    request.session['verification_email'] = user.email
-                    return redirect('verify_otp')
-    
-        
-    # ... rest of your logic
                 login(request, user)
-                if user.is_superuser:
-                    messages.success(request, "Login was successful")
-                    return redirect('Dashbd')
-                if user.user_type == '1':
-                    messages.success(request, "Login was successful")
+                messages.success(request, "Login was successful")
+                if user.is_superuser or user.user_type == '1':
                     return redirect('Dashbd')
                 elif user.user_type == '2':
-                    messages.success(request, "Login was successful")
                     return redirect('StaffDashboard')
                 elif user.user_type == '3':
-                    messages.success(request, "Login was successful")
                     return redirect('catechist_dashboard')
-                
-                else:
-                    return HttpResponse("error_page")
+                return redirect('Dashbd')
             else:
-                messages.error(request, "User does not exist or invalid credentials")
+                messages.error(request, "Invalid credentials")
                 return redirect("error_page")
     else:
-        # Return an empty form for GET requests
         form = LoginForm()
-        return render(request, 'login.html', {'form': form})
+    return render(request, 'login.html', {'form': form})
 
-#user creation function
-# 
-from .utils import send_background_email
+def Logout(request):
+    logout(request)
+    return redirect('Login')
+
+def error_page(request):
+    return render(request, "error.html", {"title": "Access Denied", "message": "Login required."})
+
+# --- REGISTRATION & OTP ---
 def register_user(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.is_active = True
+            user.is_active = True 
             user.save()
             user.generate_otp()
-            
-            # Hand off to background thread
-            send_background_email(
-                subject='Verify your Parish Account',
-                recipient_email=user.email,
-                template_name='emails/otp_email.html', # Create this template
-                context={'otp': user.otp, 'name': user.username}
-            )
+
+            html_content = f"""
+            <div style="font-family: Arial; padding: 20px;">
+                <h2>Account Verification</h2>
+                <p>Your OTP is: <strong style="font-size: 24px; color: #e74c3c;">{user.otp}</strong></p>
+            </div>
+            """
+            send_brevo_email(user.email, "Verify Your Account", html_content)
             
             request.session['verification_email'] = user.email
-            return redirect('verify_otp') 
+            messages.success(request, "OTP sent to your email.")
+            return redirect('verify_otp')
     else:
         form = UserRegisterForm()
     return render(request, 'register.html', {'form': form})
 
-# views.py
+# THIS IS THE FUNCTION YOUR ERROR WAS LOOKING FOR
 def verify_otp(request):
     if request.method == 'POST':
         otp_entered = request.POST.get('otp')
@@ -141,34 +81,62 @@ def verify_otp(request):
         try:
             user = CustomUser.objects.get(email=email, otp=otp_entered)
             user.is_verified = True
-            user.otp = "" # Clear OTP after use
+            user.otp = "" 
             user.save()
-            messages.success(request, "Account verified! You can now login.")
+            messages.success(request, "Verified! You can now login.")
             return redirect('Login')
         except CustomUser.DoesNotExist:
-            messages.error(request, "Invalid OTP. Please try again.")
+            messages.error(request, "Invalid OTP.")
             
     return render(request, 'verify_otp.html')
 
+# --- FORGOT PASSWORD (Using Brevo) ---
+from django.template.loader import render_to_string
+from django.utils import timezone
 
-# 1. This view handles the email submission form
 class CustomPasswordResetView(auth_views.PasswordResetView):
     form_class = PasswordResetForm
     template_name = 'password_reset.html'
-    email_template_name = 'password_reset_email.html'
-    html_email_template_name = 'password_reset_email.html'
-    subject_template_name = 'password_reset_subject.txt'
     success_url = reverse_lazy('password_reset_done')
 
-# 2. This view shows the "Email Sent" success message
+    def form_valid(self, form):
+        email = form.cleaned_data["email"]
+        users = CustomUser.objects.filter(email=email)
+        
+        for user in users:
+            # 1. Generate security credentials
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
+            
+            # 2. Prepare context for your styled template
+            context = {
+                'user': user,
+                'protocol': 'https' if self.request.is_secure() else 'http',
+                'domain': self.request.get_host(),
+                'uid': uid,
+                'token': token,
+                'now': timezone.now(), # For the copyright year in footer
+            }
+            
+            # 3. Render the styled HTML template
+            html_content = render_to_string('password_reset_email.html', context)
+            
+            # 4. Send via Brevo
+            send_brevo_email(
+                to_email=user.email, 
+                subject="Password Reset Request - St. Peters Parish", 
+                html_content=html_content
+            )
+
+        # Redirect to the 'Done' page regardless of user existence (security best practice)
+        return redirect(self.success_url)
+
 class CustomPasswordResetDoneView(auth_views.PasswordResetDoneView):
     template_name = 'password_reset_done.html'
 
-# 3. This view handles the actual password change via the secure link
 class CustomPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
     template_name = 'password_reset_confirm.html'
     success_url = reverse_lazy('password_reset_complete')
 
-# 4. This view shows the final "Password Changed" message
 class CustomPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
     template_name = 'password_reset_complete.html'

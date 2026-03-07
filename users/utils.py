@@ -1,24 +1,47 @@
-import threading
-from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
+import sib_api_v3_sdk
+from sib_api_v3_sdk.rest import ApiException
 from django.conf import settings
+from django.template.loader import render_to_string
+import threading
 
-def send_background_email(subject, recipient_email, template_name, context, plain_message=None):
-    def run():
+def send_brevo_email(to_email, subject, html_content=None, template_name=None, context=None):
+    """
+    Sends an email via Brevo API in a background thread.
+    Can be called with raw html_content OR a template_name + context.
+    """
+    def run_send():
+        # 1. Configuration
+        configuration = sib_api_v3_sdk.Configuration()
+        configuration.api_key['api-key'] = settings.BREVO_API_KEY
+
+        api_instance = sib_api_v3_sdk.TransactionalEmailsApi(
+            sib_api_v3_sdk.ApiClient(configuration)
+        )
+
+        # 2. Handle Template Rendering if necessary
+        # This allows you to pass a file like 'emm.html' directly
+        if template_name and context:
+            final_html = render_to_string(template_name, context)
+        else:
+            final_html = html_content
+
+        # 3. Create the Email Object
+        email = sib_api_v3_sdk.SendSmtpEmail(
+            to=[{"email": to_email}],
+            sender={
+                "email": "kevinmalasa2000@gmail.com", 
+                "name": "St. Peters Parish System"
+            },
+            subject=subject,
+            html_content=final_html
+        )
+
+        # 4. Execute the Send
         try:
-            html_content = render_to_string(template_name, context)
-            text_content = plain_message if plain_message else strip_tags(html_content)
-            
-            email = EmailMultiAlternatives(
-                subject,
-                text_content,
-                settings.DEFAULT_FROM_EMAIL,
-                [recipient_email]
-            )
-            email.attach_alternative(html_content, "text/html")
-            email.send(fail_silently=False)
-        except Exception as e:
-            print(f"Email error: {e}") # Check Render logs for this
+            api_instance.send_transac_email(email)
+        except ApiException as e:
+            print(f"Brevo API Error: {e}")
 
-    threading.Thread(target=run).start()
+    # Start the thread so the web page doesn't wait/hang
+    email_thread = threading.Thread(target=run_send)
+    email_thread.start()

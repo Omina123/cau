@@ -16,8 +16,10 @@ from django.conf import settings
 from .decorators import superuser_or_usertype
 from .models import *
 from users.models import CustomUser, Catechist
-
+from users.utils import send_brevo_email
 from django.contrib import messages
+from django.template.loader import render_to_string
+
 # views.py
 
 
@@ -142,15 +144,17 @@ def home (request):
 # Create your views here.
 def  about(request):
     return render(request, 'about.html')
-  
-from users.utils import send_background_email
-def Contact(request): 
+
+
+def Contact(request):
     if request.method == "POST":
+        # 1. Get the data from the Contact Form
         name = request.POST.get("name")
         email = request.POST.get("email")
         phone = request.POST.get("phone")
         message = request.POST.get("message")
 
+        # 2. Prepare the context for the email template
         context = {
             'name': name,
             'email': email,
@@ -158,16 +162,23 @@ def Contact(request):
             'message': message
         }
 
-        # Send to yourself in background
-        send_background_email(
-            subject="New Contact Form Message",
-            recipient_email="kevinmalasa2000@gmail.com",
-            template_name='emails/contact_notification.html',
-            context=context
+        # 3. Render your HTML template (emm.html) into a string
+        # This makes the email look like your designed template
+        html_content = render_to_string("emm.html", context)
+
+        # 4. Send the email using the Brevo function
+        # We send this to YOUR email so you can see the user's message
+        send_brevo_email(
+            to_email="kevinmalasa2000@gmail.com", 
+            subject=f"New Contact Form Message from {name}",
+            html_content=html_content
         )
 
-        return render(request, "contact.html", {"success": True, "title": title})
-    return render(request, "contact.html", {"title": title})
+        # 5. Return the contact page with a success message
+        return render(request, "contact.html", {"success": True})
+
+    # If it's a GET request, just show the contact page
+    return render(request, "contact.html")
 # def CatechistDashboard(request):
 #     return render(request, 'catechist_dashboard.html')
 @superuser_or_usertype(allowed_types=['1', '2'])
