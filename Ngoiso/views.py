@@ -144,45 +144,41 @@ def home (request):
 # Create your views here.
 def  about(request):
     return render(request, 'about.html')
-
-
 def Contact(request):
+
     if request.method == "POST":
-        # 1. Get the data from the Contact Form
         name = request.POST.get("name")
         email = request.POST.get("email")
         phone = request.POST.get("phone")
         message = request.POST.get("message")
 
-        # 2. Prepare the context for the email template
         context = {
-            'name': name,
-            'email': email,
-            'phone': phone,
-            'message': message
+            "name": name,
+            "email": email,
+            "phone": phone,
+            "message": message
         }
 
-        # 3. Render your HTML template (emm.html) into a string
-        # This makes the email look like your designed template
-        html_content = render_to_string("emm.html", context)
+        try:
+            html_content = render_to_string("emm.html", context)
 
-        # 4. Send the email using the Brevo function
-        # We send this to YOUR email so you can see the user's message
-        send_brevo_email(
-            to_email="kevinmalasa2000@gmail.com", 
-            subject=f"New Contact Form Message from {name}",
-            html_content=html_content
-        )
+            send_brevo_email(
+                to_email="kevinmalasa2000@gmail.com",
+                subject=f"New Contact Message from {name}",
+                html_content=html_content
+            )
 
-        # 5. Return the contact page with a success message
-        return render(request, "contact.html", {"success": True})
+            return render(request, "Contact.html", {"success": True})
+
+        except Exception as e:
+            print("CONTACT ERROR:", e)
+            return render(request, "Contact.html", {"error": True})
+
+    return render(request, "Contact.html")
 
     # If it's a GET request, just show the contact page
-    return render(request, "contact.html")
-# def CatechistDashboard(request):
-#     return render(request, 'catechist_dashboard.html')
+  
 @superuser_or_usertype(allowed_types=['1', '2'])
-
 def StaffDashboard(request):
     selected_year = int(request.GET.get('year', date.today().year))
     outstations = Outstation.objects.all()

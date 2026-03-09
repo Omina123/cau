@@ -21,23 +21,36 @@ def Login(request):
         if form.is_valid():
             email = form.cleaned_data['Email']
             password = form.cleaned_data['password']
+
             user = EmailBackend.authenticate(request, username=email, password=password)
-            
+
             if user is not None:
+
+                # 🔴 BLOCK LOGIN IF NOT VERIFIED
+                if not user.is_verified:
+                    messages.error(request, "Your account is not verified. Please verify OTP first.")
+                    request.session['verification_email'] = user.email
+                    return redirect('verify_otp')
+
                 login(request, user)
                 messages.success(request, "Login was successful")
+
                 if user.is_superuser or user.user_type == '1':
                     return redirect('Dashbd')
                 elif user.user_type == '2':
                     return redirect('StaffDashboard')
                 elif user.user_type == '3':
                     return redirect('catechist_dashboard')
+
                 return redirect('Dashbd')
+
             else:
                 messages.error(request, "Invalid credentials")
                 return redirect("error_page")
+
     else:
         form = LoginForm()
+
     return render(request, 'login.html', {'form': form})
 
 def Logout(request):
@@ -140,3 +153,29 @@ class CustomPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
 
 class CustomPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
     template_name = 'password_reset_complete.html'
+def resend_otp(request):
+    email = request.session.get('verification_email')
+    
+    if not email:
+        messages.error(request, "Session expired. Please register again.")
+        return redirect('register')
+
+    try:
+        user = CustomUser.objects.get(email=email)
+        user.generate_otp()  # This creates a new 6-digit code in the DB
+
+        # Send the new code via Brevo (using your professional style)
+        html_content = f"""
+        <div style="font-family: Arial; padding: 20px; border-top: 5px solid #FFD700;">
+            <h2>New Verification Code</h2>
+            <p>Your new OTP is: <strong style="font-size: 24px; color: #212529;">{user.otp}</strong></p>
+            <p>This code replaces your previous one.</p>
+        </div>
+        """
+        send_brevo_email(user.email, "New OTP - St. Peters Parish", html_content)
+        
+        messages.success(request, "A fresh code has been sent to your email.")
+    except CustomUser.DoesNotExist:
+        messages.error(request, "User not found.")
+        
+    return redirect('verify_otp')
